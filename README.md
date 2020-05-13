@@ -7,7 +7,7 @@ Reminder: Folder can only be accessed from PSU account and sponsors can't be con
 
 https://drive.google.com/open?id=1UXFb4zloMw1V_9cGteujGtlBlbyKRhQ9
 
-#What you need to run the app:
+# What you need to run the app:
 
 1. For IDE im using VS code, I'm pretty sure setup shouldnt change much if you are using another.
 
