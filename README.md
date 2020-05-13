@@ -12,10 +12,9 @@ https://drive.google.com/open?id=1UXFb4zloMw1V_9cGteujGtlBlbyKRhQ9
 1. For IDE im using VS code, I'm pretty sure setup shouldnt change much if you are using another.
 
 2. Visit https://expo.io/learn
-    
-    -Download node.js
-    -Open terminal and type the command 
-          npm install expo-cli --global
+    Download node.js
+    Open terminal and type the command 
+    # # npm install expo-cli --global
         You can use a windows / mac terminal, or alternatively, you could also just paste the command into a new terminal in VS code.
 
 3. I'm not sure if node already does this but you may need to type 
