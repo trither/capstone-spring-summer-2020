@@ -1,5 +1,6 @@
 import React from "react";
-import { View, StyleSheet, } from "react-native";
+import { View, StyleSheet, Button, } from "react-native";
+import ColorPalette from "../constants/ColorPalette";
 
 const Card = props => {
     return(
@@ -15,10 +16,10 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
         shadowOpacity: 0.26,
         //Andriod
-        backgroundColor: 'white',
+        backgroundColor: ColorPalette.secondary,
         padding: 20,
         borderRadius: 10,
-    }
+    },
 });
 
 export default Card;

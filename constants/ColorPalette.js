@@ -8,4 +8,9 @@ export default {
     crimson: '#710117',
     champagne: '#ECD5BB',
     serenity: '#54627B',
-}
+
+    primary: '#0E9AA7',
+    secondary: '#3DA4AB',
+    offcolor: '#F6CD61',
+    highlight: '#FE8A71',
+};
