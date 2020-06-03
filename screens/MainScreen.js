@@ -17,7 +17,7 @@ import Header from "../components/Header";
 
 const MainScreen = (props) => {
   //API grab lives remaining
-  var lives = 2;
+  var lives = 3;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
   let bubble;
   if (lives === 1){
@@ -36,6 +36,7 @@ const MainScreen = (props) => {
 
   return (
     <View style={styles.screen}>
+      <Header title="Safe__"/>
       <View style={styles.cardContainer}>
         <Card>
           <Text style={styles.text}> User level + recent challenges completed </Text>
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: 360,
+    width: '100%',
     height: 125,
     alignSelf: "center"
   }
