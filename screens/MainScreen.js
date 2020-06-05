@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: ColorPalette.primary,
     flex: 2,
-    justifyContent: "space-evenly",
+
   },
 
 
@@ -73,12 +73,15 @@ const styles = StyleSheet.create({
     textShadowRadius: 6,
     shadowOpacity: .2,
     textAlign: "center",
+    fontSize: 16,
+    fontWeight: 'bold'    
   },
 
   image: {
-    width: '100%',
     height: 125,
-    alignSelf: "center"
+    width: 360,
+    alignSelf: "center",
+    tintColor: ColorPalette.offcolor
   }
 });
 

@@ -1,15 +1,23 @@
 import React from "react";
-import { View, StyleSheet, Button, TouchableHighlight, } from "react-native";
+import { View, StyleSheet, Button, TouchableHighlight, TouchableOpacity, Text,} from "react-native";
 import ColorPalette from "../constants/ColorPalette";
 import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
 const Footer = (props) => {
   return (
     <View style={styles.container}>
-      <Button onPress={() => props.onButtonPress("main screen")} title="Home" color={ColorPalette.offcolor}/>
-      <Button onPress={() => props.onButtonPress("profile")} title="Profile" color={ColorPalette.offcolor}/>
-      <Button onPress={() => props.onButtonPress("challenges")} title="Challenges" color={ColorPalette.offcolor}/>
-      <Button onPress={() => props.onButtonPress("heatmap")} title="Heatmap" color={ColorPalette.offcolor}/>
+      <TouchableOpacity onPress={() => props.onButtonPress("main screen")}>
+        <Icon style={styles.icon} name='home' raised='true'/>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => props.onButtonPress("profile")}>
+        <Icon style={styles.icon} name='user' raised='true'/>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => props.onButtonPress("challenges")}>
+        <Icon style={styles.icon} name='trophy' raised='true'/>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => props.onButtonPress("heatmap")}>
+        <Icon style={styles.icon} name='map' raised='true'/>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -25,6 +33,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: ColorPalette.secondary,
   },
+  icon: {
+    fontSize: 50,
+    textShadowColor: ColorPalette.highlight,
+    textShadowOffset: { width:0, height:2},
+    textShadowRadius: 6,
+    shadowOpacity: .2,    
+    color: ColorPalette.offcolor,
+  }
 
 });
 export default Footer;
