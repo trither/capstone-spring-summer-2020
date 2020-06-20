@@ -24,6 +24,7 @@ export default function App() {
     content = <HeatmapScreen onPageChange={changePageHandler}/>;
   }
 
+
   return <View style={styles.container}>{content}</View>;
 }
 

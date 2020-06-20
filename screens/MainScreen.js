@@ -9,43 +9,70 @@ import {
   Button,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import Footer from "../components/Footer";
 import Card from "../components/Card";
 import ColorPalette from "../constants/ColorPalette";
 import Header from "../components/Header";
+import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
 const MainScreen = (props) => {
   //API grab lives remaining
-  var lives = 3;
+  var lives = 2;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
   let bubble;
   if (lives === 1){
     bubble =  <Image 
               style={styles.image} 
-              source={require("./Assets/OneBubble.png")}/>
+              source={require("./Assets/OneHeart.png")}/>
   } else if (lives === 2){
     bubble =  <Image 
               style={styles.image} 
-              source={require("./Assets/TwoBubble.png")}/>
+              source={require("./Assets/TwoHeart.png")}/>
   } else if (lives === 3){
     bubble =  <Image 
               style={styles.image} 
-              source={require("./Assets/ThreeBubble.png")}/>
+              source={require("./Assets/ThreeHeart.png")}/>
   }
+
+  //API for Challenge Titles
+  var ch1 = "Challenge #1"
+  var ch2 = "Challenge #2"
+  var ch3 = "Challenge #3"
 
   return (
     <View style={styles.screen}>
-      <Header title="Safe__"/>
-      <View style={styles.cardContainer}>
+      <Header title="Safe__"/>  
+        <View style={styles.cardContainer}>
         <Card>
-          <Text style={styles.text}> User level + recent challenges completed </Text>
+            <View style={styles.challenge}>
+              <TouchableOpacity onPress={()=>props.onPageChange("challenges")} width="80%">
+                <Text style={styles.text}> {ch1} </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
+                <Icon style={styles.icon} name='refresh' raised='true'/>
+              </TouchableOpacity>  
+            </View>
+            <View style={styles.challenge}>
+              <TouchableOpacity onPress={()=>props.onPageChange("challenges")} width="80%">
+                <Text style={styles.text}> {ch2} </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
+                <Icon style={styles.icon} name='refresh' raised='true'/>
+              </TouchableOpacity>  
+            </View>
+            <View style={styles.challenge}>
+              <TouchableOpacity onPress={()=>props.onPageChange("challenges")} width="80%">
+                <Text style={styles.text}> {ch3} </Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
+                <Icon style={styles.icon} name='refresh' raised='true'/>
+              </TouchableOpacity>  
+            </View>
         </Card>
         <Card>
-          <Text style={styles.text}> Life Information </Text>
-        </Card>
-        <Card>
-          <Text style={styles.text}> Bubbles Remaining </Text>
+          <Text style={styles.text}> Hearts Remaining </Text>
           <View>{bubble}</View>
         </Card>
       </View>
@@ -62,9 +89,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     backgroundColor: ColorPalette.primary,
     flex: 2,
-
   },
-
 
   text: {
     color: ColorPalette.offcolor,
@@ -81,7 +106,36 @@ const styles = StyleSheet.create({
     height: 125,
     width: 360,
     alignSelf: "center",
-    tintColor: ColorPalette.offcolor
+  },
+
+  chContatiner: {
+    height: 50,
+    width: "100%",
+    position: "absolute",
+    bottom: 0,
+    justifyContent: "space-around",
+    alignItems: "center",
+    flexDirection: "column",
+    backgroundColor: ColorPalette.secondary,
+  },
+
+  challenge: {
+    height: 40,
+    width: "100%",
+    bottom: 0,
+    justifyContent: "space-around",
+    alignItems: "center",
+    flexDirection: "row",
+    backgroundColor: ColorPalette.secondary,
+  },
+
+  icon: {
+    fontSize: 35,
+    textShadowColor: ColorPalette.highlight,
+    textShadowOffset: { width:0, height:2},
+    textShadowRadius: 6,
+    shadowOpacity: .2,    
+    color: ColorPalette.offcolor,
   }
 });
 
