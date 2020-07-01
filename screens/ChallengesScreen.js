@@ -15,15 +15,23 @@ import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
 
 const ChallengesScreen = props => {
+    var challengeTitle = "Challenge Title"
+    var challengeDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
+    + "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer"
+    + " took a galley of type and scrambled it to make a type specimen book. It has survived not only five" 
+    + " centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was"
+    + " popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and"
+    + " more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+
     return(
         <View style={styles.screen}>
         <Header title="Safe__"/>
             <View style={styles.cardContainer}>
                 <Card>
-                    <Text style={styles.title}> Challenge Name </Text>
+                    <Text style={styles.title}> {challengeTitle} </Text>
                 </Card>
                 <Card>
-                    <Text style={styles.body}> Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</Text>
+                    <Text style={styles.body}> {challengeDescription} </Text>
                 </Card>
             </View>
             <View style={styles.buttonContainer}>
