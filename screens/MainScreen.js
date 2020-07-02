@@ -43,10 +43,9 @@ const MainScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      <Header title="Safe__"/>  
-        <View style={styles.cardContainer}>
-        <Card>
-            <View style={styles.challenge}>
+      <Header onButtonPress = {props.onPageChange}/>  
+        <View style={styles.cardContainer}> 
+            <View style={styles.challenge} top={10}>
               <TouchableOpacity onPress={()=>props.onPageChange("challenges")} width="80%">
                 <Text style={styles.text}> {ch1} </Text>
               </TouchableOpacity>
@@ -54,7 +53,7 @@ const MainScreen = (props) => {
                 <Icon style={styles.icon} name='refresh' raised='true'/>
               </TouchableOpacity>  
             </View>
-            <View style={styles.challenge}>
+            <View style={styles.challenge} top={10}>
               <TouchableOpacity onPress={()=>props.onPageChange("challenges")} width="80%">
                 <Text style={styles.text}> {ch2} </Text>
               </TouchableOpacity>
@@ -62,7 +61,7 @@ const MainScreen = (props) => {
                 <Icon style={styles.icon} name='refresh' raised='true'/>
               </TouchableOpacity>  
             </View>
-            <View style={styles.challenge}>
+            <View style={styles.challenge} top={10}>
               <TouchableOpacity onPress={()=>props.onPageChange("challenges")} width="80%">
                 <Text style={styles.text}> {ch3} </Text>
               </TouchableOpacity>
@@ -70,11 +69,10 @@ const MainScreen = (props) => {
                 <Icon style={styles.icon} name='refresh' raised='true'/>
               </TouchableOpacity>  
             </View>
-        </Card>
-        <Card>
-          <Text style={styles.text}> Hearts Remaining </Text>
-          <View>{bubble}</View>
-        </Card>
+          <View style={styles.health}>
+            <Text style={styles.text}> Hearts Remaining </Text>
+            <View>{bubble}</View>
+          </View>
       </View>
       <Footer onButtonPress = {props.onPageChange}/>
     </View>
@@ -126,7 +124,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: ColorPalette.secondary,
+    backgroundColor: ColorPalette.primary,
+    margin: 5,
+    borderBottomWidth: 4,
+    borderBottomStartRadius: 45,
+    borderBottomEndRadius: 45,
+    borderBottomColor: ColorPalette.offcolor,
   },
 
   icon: {
@@ -136,6 +139,11 @@ const styles = StyleSheet.create({
     textShadowRadius: 6,
     shadowOpacity: .2,    
     color: ColorPalette.offcolor,
+  },
+
+  health: {
+    position: 'absolute',
+    bottom: 120,
   }
 });
 

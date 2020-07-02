@@ -25,7 +25,7 @@ const ChallengesScreen = props => {
 
     return(
         <View style={styles.screen}>
-        <Header title="Safe__"/>
+        <Header onButtonPress = {props.onPageChange}/>
             <View style={styles.cardContainer}>
                 <Card>
                     <Text style={styles.title}> {challengeTitle} </Text>

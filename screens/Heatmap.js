@@ -7,7 +7,7 @@ import Header from "../components/Header";
 const HeatmapScreen = (props) => {
   return (
     <View style={styles.screen}>
-      <Header title="HEATMAP" />
+      <Header onButtonPress = {props.onPageChange}/>
       <MapView
         style={{ flex: 1 }}
         region={{

@@ -5,6 +5,7 @@ import MainScreen from "./screens/MainScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ChallengesScreen from "./screens/ChallengesScreen";
 import HeatmapScreen from "./screens/Heatmap";
+import SettingsScreen from "./screens/SettingsScreen";
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState("main screen");
@@ -22,6 +23,8 @@ export default function App() {
     content = <ChallengesScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "heatmap") {
     content = <HeatmapScreen onPageChange={changePageHandler}/>;
+  } else if (currentPage === "settings") {
+    content = <SettingsScreen onPageChange={changePageHandler}/>;
   }
 
 
