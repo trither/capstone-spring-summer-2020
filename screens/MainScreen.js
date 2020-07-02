@@ -44,7 +44,7 @@ const MainScreen = (props) => {
   return (
     <View style={styles.screen}>
       <Header onButtonPress = {props.onPageChange}/>  
-        <View style={styles.cardContainer}> 
+        <View style={styles.cardContainer}>
             <View style={styles.challenge} top={10}>
               <TouchableOpacity onPress={()=>props.onPageChange("challenges")} width="80%">
                 <Text style={styles.text}> {ch1} </Text>
@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
   },
 
   health: {
+    alignSelf: 'center',
     position: 'absolute',
     bottom: 120,
   }
