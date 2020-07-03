@@ -15,18 +15,18 @@ import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
 
 const ChallengesScreen = props => {
-    var challengeTitle = "Challenge Title"
-    var challengeDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    + "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer"
-    + " took a galley of type and scrambled it to make a type specimen book. It has survived not only five" 
-    + " centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was"
-    + " popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and"
-    + " more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+    // Need CloudFunctions here to fill both of these variables 
+    // with the correct data about the challenge that should be displayed
+    // Might be getting it from the main screen though, so it's possible it's not neccesary here
+    var challengeTitle = props.challenge.ChallengeTitle
+    var challengeDescription = props.challenge.ChallengeDesc
 
     return(
+        // Create the screen object
         <View style={styles.screen}>
         <Header onButtonPress = {props.onPageChange}/>
             <View style={styles.cardContainer}>
+                {/* Create the cards that contain the title and the description seperately */}
                 <Card>
                     <Text style={styles.title}> {challengeTitle} </Text>
                 </Card>
@@ -34,13 +34,17 @@ const ChallengesScreen = props => {
                     <Text style={styles.body}> {challengeDescription} </Text>
                 </Card>
             </View>
+            {/* Create the container for the refresh and button complete (it's invisible and is just here for layout reasons) */}
             <View style={styles.buttonContainer}>
+                {/* Create the squares the the buttons exist on top of (buttonBoxes) */}
                 <Card style={styles.buttonBox}>
+                    {/* CloudFunctions needed here to fetch new challnege and put the new data into the title and description elements above*/}
                     <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
                         <Icon style={styles.icon} name='refresh' raised='true'/>
                     </TouchableOpacity>
                 </Card> 
                 <Card style={styles.buttonBox}>
+                    {/* CloudFunctions needed here to recieve challenge completed data*/}                    
                     <TouchableOpacity onPress={() => Alert.alert('Challenge Marked Complete')} width="20%">
                         <Icon style={styles.icon} name='check' raised='true'/>
                     </TouchableOpacity>
@@ -51,6 +55,7 @@ const ChallengesScreen = props => {
     );
 };
 
+// Styles for all the elements/objects above
 const styles = StyleSheet.create({
     screen: {
         flex: 1

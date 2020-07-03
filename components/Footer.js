@@ -12,9 +12,6 @@ const Footer = (props) => {
       <TouchableOpacity onPress={() => props.onButtonPress("profile")}>
         <Icon style={styles.icon} name='user' raised='true'/>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => props.onButtonPress("challenges")}>
-        <Icon style={styles.icon} name='trophy' raised='true'/>
-      </TouchableOpacity>
       <TouchableOpacity onPress={() => props.onButtonPress("heatmap")}>
         <Icon style={styles.icon} name='map' raised='true'/>
       </TouchableOpacity>
