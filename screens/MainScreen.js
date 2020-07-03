@@ -37,32 +37,33 @@ const MainScreen = (props) => {
   }
 
   //API for Challenge Titles
-  var ch1 = "Challenge #1"
-  var ch2 = "Challenge #2"
-  var ch3 = "Challenge #3"
+  var ch1 = props.challenges[0].ChallengeTitle
+  var ch2 = props.challenges[1].ChallengeTitle
+  var ch3 = props.challenges[2].ChallengeTitle
 
   return (
     <View style={styles.screen}>
       <Header onButtonPress = {props.onPageChange}/>  
         <View style={styles.cardContainer}>
-            <View style={styles.challenge} top={10}>
-              <TouchableOpacity onPress={()=>props.onPageChange("challenges")} width="80%">
+        <Card>
+            <View style={styles.challenge}>
+              <TouchableOpacity onPress={()=>props.onPageChange("challenge1")} width="80%">
                 <Text style={styles.text}> {ch1} </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
                 <Icon style={styles.icon} name='refresh' raised='true'/>
               </TouchableOpacity>  
             </View>
-            <View style={styles.challenge} top={10}>
-              <TouchableOpacity onPress={()=>props.onPageChange("challenges")} width="80%">
+            <View style={styles.challenge}>
+              <TouchableOpacity onPress={()=>props.onPageChange("challenge2")} width="80%">
                 <Text style={styles.text}> {ch2} </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
                 <Icon style={styles.icon} name='refresh' raised='true'/>
               </TouchableOpacity>  
             </View>
-            <View style={styles.challenge} top={10}>
-              <TouchableOpacity onPress={()=>props.onPageChange("challenges")} width="80%">
+            <View style={styles.challenge}>
+              <TouchableOpacity onPress={()=>props.onPageChange("challenge3")} width="80%">
                 <Text style={styles.text}> {ch3} </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
