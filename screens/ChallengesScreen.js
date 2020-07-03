@@ -18,13 +18,8 @@ const ChallengesScreen = props => {
     // Need CloudFunctions here to fill both of these variables 
     // with the correct data about the challenge that should be displayed
     // Might be getting it from the main screen though, so it's possible it's not neccesary here
-    var challengeTitle = "Challenge Title"
-    var challengeDescription = "Lorem Ipsum is simply dummy text of the printing and typesetting industry."
-    + "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer"
-    + " took a galley of type and scrambled it to make a type specimen book. It has survived not only five" 
-    + " centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was"
-    + " popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and"
-    + " more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+    var challengeTitle = props.challenge.ChallengeTitle
+    var challengeDescription = props.challenge.ChallengeDesc
 
     return(
         // Create the screen object
