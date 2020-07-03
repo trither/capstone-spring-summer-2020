@@ -128,7 +128,7 @@ const HeatmapScreen = (props) => {
           </View>
         </View>
       </Modal>
-      <Header title="HEATMAP" />
+    <Header onButtonPress = {props.onPageChange}/>
       <MapView
         id="anchor"
         style={{ flex: 1 }}
