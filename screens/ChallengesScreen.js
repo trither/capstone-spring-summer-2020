@@ -24,9 +24,7 @@ const ChallengesScreen = props => {
     return(
         // Create the screen object
         <View style={styles.screen}>
-        {/* Create the Safe_ title at the top of the screen */}
-        <Header title="Safe__"/>
-            {/* Create the container for the challenge title and descriptions (it's invisible and is just here for layout reasons) */}
+        <Header onButtonPress = {props.onPageChange}/>
             <View style={styles.cardContainer}>
                 {/* Create the cards that contain the title and the description seperately */}
                 <Card>

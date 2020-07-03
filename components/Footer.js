@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     backgroundColor: ColorPalette.secondary,
   },
   icon: {
-    fontSize: 50,
+    fontSize: 45,
     textShadowColor: ColorPalette.highlight,
     textShadowOffset: { width:0, height:2},
     textShadowRadius: 6,

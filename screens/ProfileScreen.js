@@ -7,7 +7,7 @@ import Card from "../components/Card";
 const ProfileScreen = props => {
     return(
         <View style={styles.screen}>
-            <Header title="PROFILE"/>
+            <Header onButtonPress = {props.onPageChange}/>
             <Card>
                 <Text> Profile Picture</Text>
             </Card>
