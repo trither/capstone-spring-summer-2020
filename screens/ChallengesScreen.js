@@ -15,9 +15,7 @@ import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
 
 const ChallengesScreen = props => {
-    // Need CloudFunctions here to fill both of these variables 
-    // with the correct data about the challenge that should be displayed
-    // Might be getting it from the main screen though, so it's possible it's not neccesary here
+    // challenge details recieved from App.js
     var challengeTitle = props.challenge.ChallengeTitle
     var challengeDescription = props.challenge.ChallengeDesc
 
