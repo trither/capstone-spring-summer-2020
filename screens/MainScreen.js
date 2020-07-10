@@ -19,7 +19,7 @@ import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
 const MainScreen = (props) => {
   //API grab lives remaining
-  var lives = 2;
+  var lives = props.profile.Lives;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
   let bubble;
   if (lives === 1){

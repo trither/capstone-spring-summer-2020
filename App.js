@@ -14,15 +14,18 @@ export default function App() {
   const[currentChallenges, setCurrentChallenges] = useState([{ChallengeTitle:"ChallengeTitle1",ChallengeDesc:"ChallengeDesc1"},
   {ChallengeTitle:"ChallengeTitle2",ChallengeDesc:"ChallengeDesc2"},{ChallengeTitle:"ChallengeTitle3",ChallengeDesc:"ChallengeDesc3"}]);
 
+  // User info should be loaded in from DB, then can be passed to functions as a prop.  Photo is a default stock photo.
+  const[thisUser, setUser] = useState({FullName:"Name",Level:0,Lives:3,Score:0,URLPic:"https://i.stack.imgur.com/l60Hf.png",WeeklyStreak:0})
+
   const changePageHandler = (newPage) => {
     setCurrentPage(newPage);
   };
   let content;
 
   if (currentPage === "main screen") {
-    content = <MainScreen onPageChange={changePageHandler} challenges={currentChallenges}/>;
+    content = <MainScreen onPageChange={changePageHandler} challenges={currentChallenges} profile={thisUser}/>;
   } else if (currentPage === "profile") {
-    content = <ProfileScreen onPageChange={changePageHandler} />;
+    content = <ProfileScreen onPageChange={changePageHandler} profile={thisUser}/>;
   } else if (currentPage === "challenge1") {
     content = <ChallengesScreen onPageChange={changePageHandler} challenge={currentChallenges[0]}/>;
   }  else if (currentPage === "challenge2") {
