@@ -6,9 +6,22 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ChallengesScreen from "./screens/ChallengesScreen";
 import HeatmapScreen from "./screens/Heatmap";
 import SettingsScreen from "./screens/SettingsScreen";
+import LoginScreen from "./screens/Login";
+import * as firebase from 'firebase/app';
+import firebaseConfig from './firebaseConfig';
+import withfirebaseAuth from 'react-with-firebase-auth';
+import { db } from "./firestore";
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState("main screen");
+
+	var user = firebase.auth().currentUser;
+	if(user) {
+		  [currentPage, setCurrentPage] = useState("main screen");
+	}
+	else {
+		  [currentPage, setCurrentPage] = useState("log in");
+	}
+
 
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
   const[currentChallenges, setCurrentChallenges] = useState([{ChallengeTitle:"ChallengeTitle1",ChallengeDesc:"ChallengeDesc1"},
@@ -36,6 +49,8 @@ export default function App() {
     content = <HeatmapScreen onPageChange={changePageHandler}/>;
   } else if (currentPage === "settings") {
     content = <SettingsScreen onPageChange={changePageHandler}/>;
+  } else if (currentPage === "log in") {
+    content = <LoginScreen onPageChange={changePageHandler}/>;
   }
 
 
