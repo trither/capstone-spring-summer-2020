@@ -7,6 +7,7 @@ import { View,
         TouchableOpacity,
         Alert, 
         Image } from "react-native";      
+import Webview from 'react-native-webview'
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ColorPalette from "../constants/ColorPalette";
@@ -18,6 +19,7 @@ const ChallengesScreen = props => {
     // challenge details recieved from App.js
     var challengeTitle = props.challenge.ChallengeTitle
     var challengeDescription = props.challenge.ChallengeDesc
+    var challengeVideoID = "8zT6CYu0iYQ"
 
     return(
         // Create the screen object
@@ -31,6 +33,9 @@ const ChallengesScreen = props => {
                 <Card>
                     <Text style={styles.body}> {challengeDescription} </Text>
                 </Card>
+                <Text></Text>
+                <Webview style={{width:"94%", alignSelf:"center"}} source={{uri:"https://www.youtube.com/embed/" + challengeVideoID }} />
+                <Text></Text>
             </View>
             {/* Create the container for the refresh and button complete (it's invisible and is just here for layout reasons) */}
             <View style={styles.buttonContainer}>
