@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text, } from "react-native";
+import { View, StyleSheet, Text, AsyncStorage} from "react-native";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Card from "../components/Card";

@@ -6,7 +6,9 @@ import { View,
         Button,
         TouchableOpacity,
         Alert, 
-        Image } from "react-native";      
+        Image,
+        AsyncStorage,
+    } from "react-native";      
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import ColorPalette from "../constants/ColorPalette";

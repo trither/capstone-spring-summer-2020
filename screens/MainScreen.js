@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   View,
   StyleSheet,
@@ -10,36 +10,34 @@ import {
   Image,
   TouchableOpacity,
   Alert,
+  AsyncStorage,
 } from "react-native";
 import Footer from "../components/Footer";
 import Card from "../components/Card";
 import ColorPalette from "../constants/ColorPalette";
+import BubbleType from "../constants/BubbleType";
 import Header from "../components/Header";
 import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
 const MainScreen = (props) => {
   //API grab lives remaining
-  var lives = props.profile.Lives;
+  //var lives = props.profile.Lives;
+  var lives = 2;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
   let bubble;
   if (lives === 1){
-    bubble =  <Image 
-              style={styles.image} 
-              source={require("./Assets/OneHeart.png")}/>
+    bubble =  BubbleType.oneLife;
   } else if (lives === 2){
-    bubble =  <Image 
-              style={styles.image} 
-              source={require("./Assets/TwoHeart.png")}/>
+    bubble =  BubbleType.twoLife;
   } else if (lives === 3){
-    bubble =  <Image 
-              style={styles.image} 
-              source={require("./Assets/ThreeHeart.png")}/>
+    bubble =  BubbleType.thrLife;
   }
 
+
   //API for Challenge Titles
-  var ch1 = props.challenges[0].ChallengeTitle
-  var ch2 = props.challenges[1].ChallengeTitle
-  var ch3 = props.challenges[2].ChallengeTitle
+  var ch1 = props.challenges[0].ChallengeTitle;
+  var ch2 = props.challenges[1].ChallengeTitle;
+  var ch3 = props.challenges[2].ChallengeTitle;
 
   return (
     <View style={styles.screen}>
@@ -69,10 +67,10 @@ const MainScreen = (props) => {
                 <Icon style={styles.icon} name='refresh' raised='true'/>
               </TouchableOpacity>  
             </View>
-          <View style={styles.health}>
-            <Text style={styles.text}> Hearts Remaining </Text>
-            <View>{bubble}</View>
-          </View>
+            <View style={styles.health}>
+              <Text style={styles.text}> Hearts Remaining </Text>
+              <View>{bubble}</View>
+            </View>
       </View>
       <Footer onButtonPress = {props.onPageChange}/>
     </View>

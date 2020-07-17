@@ -1,11 +1,12 @@
 import React from "react";
-import { View, StyleSheet, Text, Image, ProgressBar, ProgressBarAndroid} from "react-native";
+import { View, StyleSheet, Text, Image, ProgressBar, ProgressBarAndroid, AsyncStorage} from "react-native";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Card from "../components/Card";
 import ColorPalette from "../constants/ColorPalette";
 
 const ProfileScreen = props => {
+
     //load in values from the user
     var name = props.profile.FullName;
     var level = props.profile.Level;
