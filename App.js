@@ -73,7 +73,7 @@ export default function App() {
     content = (
       <ChallengesScreen
         adminRights={thisUser.isAdmin}
-        onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[0])}
+        onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[1])}
         onPageChange={changePageHandler}
         challenge={currentChallenges[1]}
       />
@@ -82,7 +82,7 @@ export default function App() {
     content = (
       <ChallengesScreen
         adminRights={thisUser.isAdmin}
-        onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[0])}
+        onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[2])}
         onPageChange={changePageHandler}
         challenge={currentChallenges[2]}
       />
