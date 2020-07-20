@@ -18,63 +18,79 @@ import Header from "../components/Header";
 import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
 const MainScreen = (props) => {
+  const AdminAddChallengeButton = () => {
+    if (props.adminRights) {
+      return <Button onPress={()=> props.onPageChange("createNewChallenge")}color = {ColorPalette.offcolor} title="Add Challenge." />;
+    }
+  };
+
   //API grab lives remaining
-  var lives = props.profile.Lives;
+  var lives = 2;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
   let bubble;
-  if (lives === 1){
-    bubble =  <Image 
-              style={styles.image} 
-              source={require("./Assets/OneHeart.png")}/>
-  } else if (lives === 2){
-    bubble =  <Image 
-              style={styles.image} 
-              source={require("./Assets/TwoHeart.png")}/>
-  } else if (lives === 3){
-    bubble =  <Image 
-              style={styles.image} 
-              source={require("./Assets/ThreeHeart.png")}/>
+  if (lives === 1) {
+    bubble = (
+      <Image style={styles.image} source={require("./Assets/OneHeart.png")} />
+    );
+  } else if (lives === 2) {
+    bubble = (
+      <Image style={styles.image} source={require("./Assets/TwoHeart.png")} />
+    );
+  } else if (lives === 3) {
+    bubble = (
+      <Image style={styles.image} source={require("./Assets/ThreeHeart.png")} />
+    );
   }
 
   //API for Challenge Titles
-  var ch1 = props.challenges[0].ChallengeTitle
-  var ch2 = props.challenges[1].ChallengeTitle
-  var ch3 = props.challenges[2].ChallengeTitle
+  var ch1 = props.challenges[0].ChallengeTitle;
+  var ch2 = props.challenges[1].ChallengeTitle;
+  var ch3 = props.challenges[2].ChallengeTitle;
 
   return (
     <View style={styles.screen}>
-      <Header onButtonPress = {props.onPageChange}/>  
-        <View style={styles.cardContainer}>
-            <View style={styles.challenge}>
-              <TouchableOpacity onPress={()=>props.onPageChange("challenge1")} width="80%">
-                <Text style={styles.text}> {ch1} </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
-                <Icon style={styles.icon} name='refresh' raised='true'/>
-              </TouchableOpacity>  
-            </View>
-            <View style={styles.challenge}>
-              <TouchableOpacity onPress={()=>props.onPageChange("challenge2")} width="80%">
-                <Text style={styles.text}> {ch2} </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
-                <Icon style={styles.icon} name='refresh' raised='true'/>
-              </TouchableOpacity>  
-            </View>
-            <View style={styles.challenge}>
-              <TouchableOpacity onPress={()=>props.onPageChange("challenge3")} width="80%">
-                <Text style={styles.text}> {ch3} </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
-                <Icon style={styles.icon} name='refresh' raised='true'/>
-              </TouchableOpacity>  
-            </View>
-          <View style={styles.health}>
-            <Text style={styles.text}> Hearts Remaining </Text>
-            <View>{bubble}</View>
-          </View>
+      <Header onButtonPress={props.onPageChange} />
+      <View style={styles.cardContainer}>
+        <View style={styles.challenge}>
+          <TouchableOpacity
+            onPress={() => props.onPageChange("challenge1")}
+            width="80%"
+          >
+            <Text style={styles.text}> {ch1} </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
+            <Icon style={styles.icon} name="refresh" raised="true" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.challenge}>
+          <TouchableOpacity
+            onPress={() => props.onPageChange("challenge2")}
+            width="80%"
+          >
+            <Text style={styles.text}> {ch2} </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
+            <Icon style={styles.icon} name="refresh" raised="true" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.challenge}>
+          <TouchableOpacity
+            onPress={() => props.onPageChange("challenge3")}
+            width="80%"
+          >
+            <Text style={styles.text}> {ch3} </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
+            <Icon style={styles.icon} name="refresh" raised="true" />
+          </TouchableOpacity>
+        </View>
+          {AdminAddChallengeButton()}
+        <View style={styles.health}>
+          <Text style={styles.text}> Hearts Remaining </Text>
+          <View>{bubble}</View>
+        </View>
       </View>
-      <Footer onButtonPress = {props.onPageChange}/>
+      <Footer onButtonPress={props.onPageChange} />
     </View>
   );
 };
@@ -92,12 +108,12 @@ const styles = StyleSheet.create({
   text: {
     color: ColorPalette.offcolor,
     textShadowColor: ColorPalette.highlight,
-    textShadowOffset: { width:0, height:2},
+    textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
-    shadowOpacity: .2,
+    shadowOpacity: 0.2,
     textAlign: "center",
     fontSize: 16,
-    fontWeight: 'bold'    
+    fontWeight: "bold",
   },
 
   image: {
@@ -124,28 +140,23 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: ColorPalette.primary,
-    margin: 5,
-    borderBottomWidth: 4,
-    borderBottomStartRadius: 45,
-    borderBottomEndRadius: 45,
-    borderBottomColor: ColorPalette.offcolor,
+    backgroundColor: ColorPalette.secondary,
   },
 
   icon: {
     fontSize: 35,
     textShadowColor: ColorPalette.highlight,
-    textShadowOffset: { width:0, height:2},
+    textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
-    shadowOpacity: .2,    
+    shadowOpacity: 0.2,
     color: ColorPalette.offcolor,
   },
 
   health: {
-    alignSelf: 'center',
-    position: 'absolute',
+    alignSelf: "center",
+    position: "absolute",
     bottom: 120,
-  }
+  },
 });
 
 export default MainScreen;
