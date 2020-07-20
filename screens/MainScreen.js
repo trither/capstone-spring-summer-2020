@@ -25,7 +25,7 @@ const MainScreen = (props) => {
   };
 
   //API grab lives remaining
-  var lives = 2;
+  var lives = props.profile.Lives;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
   let bubble;
   if (lives === 1) {
@@ -140,7 +140,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: ColorPalette.secondary,
+    backgroundColor: ColorPalette.primary,
+    margin: 5,
+    borderBottomWidth: 4,
+    borderBottomStartRadius: 45,
+    borderBottomEndRadius: 45,
+    borderBottomColor: ColorPalette.offcolor,
   },
 
   icon: {
