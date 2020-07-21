@@ -21,6 +21,7 @@ const ChallengesScreen = props => {
     var challengeDescription = props.challenge.ChallengeDesc
     var challengeVideoID = "8zT6CYu0iYQ"
 
+    // function to check if video exists to be embedded
     function videoDisplay(challengeVideoID) {
         if (challengeVideoID !== "") {
             return (
