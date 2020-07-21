@@ -21,6 +21,14 @@ const ChallengesScreen = props => {
     var challengeDescription = props.challenge.ChallengeDesc
     var challengeVideoID = "8zT6CYu0iYQ"
 
+    function videoDisplay(challengeVideoID) {
+        if (challengeVideoID !== "") {
+            return (
+                <Webview style={{width:"94%", alignSelf:"center", marginVertical: 10}} source={{uri:"https://www.youtube.com/embed/" + challengeVideoID }} />
+            );
+        }
+    }
+
     return(
         // Create the screen object
         <View style={styles.screen}>
@@ -33,9 +41,8 @@ const ChallengesScreen = props => {
                 <Card>
                     <Text style={styles.body}> {challengeDescription} </Text>
                 </Card>
-                <Text></Text>
-                <Webview style={{width:"94%", alignSelf:"center"}} source={{uri:"https://www.youtube.com/embed/" + challengeVideoID }} />
-                <Text></Text>
+                {videoDisplay(challengeVideoID)}
+                
             </View>
             {/* Create the container for the refresh and button complete (it's invisible and is just here for layout reasons) */}
             <View style={styles.buttonContainer}>
