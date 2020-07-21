@@ -5,17 +5,19 @@ import MainScreen from "./screens/MainScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import HeatmapScreen from "./screens/Heatmap";
 import SettingsScreen from "./screens/SettingsScreen";
-import ChallengesScreen from "./screens/ChallengesScreen";;
+import ChallengesScreen from "./screens/ChallengesScreen";
 import CreateNewChallengeScreen from "./screens/CreateNewChallengeScreen";
+import Tutorial from "./screens/Tutorial.js"
 
 export default function App() {
+  //const [currentPage, setCurrentPage] = useState("main screen");
   const [currentPage, setCurrentPage] = useState("main screen");
 
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
   const [currentChallenges, setCurrentChallenges] = useState([
-    { ChallengeTitle: "ChallengeTitle1", ChallengeDesc: "ChallengeDesc1" },
-    { ChallengeTitle: "ChallengeTitle2", ChallengeDesc: "ChallengeDesc2" },
-    { ChallengeTitle: "ChallengeTitle3", ChallengeDesc: "ChallengeDesc3" },
+    { title: "ChallengeTitle1", description: "ChallengeDesc1" },
+    { title: "ChallengeTitle2", description: "ChallengeDesc2" },
+    { title: "ChallengeTitle3", description: "ChallengeDesc3" },
   ]);
 
   // User info should be loaded in from DB, then can be passed to functions as a prop.  Photo is a default stock photo.
@@ -27,6 +29,7 @@ export default function App() {
     URLPic: "https://i.stack.imgur.com/l60Hf.png",
     WeeklyStreak: 0,
     isAdmin: true,
+    showTutorial: true,
   });
 
   const changePageHandler = (newPage) => {
@@ -36,13 +39,17 @@ export default function App() {
   //When the delete challenge button is hit in the challenge page this function is executed.
   //When an admin deletes a challenge, we load a new one to replace it.
   const deleteChallengeHandler = (challengeToDelete) => {
-    console.log(challengeToDelete.ChallengeTitle);
     currentChallenges.forEach(function (challenge) {
-      if (challengeToDelete.ChallengeTitle == challenge.ChallengeTitle) {
-        challenge.ChallengeTitle = "replace";
-        challenge.ChallengeDesc = "replace";
+      if (challengeToDelete.title == challenge.title) {
+        challenge.title = "replace";
+        challenge.description = "replace";
       }
     });
+  };
+
+  const ChallengeEditHandler = (challengeToEdit, challenge) => {
+    challengeToEdit.title = challenge.title;
+    challengeToEdit.description = challenge.description;
   };
 
   let content;
@@ -65,6 +72,7 @@ export default function App() {
       <ChallengesScreen
         adminRights={thisUser.isAdmin}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[0])}
+        onEditChallenge={ChallengeEditHandler}
         onPageChange={changePageHandler}
         challenge={currentChallenges[0]}
       />
@@ -74,6 +82,7 @@ export default function App() {
       <ChallengesScreen
         adminRights={thisUser.isAdmin}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[1])}
+        onEditChallenge={ChallengeEditHandler}
         onPageChange={changePageHandler}
         challenge={currentChallenges[1]}
       />
@@ -83,6 +92,7 @@ export default function App() {
       <ChallengesScreen
         adminRights={thisUser.isAdmin}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[2])}
+        onEditChallenge={ChallengeEditHandler}
         onPageChange={changePageHandler}
         challenge={currentChallenges[2]}
       />
@@ -92,7 +102,9 @@ export default function App() {
   } else if (currentPage === "settings") {
     content = <SettingsScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "createNewChallenge") {
-    content = <CreateNewChallengeScreen onPageChange={changePageHandler}/>;
+    content = <CreateNewChallengeScreen onPageChange={changePageHandler} />;
+  } else if (currentPage === "tutorial"){
+    content = <Tutorial />
   }
 
   return <View style={styles.container}>{content}</View>;

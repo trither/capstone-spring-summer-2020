@@ -17,12 +17,9 @@ import Icon from "@expo/vector-icons/FontAwesome";
 
 const ChallengesScreen = (props) => {
   // challenge details recieved from App.js
-  const [challengeTitle, setChallengeTitle] = useState(
-    props.challenge.ChallengeTitle
-  );
-  const [challengeDescription, setChallengeDescription] = useState(
-    props.challenge.ChallengeDesc
-  );
+  const [challenge, setChallenge] = useState({title: props.challenge.title, description: props.challenge.description});
+
+  //Control when the modal is visible / what is displayed when the modal is visible.
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState();
 
@@ -48,7 +45,7 @@ const ChallengesScreen = (props) => {
         <TextInput
           style={styles.editInput}
           placeholder="New Title..."
-          onChangeText={(text) => setChallengeTitle(text)}
+          onChangeText={(text) => challenge.title = text}
         />
       );
     }
@@ -57,7 +54,7 @@ const ChallengesScreen = (props) => {
         <TextInput
           style={styles.editInput}
           placeholder="New Description..."
-          onChangeText={(text) => setChallengeDescription(text)}
+          onChangeText={(text) => challenge.description = text}
         />
       );
     }
@@ -65,13 +62,13 @@ const ChallengesScreen = (props) => {
 
   const onModalClose = () => {
     //WRITE CHALLENGE TITLE AND CHALLENGE DESCRIPTION TO THE DATABASE
+    props.onEditChallenge(props.challenge, challenge)
   };
 
   const onDeleteButtonPress = () => {
     //Database call to delete the current challenge.
     props.onDeleteChallenge();
-    setChallengeTitle();
-    setChallengeDescription();
+    setChallenge();
     props.onPageChange("main screen");
   };
 
@@ -145,11 +142,11 @@ const ChallengesScreen = (props) => {
         {/* Create the cards that contain the title and the description seperately */}
         <Card style={styles.adminContainer}>
           {ChallengeTitleAdminComponent()}
-          <Text style={styles.title}> {challengeTitle} </Text>
+          <Text style={styles.title}> {challenge.title} </Text>
         </Card>
         <Card style={styles.adminContainer}>
           {ChallengeDescriptionAdminComponent()}
-          <Text style={styles.body}> {challengeDescription} </Text>
+          <Text style={styles.body}> {challenge.description} </Text>
         </Card>
         {AdminDeleteButton()}
       </View>

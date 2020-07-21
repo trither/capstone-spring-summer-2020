@@ -15,7 +15,7 @@ import Header from "../components/Header";
 import Icon from "@expo/vector-icons/FontAwesome";
 import { FontAwesome } from "@expo/vector-icons";
 
-const MainScreen = (props) => {
+const MainScreenTutorial = (props) => {
   //If the user is an admin. Create the admin add new challenge button.
   const AdminAddChallengeButton = () => {
     if (props.adminRights) {
@@ -45,7 +45,7 @@ const MainScreen = (props) => {
   };
 
   //API grab lives remaining
-  var lives = props.profile.Lives;
+  var lives = 3;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
   let bubble;
   if (lives === 1) {
@@ -63,14 +63,14 @@ const MainScreen = (props) => {
   }
 
   //API for Challenge Titles
-  var ch1 = props.challenges[0].title;
-  var ch2 = props.challenges[1].title;
-  var ch3 = props.challenges[2].title;
+  var ch1 = "Challenge 1";
+  var ch2 = "Challenge 2";
+  var ch3 = "Challenge 3";
 
   return (
     <View style={styles.screen}>
       <Header onButtonPress={props.onPageChange} />
-      <View style={styles.challengeContainer}>
+      <View style={styles.challengeContainerTutorial}>
         <View style={styles.challenge}>
           <TouchableOpacity
             onPress={() => props.onPageChange("challenge1")}
@@ -106,9 +106,21 @@ const MainScreen = (props) => {
         </View>
         {AdminAddChallengeButton()}
       </View>
-      <View style={styles.health}>
+      <View style={styles.tutorialHealth}>
         <Text style={styles.text}> Hearts Remaining </Text>
         <View>{bubble}</View>
+      </View>
+      <View style={styles.tutorialNavbar}>
+        <View style={styles.arrowContainer}>
+          <TouchableOpacity onPress={() => console.log("left")}>
+            <FontAwesome name="arrow-left" size={50} color="black" />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.arrowContainer}>
+          <TouchableOpacity onPress={() => console.log("right")}>
+            <FontAwesome name="arrow-right" size={50} color="black" />
+          </TouchableOpacity>
+        </View>
       </View>
       <Footer onButtonPress={props.onPageChange} />
     </View>
@@ -120,6 +132,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: ColorPalette.primary,
+  },
+
+  arrowContainer: {
+    margin: 40,
+  },
+
+  tutorialNavbar: {
+    flexDirection: "row",
   },
 
   challengeContainerTutorial: {
@@ -193,4 +213,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainScreen;
+export default MainScreenTutorial;
