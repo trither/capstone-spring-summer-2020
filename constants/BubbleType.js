@@ -2,7 +2,7 @@ import React from 'react';
 import { AsyncStorage, Image, StyleSheet} from "react-native";
 
 let bubbleType = {};
-var  bubbleVar= 2;
+var  bubbleVar= 1;
 if (bubbleVar === 1){
     bubbleType =  {
         oneLife:<Image 
