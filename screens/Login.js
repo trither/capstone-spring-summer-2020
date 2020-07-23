@@ -28,9 +28,24 @@ const LoginScreen = (props) => {
 	      googleUser.accessToken
       );
       // Sign in with credential from the Google user.
-      firebase.auth().signInWithCredential(credential).then(function(){
+      if(result.additionalUserInfo.isNewUser){
+      firebase.auth().signInAndRetrieveDataWithCredential(credential)
+	.then(function(result){
 		console.log('user signed in');
-      })
+		firebase
+		.database()
+		.ref('/profile/' + result.user.uid)
+		.set({
+			firstname: result.additionalUserInfo.profile.given_name,
+			lastname: result.additionalUserInfo.profile.family_name,
+			profile_picture: result.additionalUserInfo.profile.picture,
+			locale: result.additionalUserInfo.profile.locale,
+		}).then(function (snapshot) {
+			console.log('snapshot', snapshot);
+      });
+	})
+	    }
+
 	    .catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
