@@ -8,10 +8,17 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import Footer from "../components/Footer";
-import Card from "../components/Card";
-import ColorPalette from "../constants/ColorPalette";
-import Header from "../components/Header";
+//import Footer from ".../components/Footer";
+
+//Components
+import Footer from "../../components/Footer";
+import Card from "../../components/Card";
+import Header from "../../components/Header";
+import TutorialNavbar from "../../components/TutorialNavbar";
+
+//constants
+import ColorPalette from "../../constants/ColorPalette";
+
 import Icon from "@expo/vector-icons/FontAwesome";
 import { FontAwesome } from "@expo/vector-icons";
 
@@ -50,15 +57,18 @@ const MainScreenTutorial = (props) => {
   let bubble;
   if (lives === 1) {
     bubble = (
-      <Image style={styles.image} source={require("./Assets/OneHeart.png")} />
+      <Image style={styles.image} source={require("../Assets/OneHeart.png")} />
     );
   } else if (lives === 2) {
     bubble = (
-      <Image style={styles.image} source={require("./Assets/TwoHeart.png")} />
+      <Image style={styles.image} source={require("../Assets/TwoHeart.png")} />
     );
   } else if (lives === 3) {
     bubble = (
-      <Image style={styles.image} source={require("./Assets/ThreeHeart.png")} />
+      <Image
+        style={styles.image}
+        source={require("../Assets/ThreeHeart.png")}
+      />
     );
   }
 
@@ -106,22 +116,22 @@ const MainScreenTutorial = (props) => {
         </View>
         {AdminAddChallengeButton()}
       </View>
+      <Text>
+        Every day you will be presented with three possible challenges.
+        Challenges include a variaty of activities to help you stay healthy and
+        active during the COVID-19 pandemic.
+      </Text>
       <View style={styles.tutorialHealth}>
         <Text style={styles.text}> Hearts Remaining </Text>
         <View>{bubble}</View>
       </View>
-      <View style={styles.tutorialNavbar}>
-        <View style={styles.arrowContainer}>
-          <TouchableOpacity onPress={() => console.log("left")}>
-            <FontAwesome name="arrow-left" size={50} color="black" />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.arrowContainer}>
-          <TouchableOpacity onPress={() => console.log("right")}>
-            <FontAwesome name="arrow-right" size={50} color="black" />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <TutorialNavbar
+        first={false}
+        last={false}
+        nextPage={"healthTutorial"}
+        prevPage={"welcome"}
+        onArrowPress={props.onPageChange}
+      />
       <Footer onButtonPress={props.onPageChange} />
     </View>
   );
@@ -132,14 +142,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     backgroundColor: ColorPalette.primary,
-  },
-
-  arrowContainer: {
-    margin: 40,
-  },
-
-  tutorialNavbar: {
-    flexDirection: "row",
   },
 
   challengeContainerTutorial: {

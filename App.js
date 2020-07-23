@@ -1,17 +1,27 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 
+//Main app screens
 import MainScreen from "./screens/MainScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import HeatmapScreen from "./screens/Heatmap";
 import SettingsScreen from "./screens/SettingsScreen";
 import ChallengesScreen from "./screens/ChallengesScreen";
+
+//admin screen
 import CreateNewChallengeScreen from "./screens/CreateNewChallengeScreen";
-import Tutorial from "./screens/Tutorial.js"
+
+//Tutorial screens
+import MainScreenChallengeTutorial from "./screens/Tutorial Screens/MainScreenChallengeTutorial.js";
+import HealthTutorialScreen from "./screens/Tutorial Screens/HealthTutorialScreen";
+import TutorialWelcome from "./screens/Tutorial Screens/TutorialWelcome";
+import ProfileTutorial from "./screens/Tutorial Screens/ProfileScreenTutorial";
+import HeatmapTutorial from "./screens/Tutorial Screens/HeatmapTutorial";
+import ChallengeTutorial from "./screens/Tutorial Screens/ChallengeScreenTutorial";
 
 export default function App() {
   //const [currentPage, setCurrentPage] = useState("main screen");
-  const [currentPage, setCurrentPage] = useState("main screen");
+  const [currentPage, setCurrentPage] = useState("welcome");
 
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
   const [currentChallenges, setCurrentChallenges] = useState([
@@ -103,8 +113,18 @@ export default function App() {
     content = <SettingsScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "createNewChallenge") {
     content = <CreateNewChallengeScreen onPageChange={changePageHandler} />;
-  } else if (currentPage === "tutorial"){
-    content = <Tutorial />
+  } else if (currentPage === "mainChallengeTutorial") {
+    content = <MainScreenChallengeTutorial onPageChange={changePageHandler} />;
+  } else if (currentPage === "healthTutorial") {
+    content = <HealthTutorialScreen onPageChange={changePageHandler} />;
+  } else if (currentPage === "welcome") {
+    content = <TutorialWelcome onPageChange={changePageHandler} />;
+  } else if (currentPage === "profileTutorial") {
+    content = <ProfileTutorial onPageChange={changePageHandler} />;
+  } else if (currentPage === "challengeTutorial") {
+    content = <ChallengeTutorial onPageChange={changePageHandler} />;
+  } else if (currentPage === "heatmapTutorial") {
+    content = <HeatmapTutorial onPageChange={changePageHandler} />;
   }
 
   return <View style={styles.container}>{content}</View>;

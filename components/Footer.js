@@ -1,5 +1,9 @@
 import React from "react";
-import { View, StyleSheet, Button, TouchableHighlight, TouchableOpacity, Text,} from "react-native";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
 import ColorPalette from "../constants/ColorPalette";
 import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
@@ -7,13 +11,13 @@ const Footer = (props) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => props.onButtonPress("main screen")}>
-        <Icon style={styles.icon} name='home' raised='true'/>
+        <Icon style={styles.icon} name="home" raised="true" />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => props.onButtonPress("profile")}>
-        <Icon style={styles.icon} name='user' raised='true'/>
+        <Icon style={styles.icon} name="user" raised="true" />
       </TouchableOpacity>
       <TouchableOpacity onPress={() => props.onButtonPress("heatmap")}>
-        <Icon style={styles.icon} name='map' raised='true'/>
+        <Icon style={styles.icon} name="map" raised="true" />
       </TouchableOpacity>
     </View>
   );
@@ -33,11 +37,10 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 45,
     textShadowColor: ColorPalette.highlight,
-    textShadowOffset: { width:0, height:2},
+    textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
-    shadowOpacity: .2,    
+    shadowOpacity: 0.2,
     color: ColorPalette.offcolor,
-  }
-
+  },
 });
 export default Footer;
