@@ -6,12 +6,14 @@ import Card from "../components/Card";
 import ColorPalette from "../constants/ColorPalette";
 
 const ProfileScreen = props => {
+    //Set Theme
+    let theme = ColorPalette();
 
     //load in values from the user
     var name = props.profile.FullName;
     var level = props.profile.Level;
     var score = props.profile.Score;
-    let profilePic = <Image style={styles.profilePicture} source={{uri:props.profile.URLPic}}/>
+    let profilePic = <Image style={[styles.profilePicture, {borderColor: theme.offcolor,}]} source={{uri:props.profile.URLPic}}/>
     var streak = props.profile.WeeklyStreak;
     //variables for progress/level bar.  Let me know if you want this moved somewhere else
     var reqExp = 0;
@@ -52,29 +54,29 @@ const ProfileScreen = props => {
     var percentDone = getPercent.toFixed(0) + '%';
 
     return(
-        <View style={styles.screen}>
+        <View style={[styles.screen, {backgroundColor: theme.primary,}]}>
             <Header onButtonPress = {props.onPageChange}/>
             <View style={styles.boxTop}> 
-                <Text style={styles.profileName}>{name}</Text>
-                <View style={styles.addShadow}>{profilePic}</View>
+                <Text style={[styles.profileName, {color: theme.offcolor, textShadowColor: theme.highlight,}]}>{name}</Text>
+                <View style={[styles.addShadow, {shadowColor: theme.highlight,}]}>{profilePic}</View>
                 <View style={styles.levelContainer}>
-                    <View style={styles.levelScoreBox}>
-                        <Text style={styles.levelScore}>{level}</Text>
+                    <View style={[styles.levelScoreBox, {borderColor: theme.offcolor, shadowColor: theme.highlight,}]}>
+                        <Text style={[styles.levelScore, {color: theme.offcolor, textShadowColor: theme.highlight,}]}>{level}</Text>
                     </View>
-                    <View style={styles.levelBar}>
-                        <View style={styles.levelBarFill} width={percentDone}  />
-                        <Text style={styles.levelExp}> {currentLevelScore} / {reqExp} </Text>
+                    <View style={[styles.levelBar, {backgroundColor: theme.primary, shadowColor: theme.highlight, borderColor: theme.offcolor,}]}>
+                        <View style={[styles.levelBarFill, {backgroundColor: theme.highlight,}]} width={percentDone}  />
+                        <Text style={[styles.levelExp, {color: theme.offcolor, textShadowColor: theme.highlight, shadowColor: theme.highlight,}]}> {currentLevelScore} / {reqExp} </Text>
                     </View>
                 </View>
             </View>
             <View style={styles.middleBox}>
-                <View style={styles.statBox}>
-                    <Text style={styles.text}>Total Score</Text>
-                    <Text style={styles.scoreText}>{score}</Text>
+                <View style={[styles.statBox, {borderColor: theme.offcolor, shadowColor: theme.highlight,}]}>
+                    <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}>Total Score</Text>
+                    <Text style={[styles.scoreText, {color: theme.offcolor, textShadowColor: theme.highlight,}]}>{score}</Text>
                 </View>
-                <View style={styles.statBox}>
-                    <Text style={styles.text}>Weekly Streak</Text>
-                    <Text style={styles.scoreText}>{streak}</Text>
+                <View style={[styles.statBox, {borderColor: theme.offcolor, shadowColor: theme.highlight,}]}>
+                    <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}>Weekly Streak</Text>
+                    <Text style={[styles.scoreText, {color: theme.offcolor, textShadowColor: theme.highlight,}]}>{streak}</Text>
                 </View>
             </View>
             <Footer onButtonPress = {props.onPageChange}/>
@@ -84,13 +86,10 @@ const ProfileScreen = props => {
 
 const styles = StyleSheet.create({
     screen: {
-        backgroundColor:ColorPalette.primary,
         flex: 1
     },
 
     text :{
-        color: ColorPalette.offcolor,
-        textShadowColor: ColorPalette.highlight,
         textShadowOffset: { width:0, height:2},
         textShadowRadius: 6,
         shadowOpacity: .2,
@@ -101,8 +100,6 @@ const styles = StyleSheet.create({
 
     profileName:{
         top:7,
-        color: ColorPalette.offcolor,
-        textShadowColor: ColorPalette.highlight,
         textShadowOffset: { width:1, height:1},
         textShadowRadius: 0,
         shadowOpacity: .2,
@@ -116,13 +113,11 @@ const styles = StyleSheet.create({
         height: 125,
         width: 125,
         alignSelf: "center",
-        borderColor: ColorPalette.offcolor,
         borderWidth: 5,
         borderRadius: 10,
     },
 
     addShadow: {
-        shadowColor: ColorPalette.highlight,
         shadowOffset: {
             width: 2,
             height: 2,
@@ -144,8 +139,6 @@ const styles = StyleSheet.create({
     },
 
     levelScore:{
-        color: ColorPalette.offcolor,
-        textShadowColor: ColorPalette.highlight,
         textShadowOffset: { width:0, height:2},
         textShadowRadius: 6,
         shadowOpacity: .2,
@@ -157,11 +150,9 @@ const styles = StyleSheet.create({
     levelScoreBox: {
         height:35,
         width:50,
-        borderColor: ColorPalette.offcolor,
         borderWidth:5,
         borderTopLeftRadius: 10,
         borderBottomLeftRadius: 10,
-        shadowColor: ColorPalette.highlight,
         shadowOffset: {
             width: 2,
             height: 2,
@@ -171,15 +162,13 @@ const styles = StyleSheet.create({
     },
 
     levelExp :{
-        color: ColorPalette.offcolor,
-        textShadowColor: ColorPalette.highlight,
         textShadowOffset: { width:0, height:1},
         textShadowRadius: 6,
         shadowOpacity: .2,
         textAlign: "center",
         fontSize: 16,
         fontWeight: 'bold',
-        shadowColor: ColorPalette.highlight,
+
         shadowOffset: {
             width: 1,
             height: 1,
@@ -191,13 +180,10 @@ const styles = StyleSheet.create({
     levelBar: {
         height: 35,
         width: '80%',
-        backgroundColor: ColorPalette.primary,
-        borderColor: ColorPalette.offcolor,
         borderWidth: 5,
         borderTopRightRadius: 10,
         borderBottomRightRadius: 10,
         alignContent: 'center',
-        shadowColor: ColorPalette.highlight,
         shadowOffset: {
             width: 2,
             height: 2,
@@ -212,7 +198,6 @@ const styles = StyleSheet.create({
         right: 0,
         top: 0,
         bottom: 0,
-        backgroundColor: ColorPalette.highlight,
     },
 
     example: {
@@ -228,9 +213,7 @@ const styles = StyleSheet.create({
         width: 150,
         height: 80,
         borderWidth:5,
-        borderColor: ColorPalette.offcolor,
         borderRadius: 10,
-        shadowColor: ColorPalette.highlight,
         shadowOffset: {
             width: 1,
             height: 1,
@@ -240,8 +223,6 @@ const styles = StyleSheet.create({
     },
 
     scoreText :{
-        color: ColorPalette.offcolor,
-        textShadowColor: ColorPalette.highlight,
         textShadowOffset: { width:0, height:1},
         textShadowRadius: 0,
         shadowOpacity: .2,

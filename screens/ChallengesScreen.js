@@ -20,33 +20,34 @@ const ChallengesScreen = props => {
     // challenge details recieved from App.js
     var challengeTitle = props.challenge.ChallengeTitle
     var challengeDescription = props.challenge.ChallengeDesc
+    let theme = ColorPalette();
 
     return(
         // Create the screen object
         <View style={styles.screen}>
         <Header onButtonPress = {props.onPageChange}/>
-            <View style={styles.cardContainer}>
+            <View style={[styles.cardContainer, {backgroundColor: theme.primary}]}>
                 {/* Create the cards that contain the title and the description seperately */}
                 <Card>
-                    <Text style={styles.title}> {challengeTitle} </Text>
+                    <Text style={[styles.title, {color: theme.offcolor, textShadowColor: theme.highlight}]}> {challengeTitle} </Text>
                 </Card>
                 <Card>
-                    <Text style={styles.body}> {challengeDescription} </Text>
+                    <Text style={[styles.body, {color: theme.offcolor}]}> {challengeDescription} </Text>
                 </Card>
             </View>
             {/* Create the container for the refresh and button complete (it's invisible and is just here for layout reasons) */}
-            <View style={styles.buttonContainer}>
+            <View style={[styles.buttonContainer,{backgroundColor: theme.primary}]}>
                 {/* Create the squares the the buttons exist on top of (buttonBoxes) */}
                 <Card style={styles.buttonBox}>
                     {/* CloudFunctions needed here to fetch new challnege and put the new data into the title and description elements above*/}
                     <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
-                        <Icon style={styles.icon} name='refresh' raised='true'/>
+                        <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor}]} name='refresh' raised='true'/>
                     </TouchableOpacity>
                 </Card> 
                 <Card style={styles.buttonBox}>
                     {/* CloudFunctions needed here to recieve challenge completed data*/}                    
                     <TouchableOpacity onPress={() => Alert.alert('Challenge Marked Complete')} width="20%">
-                        <Icon style={styles.icon} name='check' raised='true'/>
+                        <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor}]} name='check' raised='true'/>
                     </TouchableOpacity>
                 </Card>
             </View>
@@ -68,12 +69,10 @@ const styles = StyleSheet.create({
       },
 
     cardContainer: {
-        backgroundColor: ColorPalette.primary,
         flex: 2,
     },
 
     buttonContainer: {
-        backgroundColor: ColorPalette.primary,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-around'
@@ -86,8 +85,6 @@ const styles = StyleSheet.create({
     },
 
     title: {
-      color: ColorPalette.offcolor,
-      textShadowColor: ColorPalette.highlight,
       textShadowOffset: { width:0, height:2},
       textShadowRadius: 6,
       shadowOpacity: .2,
@@ -97,18 +94,15 @@ const styles = StyleSheet.create({
     },
 
     body: {
-        color: ColorPalette.offcolor,
         textAlign: "center",
         fontSize: 16  
       },
 
       icon: {
         fontSize: 64,
-        textShadowColor: ColorPalette.highlight,
         textShadowOffset: { width:0, height:2},
         textShadowRadius: 6,
         shadowOpacity: .2,    
-        color: ColorPalette.offcolor,
       }
 });
 

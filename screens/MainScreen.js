@@ -19,6 +19,7 @@ import BubbleType from "../constants/BubbleType";
 import Header from "../components/Header";
 import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
+
 const MainScreen = (props) => {
   //API grab lives remaining
   var lives = props.profile.Lives;
@@ -31,43 +32,43 @@ const MainScreen = (props) => {
   } else if (lives === 3){
     bubble =  BubbleType.thrLife;
   }
-
-
+  //Set theme for page
+  let theme = ColorPalette();
   //API for Challenge Titles
   var ch1 = props.challenges[0].ChallengeTitle;
   var ch2 = props.challenges[1].ChallengeTitle;
   var ch3 = props.challenges[2].ChallengeTitle;
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, {backgroundColor:theme.primary}]}>
       <Header onButtonPress = {props.onPageChange}/>  
         <View style={styles.cardContainer}>
-            <View style={styles.challenge}>
+            <View style={[styles.challenge, {backgroundColor: theme.primary, borderBottomColor: theme.offcolor}]}>
               <TouchableOpacity onPress={()=>props.onPageChange("challenge1")} width="80%">
-                <Text style={styles.text}> {ch1} </Text>
+                <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}> {ch1} </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
-                <Icon style={styles.icon} name='refresh' raised='true'/>
+                <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor}]} name='refresh' raised='true'/>
               </TouchableOpacity>  
             </View>
-            <View style={styles.challenge}>
+            <View style={[styles.challenge, {backgroundColor: theme.primary, borderBottomColor: theme.offcolor}]}>
               <TouchableOpacity onPress={()=>props.onPageChange("challenge2")} width="80%">
-                <Text style={styles.text}> {ch2} </Text>
+                <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}> {ch2} </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
-                <Icon style={styles.icon} name='refresh' raised='true'/>
+                <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor}]} name='refresh' raised='true'/>
               </TouchableOpacity>  
             </View>
-            <View style={styles.challenge}>
+            <View style={[styles.challenge, {backgroundColor: theme.primary, borderBottomColor: theme.offcolor}]}>
               <TouchableOpacity onPress={()=>props.onPageChange("challenge3")} width="80%">
-                <Text style={styles.text}> {ch3} </Text>
+                <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}> {ch3} </Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
-                <Icon style={styles.icon} name='refresh' raised='true'/>
+                <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor}]} name='refresh' raised='true'/>
               </TouchableOpacity>  
             </View>
             <View style={styles.health}>
-              <Text style={styles.text}> Hearts Remaining </Text>
+              <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}> Hearts Remaining </Text>
               <View>{bubble}</View>
             </View>
       </View>
@@ -82,13 +83,10 @@ const styles = StyleSheet.create({
   },
 
   cardContainer: {
-    backgroundColor: ColorPalette.primary,
     flex: 2,
   },
 
   text: {
-    color: ColorPalette.offcolor,
-    textShadowColor: ColorPalette.highlight,
     textShadowOffset: { width:0, height:2},
     textShadowRadius: 6,
     shadowOpacity: .2,
@@ -103,17 +101,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 
-  chContatiner: {
-    height: 50,
-    width: "100%",
-    position: "absolute",
-    bottom: 0,
-    justifyContent: "space-around",
-    alignItems: "center",
-    flexDirection: "column",
-    backgroundColor: ColorPalette.secondary,
-  },
-
   challenge: {
     height: 40,
     width: "100%",
@@ -121,21 +108,19 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: ColorPalette.primary,
     margin: 5,
     borderBottomWidth: 4,
     borderBottomStartRadius: 45,
     borderBottomEndRadius: 45,
-    borderBottomColor: ColorPalette.offcolor,
   },
 
   icon: {
     fontSize: 35,
     textShadowColor: ColorPalette.highlight,
+    color: ColorPalette.offcolor,
     textShadowOffset: { width:0, height:2},
     textShadowRadius: 6,
     shadowOpacity: .2,    
-    color: ColorPalette.offcolor,
   },
 
   health: {

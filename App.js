@@ -6,6 +6,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ChallengesScreen from "./screens/ChallengesScreen";
 import HeatmapScreen from "./screens/Heatmap";
 import SettingsScreen from "./screens/SettingsScreen";
+import ColorPalette from "./constants/ColorPalette"
 
 export default function App() {
   //Page Functions (No need for DB)
