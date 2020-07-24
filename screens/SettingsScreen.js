@@ -33,7 +33,6 @@ const SettingsScreen = props =>{
     if (data !== null){
         changeTheme(data)
     }
-    console.log(data)
     })
 
     AsyncStorage.getItem("bubble")
@@ -42,7 +41,6 @@ const SettingsScreen = props =>{
     if (data !== null){
         changeBubble(data)
     }
-    console.log(data)
     })
 
     return(
@@ -62,7 +60,7 @@ const SettingsScreen = props =>{
                         containerStyle={{height: 40}}
                         onChangeItem={function (item) { 
                             AsyncStorage.setItem('theme', item.value)
-                            .then(()=>{console.log('saved');})
+                            .then(()=>{})
                             .catch((error)=>{console.log(error)})
                             refreshMe()
                         }}
@@ -80,7 +78,7 @@ const SettingsScreen = props =>{
                         containerStyle={{height: 40}}
                         onChangeItem={item => 
                             AsyncStorage.setItem('bubble', item.value)
-                            .then(()=>{console.log('saved');})
+                            .then(()=>{})
                             .catch((error)=>{console.log(error)})}
                     />
                 </View>

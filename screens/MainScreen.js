@@ -24,13 +24,15 @@ const MainScreen = (props) => {
   //API grab lives remaining
   var lives = props.profile.Lives;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
+  let myBubble = BubbleType();
   let bubble;
+  var types = myBubble.type;
   if (lives === 1){
-    bubble =  BubbleType.oneLife;
+    bubble =  myBubble.oneLife;
   } else if (lives === 2){
-    bubble =  BubbleType.twoLife;
+    bubble =  myBubble.twoLife;
   } else if (lives === 3){
-    bubble =  BubbleType.thrLife;
+    bubble =  myBubble.thrLife;
   }
   //Set theme for page
   let theme = ColorPalette();
@@ -68,7 +70,7 @@ const MainScreen = (props) => {
               </TouchableOpacity>  
             </View>
             <View style={styles.health}>
-              <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}> Hearts Remaining </Text>
+              <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}> {types} Remaining </Text>
               <View>{bubble}</View>
             </View>
       </View>

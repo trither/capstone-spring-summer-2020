@@ -1,8 +1,11 @@
-import React,{useState} from 'react';
+import React, {useState} from 'react';
 import { AsyncStorage } from "react-native";
 
 let theme
 const myTheme = () => {
+    var themeVar;
+
+    //Async Storage Call for 'theme'
     const [Theme, setThemeState] = useState("");
     const changeTheme = (newTheme) => {
         setThemeState(newTheme)
