@@ -4,16 +4,17 @@ import ColorPalette from "../constants/ColorPalette";
 import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
 const Footer = (props) => {
+  let theme = ColorPalette();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor:theme.secondary}]}>
       <TouchableOpacity onPress={() => props.onButtonPress("main screen")}>
-        <Icon style={styles.icon} name='home' raised='true'/>
+        <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor,}]} name='home' raised='true'/>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => props.onButtonPress("profile")}>
-        <Icon style={styles.icon} name='user' raised='true'/>
+        <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor,}]} name='user' raised='true'/>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => props.onButtonPress("heatmap")}>
-        <Icon style={styles.icon} name='map' raised='true'/>
+        <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor,}]} name='map' raised='true'/>
       </TouchableOpacity>
     </View>
   );
@@ -28,15 +29,12 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: ColorPalette.secondary,
   },
   icon: {
     fontSize: 45,
-    textShadowColor: ColorPalette.highlight,
     textShadowOffset: { width:0, height:2},
     textShadowRadius: 6,
     shadowOpacity: .2,    
-    color: ColorPalette.offcolor,
   }
 
 });

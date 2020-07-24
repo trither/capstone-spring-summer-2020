@@ -1,25 +1,28 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 
 import MainScreen from "./screens/MainScreen";
 import ProfileScreen from "./screens/ProfileScreen";
 import ChallengesScreen from "./screens/ChallengesScreen";
 import HeatmapScreen from "./screens/Heatmap";
 import SettingsScreen from "./screens/SettingsScreen";
+import ColorPalette from "./constants/ColorPalette"
 
 export default function App() {
+  //Page Functions (No need for DB)
   const [currentPage, setCurrentPage] = useState("main screen");
+  
+  const changePageHandler = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  // User info should be loaded in from DB, then can be passed to functions as a prop.  Photo is a default stock photo.
+  const[thisUser, setUser] = useState({FullName:"Name",Level:0,Lives:3,Score:0,URLPic:"https://i.stack.imgur.com/l60Hf.png",WeeklyStreak:0})
 
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
   const[currentChallenges, setCurrentChallenges] = useState([{ChallengeTitle:"ChallengeTitle1",ChallengeDesc:"ChallengeDesc1"},
   {ChallengeTitle:"ChallengeTitle2",ChallengeDesc:"ChallengeDesc2"},{ChallengeTitle:"ChallengeTitle3",ChallengeDesc:"ChallengeDesc3"}]);
 
-  // User info should be loaded in from DB, then can be passed to functions as a prop.  Photo is a default stock photo.
-  const[thisUser, setUser] = useState({FullName:"Name",Level:0,Lives:3,Score:0,URLPic:"https://i.stack.imgur.com/l60Hf.png",WeeklyStreak:0})
-
-  const changePageHandler = (newPage) => {
-    setCurrentPage(newPage);
-  };
   let content;
 
   if (currentPage === "main screen") {

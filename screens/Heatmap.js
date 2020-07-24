@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Button, Modal } from "react-native";
+import { View, StyleSheet, Text, Button, Modal, AsyncStorage } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
