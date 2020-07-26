@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Button, Modal, AsyncStorage } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Button,
+  Modal,
+  AsyncStorage,
+} from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -128,7 +135,6 @@ const HeatmapScreen = (props) => {
           </View>
         </View>
       </Modal>
-    <Header onButtonPress = {props.onPageChange}/>
       <MapView
         id="anchor"
         style={{ flex: 1 }}
@@ -142,7 +148,6 @@ const HeatmapScreen = (props) => {
       >
         {polygons}
       </MapView>
-      <Footer onButtonPress={props.onPageChange} />
     </View>
   );
 };
@@ -157,9 +162,7 @@ const styles = StyleSheet.create({
     //justifyContent:"space-around"
   },
 
-  modalText: {
-
-  },
+  modalText: {},
 
   centeredView: {
     flex: 1,

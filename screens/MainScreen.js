@@ -1,80 +1,164 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
   Text,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
   Button,
-  Image,
   TouchableOpacity,
   Alert,
-  AsyncStorage,
 } from "react-native";
-import Footer from "../components/Footer";
-import Card from "../components/Card";
 import ColorPalette from "../constants/ColorPalette";
 import BubbleType from "../constants/BubbleType";
-import Header from "../components/Header";
 import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
-
 const MainScreen = (props) => {
+  //If the user is an admin. Create the admin add new challenge button.
+  const AdminAddChallengeButton = () => {
+    if (props.adminRights) {
+      return (
+        <Button
+          onPress={() => props.onPageChange("createNewChallenge")}
+          color={ColorPalette.offcolor}
+          title="Add Challenge."
+        />
+      );
+    }
+  };
   //API grab lives remaining
   var lives = props.profile.Lives;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
   let myBubble = BubbleType();
   let bubble;
   var types = myBubble.type;
-  if (lives === 1){
-    bubble =  myBubble.oneLife;
-  } else if (lives === 2){
-    bubble =  myBubble.twoLife;
-  } else if (lives === 3){
-    bubble =  myBubble.thrLife;
+  if (lives === 1) {
+    bubble = myBubble.oneLife;
+  } else if (lives === 2) {
+    bubble = myBubble.twoLife;
+  } else if (lives === 3) {
+    bubble = myBubble.thrLife;
   }
   //Set theme for page
   let theme = ColorPalette();
   //API for Challenge Titles
-  var ch1 = props.challenges[0].ChallengeTitle;
-  var ch2 = props.challenges[1].ChallengeTitle;
-  var ch3 = props.challenges[2].ChallengeTitle;
+  var ch1 = props.challenges[0].title;
+  var ch2 = props.challenges[1].title;
+  var ch3 = props.challenges[2].title;
 
   return (
-    <View style={[styles.screen, {backgroundColor:theme.primary}]}>
-      <Header onButtonPress = {props.onPageChange}/>  
-        <View style={styles.cardContainer}>
-            <View style={[styles.challenge, {backgroundColor: theme.primary, borderBottomColor: theme.offcolor}]}>
-              <TouchableOpacity onPress={()=>props.onPageChange("challenge1")} width="80%">
-                <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}> {ch1} </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
-                <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor}]} name='refresh' raised='true'/>
-              </TouchableOpacity>  
-            </View>
-            <View style={[styles.challenge, {backgroundColor: theme.primary, borderBottomColor: theme.offcolor}]}>
-              <TouchableOpacity onPress={()=>props.onPageChange("challenge2")} width="80%">
-                <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}> {ch2} </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
-                <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor}]} name='refresh' raised='true'/>
-              </TouchableOpacity>  
-            </View>
-            <View style={[styles.challenge, {backgroundColor: theme.primary, borderBottomColor: theme.offcolor}]}>
-              <TouchableOpacity onPress={()=>props.onPageChange("challenge3")} width="80%">
-                <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}> {ch3} </Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => Alert.alert('Refresh')} width="20%">
-                <Icon style={[styles.icon, {textShadowColor: theme.highlight, color: theme.offcolor}]} name='refresh' raised='true'/>
-              </TouchableOpacity>  
-            </View>
-            <View style={styles.health}>
-              <Text style={[styles.text, {color: theme.offcolor, textShadowColor: theme.highlight}]}> {types} Remaining </Text>
-              <View>{bubble}</View>
-            </View>
+    <View style={[styles.screen, { backgroundColor: theme.primary }]}>
+      <View style={styles.cardContainer}>
+        <View
+          style={[
+            styles.challenge,
+            {
+              backgroundColor: theme.primary,
+              borderBottomColor: theme.offcolor,
+            },
+          ]}
+        >
+          <TouchableOpacity
+            onPress={() => props.onPageChange("challenge1")}
+            width="80%"
+          >
+            <Text
+              style={[
+                styles.text,
+                { color: theme.offcolor, textShadowColor: theme.highlight },
+              ]}
+            >
+              {ch1}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
+            <Icon
+              style={[
+                styles.icon,
+                { textShadowColor: theme.highlight, color: theme.offcolor },
+              ]}
+              name="refresh"
+              raised="true"
+            />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={[
+            styles.challenge,
+            {
+              backgroundColor: theme.primary,
+              borderBottomColor: theme.offcolor,
+            },
+          ]}
+        >
+          <TouchableOpacity
+            onPress={() => props.onPageChange("challenge2")}
+            width="80%"
+          >
+            <Text
+              style={[
+                styles.text,
+                { color: theme.offcolor, textShadowColor: theme.highlight },
+              ]}
+            >
+              {ch2}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
+            <Icon
+              style={[
+                styles.icon,
+                { textShadowColor: theme.highlight, color: theme.offcolor },
+              ]}
+              name="refresh"
+              raised="true"
+            />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={[
+            styles.challenge,
+            {
+              backgroundColor: theme.primary,
+              borderBottomColor: theme.offcolor,
+            },
+          ]}
+        >
+          <TouchableOpacity
+            onPress={() => props.onPageChange("challenge3")}
+            width="80%"
+          >
+            <Text
+              style={[
+                styles.text,
+                { color: theme.offcolor, textShadowColor: theme.highlight },
+              ]}
+            >
+              {ch3}
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
+            <Icon
+              style={[
+                styles.icon,
+                { textShadowColor: theme.highlight, color: theme.offcolor },
+              ]}
+              name="refresh"
+              raised="true"
+            />
+          </TouchableOpacity>
+        </View>
+        {AdminAddChallengeButton()}
+        <View style={styles.health}>
+          <Text
+            style={[
+              styles.text,
+              { color: theme.offcolor, textShadowColor: theme.highlight },
+            ]}
+          >
+            {types} Remaining
+          </Text>
+          <View>{bubble}</View>
+        </View>
       </View>
-      <Footer onButtonPress = {props.onPageChange}/>
     </View>
   );
 };
@@ -89,12 +173,12 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    textShadowOffset: { width:0, height:2},
+    textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
-    shadowOpacity: .2,
+    shadowOpacity: 0.2,
     textAlign: "center",
     fontSize: 16,
-    fontWeight: 'bold'    
+    fontWeight: "bold",
   },
 
   image: {
@@ -120,16 +204,16 @@ const styles = StyleSheet.create({
     fontSize: 35,
     textShadowColor: ColorPalette.highlight,
     color: ColorPalette.offcolor,
-    textShadowOffset: { width:0, height:2},
+    textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
-    shadowOpacity: .2,    
+    shadowOpacity: 0.2,
   },
 
   health: {
-    alignSelf: 'center',
-    position: 'absolute',
+    alignSelf: "center",
+    position: "absolute",
     bottom: 120,
-  }
+  },
 });
 
 export default MainScreen;
