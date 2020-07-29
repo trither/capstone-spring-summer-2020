@@ -9,8 +9,13 @@ import {
 } from "react-native";
 
 //Components
-import TutorialNavbar from "../../components/TutorialNavbar";
 import FadeInView from "../../components/FadeInView";
+
+//Tutorial components
+import TutorialText from "../../components/TutorialText";
+import TutorialSquare from "../../components/TutorialSquare";
+import TutorialButton from "../../components/TutorialButton";
+import TutorialNavbar from "../../components/TutorialNavbar";
 
 //constants
 import ColorPalette from "../../constants/ColorPalette";
@@ -18,14 +23,14 @@ import BubbleType from "../../constants/BubbleType";
 import Icon from "@expo/vector-icons/FontAwesome";
 
 const MainScreenTutorial = (props) => {
-  const [showChallengeArrow, setShowChallengeArrow] = useState(false);
+  const [tutorialContent, setTutorialContent] = useState(0);
   let myBubble = BubbleType();
   let theme = ColorPalette();
 
   const spawnChallengeArrow = () => {
-    if (showChallengeArrow) {
+    if (tutorialContent === 1) {
       return (
-        <FadeInView>
+        <FadeInView style={styles.arrowIcon}>
           <Icon
             style={{ color: theme.offcolor }}
             size={20}
@@ -37,7 +42,36 @@ const MainScreenTutorial = (props) => {
       return;
     }
   };
+
+  const spawnButton = () => {
+    if (tutorialContent === 0) {
+      return (
+        <TutorialButton
+          onPress={() => setTutorialContent(tutorialContent + 1)}
+          title="Go On..."
+        />
+      );
+    }
+    return (
+      <TutorialButton
+        style={{ opacity: 0 }}
+        onPress={() => setTutorialContent(tutorialContent + 1)}
+        title="Go On..."
+      />
+    );
+  };
+
+  const createTutorialText = () => {
+    if (tutorialContent === 0) {
+      return "Every day you will be presented with three possible challenges. Challenges include a variaty of activities to help you stay healthy and active during the COVID-19 pandemic.";
+    }
+    if (tutorialContent === 1) {
+      return "Press on one of the challenges!";
+    }
+  };
+
   var lives = 3;
+  var bubble;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
   if (lives === 1) {
     bubble = myBubble.oneLife;
@@ -53,90 +87,125 @@ const MainScreenTutorial = (props) => {
   var ch3 = "Challenge 3";
 
   return (
-    <View style={[styles.screen, {backgroundColor: theme.primary}]}>
+    <View style={[styles.screen, { backgroundColor: theme.primary }]}>
       <View style={styles.body}>
-        <View style={styles.challengeContainerTutorial}>
-          <View style={styles.challenge}>
+        <View
+          style={[
+            styles.challengeContainerTutorial,
+            { borderColor: theme.highlight },
+          ]}
+        >
+          <View
+            style={[styles.challenge, { borderBottomColor: theme.offcolor }]}
+          >
             {spawnChallengeArrow()}
             <TouchableOpacity
-              onPress={() => props.onPageChange("challenge1")}
+              onPress={() => props.onPageChange("challengeTutorial")}
               width="80%"
             >
-              <Text style={styles.text}> {ch1} </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => Alert.alert("Refresh")}
-              width="20%"
-            >
-              <Icon style={styles.icon} name="refresh" raised="true" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.challenge}>
-            <TouchableOpacity
-              onPress={() => props.onPageChange("challenge2")}
-              width="80%"
-            >
-              <Text style={styles.text}> {ch2} </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => Alert.alert("Refresh")}
-              width="20%"
-            >
-              <Icon style={styles.icon} name="refresh" raised="true" />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.challenge}>
-            <TouchableOpacity
-              onPress={() => props.onPageChange("challenge3")}
-              width="80%"
-            >
-              <Text style={styles.text}> {ch3} </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => Alert.alert("Refresh")}
-              width="20%"
-            >
-              <Icon style={styles.icon} name="refresh" raised="true" />
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={[styles.square, {backgroundColor: theme.highlight}]}>
-          <Text style={styles.bodyText}>
-            Every day you will be presented with three possible challenges.
-            Challenges include a variaty of activities to help you stay healthy
-            and active during the COVID-19 pandemic.
-          </Text>
-          <View
-            style={[
-              styles.buttonBorder,
-              { borderWidth: 1 },
-              { borderColor: theme.offcolor },
-            ]}
-          >
-            <TouchableHighlight onPress={() => setShowChallengeArrow(true)}>
               <Text
                 style={[
-                  { fontSize: 24 },
-                  { color: theme.offcolor },
-                  { textAlign: "center" },
+                  styles.text,
+                  { color: theme.offcolor, textShadowColor: theme.highlight },
                 ]}
               >
-                Go on...
+                {ch1}
               </Text>
-            </TouchableHighlight>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => Alert.alert("Refresh")}
+              width="20%"
+            >
+              <Icon
+                style={[
+                  styles.icon,
+                  {
+                    textShadowColor: theme.highlight,
+                    color: theme.offcolor,
+                  },
+                ]}
+                name="refresh"
+                raised="true"
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={[styles.challenge, { borderBottomColor: theme.offcolor }]}
+          >
+            {spawnChallengeArrow()}
+            <TouchableOpacity
+              onPress={() => props.onPageChange("challengeTutorial")}
+              width="80%"
+            >
+              <Text
+                style={[
+                  styles.text,
+                  { color: theme.offcolor, textShadowColor: theme.highlight },
+                ]}
+              >
+                {ch2}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => Alert.alert("Refresh")}
+              width="20%"
+            >
+              <Icon
+                style={[
+                  styles.icon,
+                  {
+                    textShadowColor: theme.highlight,
+                    color: theme.offcolor,
+                  },
+                ]}
+                name="refresh"
+                raised="true"
+              />
+            </TouchableOpacity>
+          </View>
+          <View
+            style={[styles.challenge, { borderBottomColor: theme.offcolor }]}
+          >
+            {spawnChallengeArrow()}
+            <TouchableOpacity
+              onPress={() => props.onPageChange("challengeTutorial")}
+              width="80%"
+            >
+              <Text
+                style={[
+                  styles.text,
+                  { color: theme.offcolor, textShadowColor: theme.highlight },
+                ]}
+              >
+                {ch3}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => Alert.alert("Refresh")}
+              width="20%"
+            >
+              <Icon
+                style={[
+                  styles.icon,
+                  {
+                    textShadowColor: theme.highlight,
+                    color: theme.offcolor,
+                  },
+                ]}
+                name="refresh"
+                raised="true"
+              />
+            </TouchableOpacity>
           </View>
         </View>
+        <TutorialSquare>
+          <TutorialText>{createTutorialText()}</TutorialText>
+          {spawnButton()}
+        </TutorialSquare>
         <View style={styles.health}>
           <Text style={styles.text}> Hearts Remaining </Text>
           <View>{bubble}</View>
         </View>
-        <TutorialNavbar
-          first={false}
-          last={false}
-          nextPage={"healthTutorial"}
-          prevPage={"welcome"}
-          onArrowPress={props.onPageChange}
-        />
       </View>
     </View>
   );
@@ -147,20 +216,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  buttonBorder: {
-    borderWidth: 1,
-    padding: 10,
-    width: "50%",
-  },
-
-  navbar: {
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-
-  arrowContainer: {
-    marginLeft: 30,
-    marginRight: 30,
+  arrowIcon: {
+    position: "absolute",
+    left: 0,
   },
 
   body: {
@@ -170,35 +228,14 @@ const styles = StyleSheet.create({
     width: "100%",
   },
 
-  square: {
-    padding: 20,
-    width: "90%",
-    borderRadius: 15,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  bodyText: {
-    color: "white",
-    fontSize: 18,
-    textAlign: "center",
-    margin: 10,
-  },
-
   challengeContainerTutorial: {
     width: "95%",
     borderWidth: 3,
-    borderColor: ColorPalette.highlight,
     padding: 5,
-  },
-
-  challengeContainer: {
-    width: "95%",
+    marginTop: 30,
   },
 
   text: {
-    color: ColorPalette.offcolor,
-    textShadowColor: ColorPalette.highlight,
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
     shadowOpacity: 0.2,
@@ -213,48 +250,27 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 
-  chContatiner: {
-    height: 50,
-    width: "100%",
-    position: "absolute",
-    bottom: 0,
-    justifyContent: "space-around",
-    alignItems: "center",
-    flexDirection: "column",
-    backgroundColor: ColorPalette.secondary,
-  },
-
   challenge: {
     height: 40,
     justifyContent: "space-around",
     alignItems: "center",
     flexDirection: "row",
-    backgroundColor: ColorPalette.secondary,
     margin: 5,
     borderBottomWidth: 4,
     borderBottomStartRadius: 45,
     borderBottomEndRadius: 45,
-    borderBottomColor: ColorPalette.offcolor,
   },
 
   icon: {
     fontSize: 35,
-    textShadowColor: ColorPalette.highlight,
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
     shadowOpacity: 0.2,
-    color: ColorPalette.offcolor,
   },
 
   health: {
     marginTop: "20%",
     alignSelf: "center",
-  },
-
-  tutorialHealth: {
-    marginTop: "20%",
-    alignSelf: "center",
-    borderWidth: 2,
   },
 });
 

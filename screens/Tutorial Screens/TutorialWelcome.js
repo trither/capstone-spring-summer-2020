@@ -1,48 +1,45 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  TouchableHighlight,
-} from "react-native";
+import { View, StyleSheet, Text, TouchableHighlight } from "react-native";
 import Octagon from "../../components/Octagon";
 import ColorPalette from "../../constants/ColorPalette";
 import FadeInView from "../../components/FadeInView";
 
+//Tutorial components.
+import TutorialText from "../../components/TutorialText";
+import TutorialSquare from "../../components/TutorialSquare";
+import TutorialButton from "../../components/TutorialButton";
+
 const TutorialWelcome = (props) => {
   let theme = ColorPalette();
+
+  const handlePress = () => {
+    props.onPageChange("mainChallengeTutorial");
+  };
+
   return (
-    <View style={[styles.screen, {backgroundColor: theme.primary}]}>
-      <View style={[styles.Elipse, {backgroundColor: theme.highlight}]}>
-        <Octagon theme={theme}/>
+    <View style={[styles.screen, { backgroundColor: theme.primary }]}>
+      <View style={[styles.Elipse, { backgroundColor: theme.highlight }]}>
+        <Octagon theme={theme} />
         <Text style={styles.title}>Safe_</Text>
         <Text style={styles.slogan}> The Game of Social Distancing </Text>
       </View>
 
-      <FadeInView style={[styles.square, {backgroundColor: theme.highlight}]}>
-        <Text style={styles.smallTitle}> Welcome to Safe_! </Text>
-        <Text style={styles.bodyText}>
-          The goal of the game is to complete challenges and earn experience
-          while simaltainously trying to 'survive' the week by maintaing social
-          distance.
-        </Text>
+      <FadeInView>
+        <TutorialSquare>
+          <Text style={styles.smallTitle}> Welcome to Safe_! </Text>
+          <TutorialText>
+            The goal of the game is to complete challenges and earn experience
+            while simaltainously trying to 'survive' the week by maintaing
+            social distance.
+          </TutorialText>
+        </TutorialSquare>
       </FadeInView>
-
-      <View style={[styles.buttonBorder, {borderColor: theme.highlight}]}>
-        <TouchableHighlight onPress={() => props.onPageChange("mainChallengeTutorial")}>
-          <Text style={[{fontSize: 24}, {color: theme.offcolor}]}>Learn how to play!</Text>
-        </TouchableHighlight>
-      </View>
+      <TutorialButton onPress={() => handlePress()} title="Learn How to Play!"/>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  buttonBorder: {
-    borderWidth: 1,
-    padding:10,
-  },
-
   title: {
     position: "absolute",
     fontSize: 36,

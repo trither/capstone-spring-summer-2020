@@ -1,27 +1,24 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Button,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
-import TutorialNavbar from "../../components/TutorialNavbar";
-import Footer from "../../components/Footer";
-import Card from "../../components/Card";
+import { View, StyleSheet, Text } from "react-native";
 import ColorPalette from "../../constants/ColorPalette";
 import BubbleType from "../../constants/BubbleType";
-import Header from "../../components/Header";
-import Icon from "@expo/vector-icons/FontAwesome";
-import { FontAwesome } from "@expo/vector-icons";
+
+//Tutorial components
+import TutorialText from "../../components/TutorialText";
+import TutorialSquare from "../../components/TutorialSquare";
+import TutorialButton from "../../components/TutorialButton";
+import TutorialNavbar from "../../components/TutorialNavbar";
 
 const HealthTutorial = (props) => {
+  let theme = ColorPalette();
+  let myBubble = BubbleType();
+
+  const handlePress = () => {
+    props.onPageChange("profileTutorial");
+  };
   //API grab lives remaining
   var lives = 3;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
-  let myBubble = BubbleType();
   if (lives === 1) {
     bubble = myBubble.oneLife;
   } else if (lives === 2) {
@@ -31,31 +28,32 @@ const HealthTutorial = (props) => {
   }
 
   return (
-    <View style={styles.screen}>
-      <Header onButtonPress={props.onPageChange} />
-      <View style={styles.tutorialHealth}>
-        <Text style={styles.text}> Hearts Remaining </Text>
+    <View style={[styles.screen, { backgroundColor: theme.primary }]}>
+      <View style={[styles.tutorialHealth, { borderColor: theme.highlight }]}>
+        <Text
+          style={[
+            styles.text,
+            { color: theme.offcolor, textShadowColor: theme.highlight },
+          ]}
+        >
+          Hearts Remaining
+        </Text>
         <View>{bubble}</View>
       </View>
       <View>
-        <Text>
-          In Safe_ you start 3 health, when you break social distancing by
-          coming to close to others, you will lose one health point (hp). If
-          your hp reaches zero, you lose the game. However, don't worry to much
-          about losing hp, because hp can be regained during the week by
-          actively completing challenges. PRO tip: Social distancing is not
-          enforced at your home location, so don't worry about losing hp while
-          at home!
-        </Text>
+        <TutorialSquare>
+          <TutorialText>
+            In Safe_ you start 3 health, when you break social distancing by
+            coming to close to others, you will lose one health point (hp). If
+            your hp reaches zero, you lose the game. However, don't worry to
+            much about losing hp, because hp can be regained during the week by
+            actively completing challenges. PRO tip: Social distancing is not
+            enforced at your home location, so don't worry about losing hp while
+            at home!
+          </TutorialText>
+        </TutorialSquare>
       </View>
-      <TutorialNavbar
-        first={false}
-        last={false}
-        nextPage={"challengeTutorial"}
-        prevPage={"mainChallengeTutorial"}
-        onArrowPress={props.onPageChange}
-      />
-      <Footer onButtonPress={props.onPageChange} />
+      <TutorialButton title="okay" onPress={() => handlePress()} />
     </View>
   );
 };
@@ -63,8 +61,8 @@ const HealthTutorial = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    justifyContent: "space-around",
     alignItems: "center",
-    backgroundColor: ColorPalette.primary,
   },
 
   arrowContainer: {
@@ -76,8 +74,6 @@ const styles = StyleSheet.create({
   },
 
   text: {
-    color: ColorPalette.offcolor,
-    textShadowColor: ColorPalette.highlight,
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
     shadowOpacity: 0.2,
@@ -90,15 +86,6 @@ const styles = StyleSheet.create({
     height: 125,
     width: 360,
     alignSelf: "center",
-  },
-
-  icon: {
-    fontSize: 35,
-    textShadowColor: ColorPalette.highlight,
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 6,
-    shadowOpacity: 0.2,
-    color: ColorPalette.offcolor,
   },
 
   health: {

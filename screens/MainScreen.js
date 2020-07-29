@@ -12,6 +12,8 @@ import BubbleType from "../constants/BubbleType";
 import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
 
 const MainScreen = (props) => {
+  let theme = ColorPalette();
+  let myBubble = BubbleType();
   //If the user is an admin. Create the admin add new challenge button.
   const AdminAddChallengeButton = () => {
     if (props.adminRights) {
@@ -27,7 +29,6 @@ const MainScreen = (props) => {
   //API grab lives remaining
   var lives = props.profile.Lives;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
-  let myBubble = BubbleType();
   let bubble;
   var types = myBubble.type;
   if (lives === 1) {
@@ -38,7 +39,6 @@ const MainScreen = (props) => {
     bubble = myBubble.thrLife;
   }
   //Set theme for page
-  let theme = ColorPalette();
   //API for Challenge Titles
   var ch1 = props.challenges[0].title;
   var ch2 = props.challenges[1].title;

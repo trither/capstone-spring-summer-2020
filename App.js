@@ -43,7 +43,7 @@ export default function App() {
     Lives: 3,
     Score: 0,
     URLPic: "https://i.stack.imgur.com/l60Hf.png",
-    WeeklyStreaAk: 0,
+    WeeklyStreak: 0,
     isAdmin: true,
   });
 
@@ -157,7 +157,7 @@ export default function App() {
   } else if (currentPage === "welcome") {
     content = <WelcomeScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "profileTutorial") {
-    content = <ProfileTutorial onPageChange={changePageHandler} />;
+    content = <ProfileTutorial profile={thisUser} onPageChange={changePageHandler} />;
   } else if (currentPage === "challengeTutorial") {
     content = <ChallengeTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "heatmapTutorial") {
@@ -167,7 +167,6 @@ export default function App() {
   } else if (currentPage === "healthTutorial") {
     content = <HealthTutorialScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "mainChallengeTutorial") {
-    1;
     content = <MainScreenChallengeTutorial onPageChange={changePageHandler} />;
   }
 
