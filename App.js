@@ -23,6 +23,20 @@ export default function App() {
   const[currentChallenges, setCurrentChallenges] = useState([{ChallengeTitle:"ChallengeTitle1",ChallengeDesc:"ChallengeDesc1"},
   {ChallengeTitle:"ChallengeTitle2",ChallengeDesc:"ChallengeDesc2"},{ChallengeTitle:"ChallengeTitle3",ChallengeDesc:"ChallengeDesc3"}]);
 
+  //Alert state
+  const[thisAlert, setAlert] = useState("none");
+
+  const changeAlert = (newAlert) => {
+    setAlert(newAlert);
+  };
+  //Set if group function for alerts, to be changed on events ONLY.
+  if (thisAlert === "none"){
+
+  } else {
+
+  }
+
+
   let content;
 
   if (currentPage === "main screen") {
