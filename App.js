@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, AsyncStorage } from "react-native";
+import { StyleSheet, Text, View, AsyncStorage, Alert } from "react-native";
 
 import MainScreen from "./screens/MainScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -24,6 +24,44 @@ export default function App() {
   {ChallengeTitle:"ChallengeTitle2",ChallengeDesc:"ChallengeDesc2"},{ChallengeTitle:"ChallengeTitle3",ChallengeDesc:"ChallengeDesc3"}]);
 
   //Alert state
+  let myAlert;
+  const leavingSpace = () =>{
+    Alert.alert (
+      "You're About to Leave Your Safe__",
+      "Are you going out for a legitimate reason",
+      [
+        {
+          text: "I am!",
+          onPress: () => console.log("Display Tips, Don't Decrement"),
+          style: 'cancel'
+        },
+        {
+          text: "I'm Not'",
+          onPress: () => console.log("Decrement Life")
+        }
+      ]
+    )
+  };
+
+  const lostLastLife = () =>{
+    Alert.alert (
+      "Sorry, You've Lost Your Last Life",
+      "Try to maintain social distance and when possible stay at home.",
+      [
+        {
+          text: "OK",
+          onPress: () => console.log("Last life lost, set streak to 0"),
+          style: 'cancel'
+        },
+        {
+          text: "Chance?",
+          onPress: () => console.log("Get challenge or redeem something")
+        }
+      ]
+    )
+  }
+
+
   const[thisAlert, setAlert] = useState("none");
 
   const changeAlert = (newAlert) => {
@@ -31,9 +69,9 @@ export default function App() {
   };
   //Set if group function for alerts, to be changed on events ONLY.
   if (thisAlert === "none"){
-
+    myAlert = null;
   } else {
-
+    myAlert = lostLastLife();
   }
 
 
@@ -56,7 +94,7 @@ export default function App() {
   }
 
 
-  return <View style={styles.container}>{content}</View>;
+  return <View style={styles.container}>{content}{myAlert}</View>;
 }
 
 const styles = StyleSheet.create({
