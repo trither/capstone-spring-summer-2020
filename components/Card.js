@@ -3,8 +3,9 @@ import { View, StyleSheet, Button, } from "react-native";
 import ColorPalette from "../constants/ColorPalette";
 
 const Card = props => {
+    let theme = ColorPalette();
     return(
-        <View style={{...styles.card, ...props.style}}>{props.children}</View>
+        <View style={[{...styles.card, ...props.style}, {backgroundColor: theme.secondary}]}>{props.children}</View>
     );
 };
 
@@ -16,7 +17,6 @@ const styles = StyleSheet.create({
         shadowRadius: 6,
         shadowOpacity: 0.26,
         //Andriod
-        backgroundColor: ColorPalette.secondary,
         padding: 20,
         borderRadius: 10,
     },

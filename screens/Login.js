@@ -6,8 +6,13 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Button,
+  AsyncStorage,
 } from "react-native";
 import ColorPalette from "../constants/ColorPalette";
+import * as firebase from 'firebase'
+import * as Google from 'expo-google-app-auth';
+import * as Facebook from 'expo-facebook';
+
 import * as firebase from 'firebase'
 import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
@@ -28,24 +33,10 @@ const LoginScreen = (props) => {
 	      googleUser.accessToken
       );
       // Sign in with credential from the Google user.
-      if(result.additionalUserInfo.isNewUser){
-      firebase.auth().signInAndRetrieveDataWithCredential(credential)
-	.then(function(result){
-		console.log('user signed in');
-		firebase
-		.database()
-		.ref('/profile/' + result.user.uid)
-		.set({
-			firstname: result.additionalUserInfo.profile.given_name,
-			lastname: result.additionalUserInfo.profile.family_name,
-			profile_picture: result.additionalUserInfo.profile.picture,
-			locale: result.additionalUserInfo.profile.locale,
-		}).then(function (snapshot) {
-			console.log('snapshot', snapshot);
-      });
-	})
-	    }
-
+      firebase.auth().signInWithCredential(credential).then(function(result){
+        console.log('user signed in');
+        AsyncStorage.setItem("login", result.user.uid);
+      })
 	    .catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -91,6 +82,13 @@ function isUserEqual(googleUser, firebaseUser) {
       permissions: ['public_profile'],
     });
     if (type === 'success') {
+      //sign user into firebase
+      const credential = firebase.auth.FacebookAuthProvider.credential(token);
+      firebase.auth().signInWithCredential(token).then(function(result){
+        console.log('facebook user signed in');
+        AsyncStorage.setItem("login", result.user.uid);
+      });
+
       // Get the user's name using Facebook's Graph API
       const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
       Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
@@ -102,9 +100,6 @@ function isUserEqual(googleUser, firebaseUser) {
     alert(`Facebook Login Error: ${message}`);
   }
 }
-
-
-
 
 	async function googleLogin() {
   try {
