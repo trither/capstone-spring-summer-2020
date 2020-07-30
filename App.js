@@ -75,9 +75,9 @@ export default function App() {
 
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
   const [currentChallenges, setCurrentChallenges] = useState([
-    { title: "ChallengeTitle1", description: "ChallengeDesc1" },
-    { title: "ChallengeTitle2", description: "ChallengeDesc2" },
-    { title: "ChallengeTitle3", description: "ChallengeDesc3" },
+    { title: "ChallengeTitle1", description: "gXrtOipB87Y" , isLink: true},
+    { title: "ChallengeTitle2", description: "ChallengeDesc2", isLink: false },
+    { title: "ChallengeTitle3", description: "ChallengeDesc3", isLink: false},
   ]);
 
   const changePageHandler = (newPage) => {
