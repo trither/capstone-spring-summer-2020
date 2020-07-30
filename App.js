@@ -8,10 +8,6 @@ import ChallengesScreen from "./screens/ChallengesScreen";
 import HeatmapScreen from "./screens/Heatmap";
 import SettingsScreen from "./screens/SettingsScreen";
 import LoginScreen from "./screens/Login";
-import * as firebase from 'firebase/app';
-import firebaseConfig from './firebaseConfig';
-import withfirebaseAuth from 'react-with-firebase-auth';
-import { db } from "./firestore";
 
 //Helpful components.
 import Footer from "./components/Footer";

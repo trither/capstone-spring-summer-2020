@@ -9,11 +9,6 @@ import {
   AsyncStorage,
 } from "react-native";
 import ColorPalette from "../constants/ColorPalette";
-import * as firebase from 'firebase'
-import * as Google from 'expo-google-app-auth';
-import * as Facebook from 'expo-facebook';
-
-import * as firebase from 'firebase'
 import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
 
