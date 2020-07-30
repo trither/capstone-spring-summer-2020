@@ -22,10 +22,36 @@ import HealthTutorialScreen from "./screens/Tutorial Screens/HealthTutorialScree
 import ProfileTutorial from "./screens/Tutorial Screens/ProfileScreenTutorial";
 import HeatmapTutorial from "./screens/Tutorial Screens/HeatmapTutorial";
 import ChallengeTutorial from "./screens/Tutorial Screens/ChallengeScreenTutorial";
+import Login from './screens/Login';
+import HomeAddress from './screens/HomeAddress';
+
+//set up firebase
+import * as firebase from 'firebase';
+import { firebaseConfig } from './config';
+firebase.initializeApp(firebaseConfig);
+
 
 export default function App() {
+
+  /*
+ const [login, setlogin] = useState("");
+
+  AsyncStorage.getItem("login")
+  .then((value)=>{
+    uid = value;
+    console.log('here here');
+  if (uid !== null){
+    [currentPage, setCurrentPage] = useState("main screen");
+  }
+  else {
+    [currentPage, setCurrentPage] = useState("login");
+  }
+  });
+  */
+
+  [currentPage, setCurrentPage] = useState("login");
   //Page Functions (No need for DB)
-  const [currentPage, setCurrentPage] = useState("main screen");
+  //const [currentPage, setCurrentPage] = useState("main screen");
   //Tell app whether the screen wants to render the header and footer.
   //For example, we don't want to load the header and footer for the login screen.
   //So they should be intially false, but when we are going to switch to the main screen,
@@ -168,6 +194,10 @@ export default function App() {
     content = <HealthTutorialScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "mainChallengeTutorial") {
     content = <MainScreenChallengeTutorial onPageChange={changePageHandler} />;
+  } else if (currentPage === "login") {
+    content = <Login onPageChange={changePageHandler} />;
+  } else if (currentPage === "home address") {
+    content = <HomeAddress onPageChange={changePageHandler} />;
   }
 
   return (
