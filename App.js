@@ -7,6 +7,8 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ChallengesScreen from "./screens/ChallengesScreen";
 import HeatmapScreen from "./screens/Heatmap";
 import SettingsScreen from "./screens/SettingsScreen";
+import Login from "./screens/Login";
+
 
 //Helpful components.
 import Footer from "./components/Footer";
