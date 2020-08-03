@@ -1,24 +1,54 @@
-import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Text, LayoutAnimation } from "react-native";
 import ColorPalette from "../../constants/ColorPalette";
 import BubbleType from "../../constants/BubbleType";
 
 //Tutorial components
 import TutorialText from "../../components/TutorialText";
 import TutorialSquare from "../../components/TutorialSquare";
-import TutorialButton from "../../components/TutorialButton";
-import TutorialNavbar from "../../components/TutorialNavbar";
+import SafeSpaceButton from "../../components/SafeSpaceButton";
 
 const HealthTutorial = (props) => {
+  const [stage, setStage] = useState(0);
+  const [buttonTitle, setButtonTitle] = useState(
+    "What happens if I break social distance?"
+  );
+  const [lives, setLives] = useState(3);
   let theme = ColorPalette();
   let myBubble = BubbleType();
 
   const handlePress = () => {
-    props.onPageChange("profileTutorial");
+    LayoutAnimation.spring();
+    if (stage === 0) {
+      setLives(2);
+      setButtonTitle("I will try my best to maintain social distance.");
+    } else if (stage === 1) {
+      setButtonTitle("Good to know!");
+    } else if (stage === 2) {
+      props.onPageChange("profileTutorial");
+    }
+    setStage(stage + 1);
   };
+
+  const createTutorialText = () => {
+    if (stage === 0) {
+      return "In Safe_, your health points are tracked on the main screen. ";
+    }
+    if (stage === 1) {
+      return (
+        "Simply put, if you break social distance, you will lose a health point (hp). " +
+        "Losing three hp will result in you failing for that week, but don't worry to much if you do, " +
+        "there is always next week!"
+      );
+    }
+    if (stage === 2) {
+      return "Oh, and one last thing, your hp will be restored to full at the begining of each week, so try to survive until then!";
+    }
+  };
+
   //API grab lives remaining
-  var lives = 3;
   // The following determines the image or gif to be displayed based on the number of lives remaining.
+  let bubble;
   if (lives === 1) {
     bubble = myBubble.oneLife;
   } else if (lives === 2) {
@@ -43,17 +73,18 @@ const HealthTutorial = (props) => {
       <View>
         <TutorialSquare>
           <TutorialText>
-            In Safe_ you start 3 health, when you break social distancing by
+            {createTutorialText()}
+            {/*In Safe_ you start 3 health, when you break social distancing by
             coming to close to others, you will lose one health point (hp). If
             your hp reaches zero, you lose the game. However, don't worry to
             much about losing hp, because hp can be regained during the week by
             actively completing challenges. PRO tip: Social distancing is not
             enforced at your home location, so don't worry about losing hp while
-            at home!
+            at home!*/}
           </TutorialText>
+          <SafeSpaceButton title={buttonTitle} onPress={() => handlePress()} />
         </TutorialSquare>
       </View>
-      <TutorialButton title="okay" onPress={() => handlePress()} />
     </View>
   );
 };
@@ -61,7 +92,7 @@ const HealthTutorial = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
 
@@ -78,7 +109,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 6,
     shadowOpacity: 0.2,
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 20,
     fontWeight: "bold",
   },
 

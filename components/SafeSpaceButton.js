@@ -1,8 +1,8 @@
 import React from "react";
-import { View, TouchableHighlight, Text, StyleSheet } from "react-native";
+import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import ColorPalette from "../constants/ColorPalette";
 
-const TutorialButton = (props) => {
+const SafeSpaceButton = (props) => {
   let theme = ColorPalette();
   return (
     <View style={{ alignItems: "center" }}>
@@ -13,11 +13,15 @@ const TutorialButton = (props) => {
           { borderColor: theme.offcolor },
         ]}
       >
-        <TouchableHighlight onPress={() => props.onPress()}>
-          <Text style={[{ fontSize: 24 }, { color: theme.offcolor }]}>
+        <TouchableOpacity onPress={() => props.onPress()}>
+          <Text
+            style={[
+              { fontSize: 24, color: theme.offcolor, textAlign: "center" },
+            ]}
+          >
             {props.title}
           </Text>
-        </TouchableHighlight>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -30,4 +34,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default TutorialButton;
+export default SafeSpaceButton;
