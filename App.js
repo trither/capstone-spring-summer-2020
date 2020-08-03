@@ -196,7 +196,7 @@ export default function App() {
   } else if (currentPage === "mainChallengeTutorial") {
     content = <MainScreenChallengeTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "login") {
-    content = <LoginScreen onPageChange={changePageHandler} />;
+    content = <Login onPageChange={changePageHandler} />;
   } else if (currentPage === "home address") {
     content = <HomeAddress onPageChange={changePageHandler} />;
   }
