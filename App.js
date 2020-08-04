@@ -7,10 +7,6 @@ import {
   LayoutAnimation,
 } from "react-native";
 
-//firebase imports
-import * as firebase from 'firebase';
-import * as functions from 'functions';
-
 //Main app screens
 import MainScreen from "./screens/MainScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -39,7 +35,8 @@ import HomeAddress from './screens/HomeAddress';
 //set up firebase
 import * as firebase from 'firebase';
 import { firebaseConfig } from './firebaseConfig';
-firebase.initializeApp(firebaseConfig);
+import 'firebase/auth';
+import 'firebase/firestore';
 
 
 export default function App() {
@@ -53,7 +50,51 @@ export default function App() {
   if(firebase.apps.length === 0){ 
     firebase.initializeApp(firebaseConfig);}
   const db = firebase.firestore();
-  db.settings({ timestampsInSnapshots: true });
+  
+  //create a new profile doc in db
+  function onUserSignup(result)
+  {
+    return db.collection('profile').doc(result.user.uid).set({
+      email: result.user.email,
+      name: result.user.displayName,
+      urlpic: result.user.photoURL,
+      level: 0,
+      lives: 3,
+      score: 0,
+      weeklystreak: 0,
+      activeChallenges: [],
+      challengesCompleted: [],
+    });
+  }
+
+  // function to get new challenge on refresh from db
+  function refreshchallenge() {
+    const id = Math.floor(Math.random() * 25) + 6;
+    const docRef = db.collection("challenges").where("challengeID", ">", id).limit(1)
+    const getDoc = docRef.get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        challenge.description = doc.data().description;
+        challenge.title = doc.data().challenge;
+        challenge.isLink = doc.data().isLink;
+        challenge.difficulty =doc.data().difficulty;
+        challenge.score = doc.data().score;
+        console.log(doc.id, '=>', doc.data());  
+    });
+    })
+    .catch(err => {
+      console.log('Error getting documents', err);
+    });
+}
+/*
+  function onDeleteUser()
+  {
+      const doc = db.collection('profile').doc(user.uid);
+      return doc.delete();
+  }
+
+  */
+  
   
   const [currentPage, setCurrentPage] = useState("login");
   //Page Functions (No need for DB)
@@ -161,6 +202,7 @@ export default function App() {
         challenge={currentChallenges[0]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[0])}
         onEditChallenge={ChallengeEditHandler}
+        onRefreshChallenge={refreshchallenge}
       />
     );
   } else if (currentPage === "challenge2") {
@@ -171,6 +213,7 @@ export default function App() {
         challenge={currentChallenges[1]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[1])}
         onEditChallenge={ChallengeEditHandler}
+        onRefreshChallenge={refreshchallenge}
       />
     );
   } else if (currentPage === "challenge3") {
@@ -181,6 +224,7 @@ export default function App() {
         challenge={currentChallenges[2]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[2])}
         onEditChallenge={ChallengeEditHandler}
+        onRefreshChallenge={refreshchallenge}
       />
     );
   } else if (currentPage === "heatmap") {
@@ -209,7 +253,7 @@ export default function App() {
   } else if (currentPage === "mainChallengeTutorial") {
     content = <MainScreenChallengeTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "login") {
-    content = <Login onPageChange={changePageHandler} />;
+    content = <Login onPageChange={changePageHandler} onSignup={onUserSignup}/>;
   } else if (currentPage === "home address") {
     content = <HomeAddress onPageChange={changePageHandler} />;
   }

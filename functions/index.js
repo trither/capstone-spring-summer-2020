@@ -1,4 +1,5 @@
-const functions = require('firebase-functions');
+/*
+const functions = require('..node_modules/firebase/firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp();
 const db = admin.firestore();
@@ -24,4 +25,7 @@ exports.userDeleted = functions.auth.user().onDelete(user => {
     const doc = db.collection('profile').doc(user.uid);
     return doc.delete();
 });
+
+
+*/
   

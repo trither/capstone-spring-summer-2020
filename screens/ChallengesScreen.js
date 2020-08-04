@@ -154,25 +154,6 @@ const AdminDeleteButton = () => {
 
 }
 */
-// function to get new challenge on refresh from db
-  function refreshchallenge() {
-          const id = Math.floor(Math.random() * 25) + 6;
-          const docRef = db.collection("challenges").where("challengeID", ">", id).limit(1)
-          const getDoc = docRef.get()
-          .then(snapshot => {
-            snapshot.forEach(doc => {
-              challenge.description = doc.data().description;
-              challenge.title = doc.data().challenge;
-              challenge.isLink = doc.data().isLink;
-              challenge.difficulty =doc.data().difficulty;
-              challenge.score = doc.data().score;
-              console.log(doc.id, '=>', doc.data());  
-          });
-          })
-          .catch(err => {
-            console.log('Error getting documents', err);
-          });
-}
 
   // function to check if video exists to be embedded
   function videoDisplay(isLink, description) {
@@ -236,7 +217,7 @@ const AdminDeleteButton = () => {
       >
         {/* Create the squares the the buttons exist on top of (buttonBoxes) */}
         <Card style={styles.buttonBox}>
-          {refreshchallenge()}
+          {props.onRefreshChallenge()}
           <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
             <Icon
               style={[
@@ -249,8 +230,7 @@ const AdminDeleteButton = () => {
           </TouchableOpacity>
         </Card>
         <Card style={styles.buttonBox}>
-          {/* CloudFunctions needed here to recieve challenge completed data*/
-          getChallengescompleted()}
+          {/* CloudFunctions needed here to recieve challenge completed data getChallengescompleted()*/}
           <TouchableOpacity
             onPress={() => Alert.alert("Challenge Marked Complete")}
             width="20%"
