@@ -1,21 +1,19 @@
 import React from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Image,
-  ProgressBar,
-  ProgressBarAndroid,
-  AsyncStorage,
-} from "react-native";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import Card from "../components/Card";
-import ColorPalette from "../constants/ColorPalette";
+import { View, StyleSheet, Text, Image } from "react-native";
+import ColorPalette from "../../constants/ColorPalette";
 
-const ProfileScreen = (props) => {
+import TutorialText from "../../components/TutorialText";
+import TutorialSquare from "../../components/TutorialSquare";
+import TutorialButton from "../../components/TutorialButton";
+import TutorialNavbar from "../../components/TutorialNavbar";
+
+const ProfileTutorial = (props) => {
   //Set Theme
   let theme = ColorPalette();
+
+  const handlePress = () => {
+    props.onPageChange("heatmapTutorial");
+  };
 
   //load in values from the user
   var name = props.profile.FullName;
@@ -177,6 +175,12 @@ const ProfileScreen = (props) => {
           </Text>
         </View>
       </View>
+      <TutorialSquare>
+        <TutorialText>
+          SADIUFAIUWHYEFIPGUAWEIUHPGFAPIUWEFIYGPUAPIGWYEFGPYIAWEPIGYFOAIUGYWEFGYOAWEOGYU
+        </TutorialText>
+      </TutorialSquare>
+      <TutorialButton title="a" onPress={() => handlePress()} />
     </View>
   );
 };
@@ -184,6 +188,7 @@ const ProfileScreen = (props) => {
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    justifyContent: "space-around",
   },
 
   text: {
@@ -329,4 +334,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default ProfileTutorial;

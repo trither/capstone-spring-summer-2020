@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  Button,
-  Modal,
-  AsyncStorage,
-} from "react-native";
+import { View, StyleSheet, Text, Button, Modal } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import covidCases from "../assets/COVIDcases.json";
-import zipCodeData from "../assets/Zip_Code_Boundaries.json";
+import covidCases from "../../assets/COVIDcases.json";
+import zipCodeData from "../../assets/Zip_Code_Boundaries.json";
+import ColorPalette from "../../constants/ColorPalette";
 
-const HeatmapScreen = (props) => {
+//Tutorial components
+import TutorialText from "../../components/TutorialText";
+import TutorialSquare from "../../components/TutorialSquare";
+import TutorialButton from "../../components/TutorialButton";
+import TutorialNavbar from "../../components/TutorialNavbar";
+
+const HeatmapTutorial = (props) => {
   const [polygons, setPolygons] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState([]);
+
+  let theme = ColorPalette();
+
+  const handlePress = () => {
+    props.onPageChange("main screen");
+  };
 
   const handleZipcodePress = (e) => {
     var numCases = 0;
@@ -117,11 +121,13 @@ const HeatmapScreen = (props) => {
   useEffect(() => {
     var zipcodes = readPolygonData();
     var polygonComponentList = createPolygonComponents(zipcodes);
-    setPolygons(polygons.concat(polygonComponentList));
+    if (!polygons) {
+      setPolygons(polygons.concat(polygonComponentList));
+    }
   }, []);
 
   return (
-    <View style={styles.screen}>
+    <View style={[styles.screen, { backgroundColor: theme.primary }]}>
       <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -135,6 +141,15 @@ const HeatmapScreen = (props) => {
           </View>
         </View>
       </Modal>
+      <TutorialSquare>
+        <TutorialText>
+          This is the Safe_ Heatmap. Shown on the map are the zipcodes of the
+          Portland metro area. Areas are color coded based on the amount of
+          cases in the zipcode. Green areas have under 10 cases, yellow are
+          under 50, orange are between 50 and 100 and red areas are 100+. Press
+          on a zipcode to get specifics.
+        </TutorialText>
+      </TutorialSquare>
       <MapView
         id="anchor"
         style={{ flex: 1 }}
@@ -148,6 +163,11 @@ const HeatmapScreen = (props) => {
       >
         {polygons}
       </MapView>
+      <TutorialButton
+        style={styles.buttonContainer}
+        title="Okay!"
+        onPress={() => handlePress()}
+      />
     </View>
   );
 };
@@ -157,12 +177,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  modalTextContainer: {
-    marginBottom: 15,
-    //justifyContent:"space-around"
+  buttonContainer: {
+    marginTop: 30,
+    marginBottom: 30,
   },
 
-  modalText: {},
+  modalTextContainer: {
+    marginBottom: 15,
+  },
 
   centeredView: {
     flex: 1,
@@ -187,4 +209,4 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
 });
-export default HeatmapScreen;
+export default HeatmapTutorial;
