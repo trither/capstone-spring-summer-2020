@@ -1,18 +1,34 @@
-import React from "react";
-import { View, StyleSheet, Text, Image } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Text, Image, LayoutAnimation } from "react-native";
 import ColorPalette from "../../constants/ColorPalette";
 
 import TutorialText from "../../components/TutorialText";
 import TutorialSquare from "../../components/TutorialSquare";
-import TutorialButton from "../../components/TutorialButton";
+import SafeSpaceButton from "../../components/SafeSpaceButton";
 import TutorialNavbar from "../../components/TutorialNavbar";
 
 const ProfileTutorial = (props) => {
+  const [stage, setStage] = useState(0);
+  const [buttonTitle, setButtonTitle] = useState("Okay, got it.");
   //Set Theme
   let theme = ColorPalette();
 
   const handlePress = () => {
-    props.onPageChange("heatmapTutorial");
+    LayoutAnimation.spring();
+    if(stage === 0){
+      setButtonTitle("Got it. Whats next?");
+    }
+    if (stage === 1) {
+      props.onPageChange("heatmapTutorial");
+    }
+    setStage(stage + 1);
+  };
+
+  const createTutorialText = () => {
+    if (stage === 0) {
+      return "This is the Safe_ profile page. Here you can find your total level, as well as your progress to the next level. ";
+    }
+    return "Additionally, this is where you go to find the total amount of xp you have earned, as well as your weekly streak, (how many weeks you have survived).";
   };
 
   //load in values from the user
@@ -67,7 +83,7 @@ const ProfileTutorial = (props) => {
 
   return (
     <View style={[styles.screen, { backgroundColor: theme.primary }]}>
-      <View style={styles.boxTop}>
+      <View style={[styles.boxTop, stage === 0 ? [styles.showBorder, {borderColor: theme.offcolor}] : null]}>
         <Text
           style={[
             styles.profileName,
@@ -127,7 +143,7 @@ const ProfileTutorial = (props) => {
           </View>
         </View>
       </View>
-      <View style={styles.middleBox}>
+      <View style={[styles.middleBox, stage === 1 ? [styles.showBorder, {borderColor: theme.offcolor}] : null]}>
         <View
           style={[
             styles.statBox,
@@ -176,11 +192,9 @@ const ProfileTutorial = (props) => {
         </View>
       </View>
       <TutorialSquare>
-        <TutorialText>
-          SADIUFAIUWHYEFIPGUAWEIUHPGFAPIUWEFIYGPUAPIGWYEFGPYIAWEPIGYFOAIUGYWEFGYOAWEOGYU
-        </TutorialText>
+        <TutorialText>{createTutorialText()}</TutorialText>
+        <SafeSpaceButton title={buttonTitle} onPress={() => handlePress()} />
       </TutorialSquare>
-      <TutorialButton title="a" onPress={() => handlePress()} />
     </View>
   );
 };
@@ -189,6 +203,10 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     justifyContent: "space-around",
+  },
+
+  showBorder: {
+    borderWidth: 1,
   },
 
   text: {

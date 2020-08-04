@@ -6,15 +6,18 @@ import {
   TouchableOpacity,
   Alert,
   TouchableHighlight,
+  LayoutAnimation,
 } from "react-native";
 
 //Components
 import FadeInView from "../../components/FadeInView";
+import BlinkingView from "../../components/BlinkingView";
+import FadeOutView from "../../components/FadeOutView";
 
 //Tutorial components
 import TutorialText from "../../components/TutorialText";
 import TutorialSquare from "../../components/TutorialSquare";
-import TutorialButton from "../../components/TutorialButton";
+import SafeSpaceButton from "../../components/SafeSpaceButton";
 import TutorialNavbar from "../../components/TutorialNavbar";
 
 //constants
@@ -23,49 +26,63 @@ import BubbleType from "../../constants/BubbleType";
 import Icon from "@expo/vector-icons/FontAwesome";
 
 const MainScreenTutorial = (props) => {
-  const [tutorialContent, setTutorialContent] = useState(0);
+  //Track the state of our current stage in the tutorial so we know what content to display to the user.
+  const [stage, setStage] = useState(0);
   let myBubble = BubbleType();
   let theme = ColorPalette();
 
+  //After the first button press, spawn blinking arrows to indicate to the user
+  //to press on the challenges.
   const spawnChallengeArrow = () => {
-    if (tutorialContent === 1) {
+    if (stage === 1) {
       return (
-        <FadeInView style={styles.arrowIcon}>
+        <BlinkingView style={styles.arrowIcon}>
           <Icon
             style={{ color: theme.offcolor }}
             size={20}
             name="arrow-right"
           />
-        </FadeInView>
+        </BlinkingView>
       );
     } else {
       return;
     }
   };
 
+  //Spawn the button on the first stage, but after the first click,
+  //get rid of the button because the users only option is to press on
+  //one of the three challenges.
   const spawnButton = () => {
-    if (tutorialContent === 0) {
+    if (stage === 0) {
       return (
-        <TutorialButton
-          onPress={() => setTutorialContent(tutorialContent + 1)}
+        <SafeSpaceButton
+          onPress={() => handleSafeSpaceButtonPress()}
           title="Go On..."
         />
       );
     }
     return (
-      <TutorialButton
-        style={{ opacity: 0 }}
-        onPress={() => setTutorialContent(tutorialContent + 1)}
+      <SafeSpaceButton
+        style={{position: "absolute", opacity: 0}}
+        onPress={null}
         title="Go On..."
       />
     );
   };
 
+  //Increment the stage when the button is pressed.
+  const handleSafeSpaceButtonPress = () => {
+    LayoutAnimation.spring();
+    setStage(stage + 1);
+  };
+
+  //Depending on the stage change the tutorial text.
   const createTutorialText = () => {
-    if (tutorialContent === 0) {
-      return "Every day you will be presented with three possible challenges. Challenges include a variaty of activities to help you stay healthy and active during the COVID-19 pandemic.";
+    if (stage === 0) {
+      return ("Every day you will be presented with three possible challenges. Challenges include " +
+      "a variaty of activities to help you stay healthy and active during the COVID-19 pandemic.");
     }
-    if (tutorialContent === 1) {
+    if (stage === 1) {
       return "Press on one of the challenges!";
     }
   };
