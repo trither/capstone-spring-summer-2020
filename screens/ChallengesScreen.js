@@ -121,20 +121,58 @@ const ChallengesScreen = (props) => {
     }
   };
 
-  //If the user is an admin, load the delete challenge button.
-  const AdminDeleteButton = () => {
-    if (props.adminRights) {
-      return (
-        <Button
-          onPress={() => onDeleteButtonPress()}
-          title="Delete Challenge."
-          color="red"
-        />
-      );
-    } else {
-      return;
-    }
-  };
+//If the user is an admin, load the delete challenge button.
+const AdminDeleteButton = () => {
+  if (props.adminRights) {
+    return (
+      <Button
+        onPress={() => onDeleteButtonPress()}
+        title="Delete Challenge."
+        color="red"
+      />
+    );
+  } else {
+    return;
+  }
+};
+/*
+//function to get challenges completed from db
+//grab uid from async storage
+  function setChallengecompleted() {
+  const docRef = db.collection("profile").doc('xtOtqqZlx0QFT9flOv6jIYeocTG3')
+  const getDoc = docRef.get()
+  .then(snapshot => {
+    snapshot.forEach(doc => {
+        var completedChallenges = doc.data().challengesCompleted;
+        console.log(completedChallenges)
+        console.log(doc.id, '=>', doc.data().challengesCompleted);  
+        });
+        })
+        .catch(err => {
+          console.log('Error getting documents', err);
+        });
+
+}
+*/
+// function to get new challenge on refresh from db
+  function refreshchallenge() {
+          const id = Math.floor(Math.random() * 25) + 6;
+          const docRef = db.collection("challenges").where("challengeID", ">", id).limit(1)
+          const getDoc = docRef.get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              challenge.description = doc.data().description;
+              challenge.title = doc.data().challenge;
+              challenge.isLink = doc.data().isLink;
+              challenge.difficulty =doc.data().difficulty;
+              challenge.score = doc.data().score;
+              console.log(doc.id, '=>', doc.data());  
+          });
+          })
+          .catch(err => {
+            console.log('Error getting documents', err);
+          });
+}
 
   // function to check if video exists to be embedded
   function videoDisplay(isLink, description) {
@@ -198,7 +236,7 @@ const ChallengesScreen = (props) => {
       >
         {/* Create the squares the the buttons exist on top of (buttonBoxes) */}
         <Card style={styles.buttonBox}>
-          {/* CloudFunctions needed here to fetch new challnege and put the new data into the title and description elements above*/}
+          {refreshchallenge()}
           <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
             <Icon
               style={[
@@ -211,7 +249,8 @@ const ChallengesScreen = (props) => {
           </TouchableOpacity>
         </Card>
         <Card style={styles.buttonBox}>
-          {/* CloudFunctions needed here to recieve challenge completed data*/}
+          {/* CloudFunctions needed here to recieve challenge completed data*/
+          getChallengescompleted()}
           <TouchableOpacity
             onPress={() => Alert.alert("Challenge Marked Complete")}
             width="20%"

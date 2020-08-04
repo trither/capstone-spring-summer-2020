@@ -7,6 +7,10 @@ import {
   LayoutAnimation,
 } from "react-native";
 
+//firebase imports
+import * as firebase from 'firebase';
+import * as functions from 'functions';
+
 //Main app screens
 import MainScreen from "./screens/MainScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -39,24 +43,19 @@ firebase.initializeApp(firebaseConfig);
 
 
 export default function App() {
-
-  /*
- const [login, setlogin] = useState("");
-
-  AsyncStorage.getItem("login")
-  .then((value)=>{
-    uid = value;
-    console.log('here here');
-  if (uid !== null){
-    [currentPage, setCurrentPage] = useState("main screen");
-  }
-  else {
-    [currentPage, setCurrentPage] = useState("login");
-  }
-  });
-  */
-
-  [currentPage, setCurrentPage] = useState("login");
+  
+  // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
+  const [currentChallenges, setCurrentChallenges] = useState([
+    { title: "ChallengeTitle1", description: "gXrtOipB87Y" , isLink: true},
+    { title: "ChallengeTitle2", description: "ChallengeDesc2", isLink: false },
+    { title: "ChallengeTitle3", description: "ChallengeDesc3", isLink: false},
+  ]);
+  if(firebase.apps.length === 0){ 
+    firebase.initializeApp(firebaseConfig);}
+  const db = firebase.firestore();
+  db.settings({ timestampsInSnapshots: true });
+  
+  const [currentPage, setCurrentPage] = useState("login");
   //Page Functions (No need for DB)
   //const [currentPage, setCurrentPage] = useState("main screen");
   //Tell app whether the screen wants to render the header and footer.
@@ -79,13 +78,6 @@ export default function App() {
     WeeklyStreak: 0,
     isAdmin: true,
   });
-
-  // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
-  const [currentChallenges, setCurrentChallenges] = useState([
-    { title: "ChallengeTitle1", description: "gXrtOipB87Y", isLink: true },
-    { title: "ChallengeTitle2", description: "ChallengeDesc2", isLink: false },
-    { title: "ChallengeTitle3", description: "ChallengeDesc3", isLink: false },
-  ]);
 
   const changePageHandler = (newPage) => {
     LayoutAnimation.spring();
