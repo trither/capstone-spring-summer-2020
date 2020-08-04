@@ -10,7 +10,7 @@ const TutorialText = (props) => {
 const styles = StyleSheet.create({
   bodyText: {
     color: "white",
-    fontSize: 18,
+    fontSize: 20,
     textAlign: "center",
     margin: 10,
   },

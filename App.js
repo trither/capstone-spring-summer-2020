@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, AsyncStorage } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  AsyncStorage,
+  LayoutAnimation,
+} from "react-native";
 
 //firebase imports
 import * as firebase from 'firebase';
@@ -11,6 +17,7 @@ import ProfileScreen from "./screens/ProfileScreen";
 import ChallengesScreen from "./screens/ChallengesScreen";
 import HeatmapScreen from "./screens/Heatmap";
 import SettingsScreen from "./screens/SettingsScreen";
+import LoginScreen from "./screens/Login";
 
 //Helpful components.
 import Footer from "./components/Footer";
@@ -26,8 +33,17 @@ import HealthTutorialScreen from "./screens/Tutorial Screens/HealthTutorialScree
 import ProfileTutorial from "./screens/Tutorial Screens/ProfileScreenTutorial";
 import HeatmapTutorial from "./screens/Tutorial Screens/HeatmapTutorial";
 import ChallengeTutorial from "./screens/Tutorial Screens/ChallengeScreenTutorial";
+import Login from './screens/Login';
+import HomeAddress from './screens/HomeAddress';
+
+//set up firebase
+import * as firebase from 'firebase';
+import { firebaseConfig } from './firebaseConfig';
+firebase.initializeApp(firebaseConfig);
+
 
 export default function App() {
+  
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
   const [currentChallenges, setCurrentChallenges] = useState([
     { title: "ChallengeTitle1", description: "gXrtOipB87Y" , isLink: true},
@@ -39,8 +55,9 @@ export default function App() {
   const db = firebase.firestore();
   db.settings({ timestampsInSnapshots: true });
   
+  const [currentPage, setCurrentPage] = useState("login");
   //Page Functions (No need for DB)
-  const [currentPage, setCurrentPage] = useState("main screen");
+  //const [currentPage, setCurrentPage] = useState("main screen");
   //Tell app whether the screen wants to render the header and footer.
   //For example, we don't want to load the header and footer for the login screen.
   //So they should be intially false, but when we are going to switch to the main screen,
@@ -62,9 +79,13 @@ export default function App() {
     isAdmin: true,
   });
 
-
   const changePageHandler = (newPage) => {
-    if (newPage === "main screen" || newPage === "profile") {
+    LayoutAnimation.spring();
+    if (
+      newPage === "main screen" ||
+      newPage === "settings" ||
+      newPage === "profile"
+    ) {
       setShowHeader(true);
       setShowFooter(true);
     } else if (newPage === "heatmap") {
@@ -72,6 +93,9 @@ export default function App() {
       setShowFooter(true);
     } else if (newPage === "welcome") {
       setShowHeader(false);
+      setShowFooter(false);
+    } else if (newPage === "createNewChallenge") {
+      setShowHeader(true);
       setShowFooter(false);
     }
     setCurrentPage(newPage);
@@ -162,11 +186,18 @@ export default function App() {
   } else if (currentPage === "heatmap") {
     content = <HeatmapScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "settings") {
-    content = <SettingsScreen onThemeChange={themeChangeHandler} onPageChange={changePageHandler} />;
+    content = (
+      <SettingsScreen
+        onThemeChange={themeChangeHandler}
+        onPageChange={changePageHandler}
+      />
+    );
   } else if (currentPage === "welcome") {
     content = <WelcomeScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "profileTutorial") {
-    content = <ProfileTutorial profile={thisUser} onPageChange={changePageHandler} />;
+    content = (
+      <ProfileTutorial profile={thisUser} onPageChange={changePageHandler} />
+    );
   } else if (currentPage === "challengeTutorial") {
     content = <ChallengeTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "heatmapTutorial") {
@@ -177,6 +208,10 @@ export default function App() {
     content = <HealthTutorialScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "mainChallengeTutorial") {
     content = <MainScreenChallengeTutorial onPageChange={changePageHandler} />;
+  } else if (currentPage === "login") {
+    content = <Login onPageChange={changePageHandler} />;
+  } else if (currentPage === "home address") {
+    content = <HomeAddress onPageChange={changePageHandler} />;
   }
 
   return (

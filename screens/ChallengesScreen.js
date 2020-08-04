@@ -1,22 +1,18 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import {
-    View,
-    StyleSheet,
-    Text,
-    Button,
-    TouchableOpacity,
-    Alert,
-    TextInput,
-    Modal,
-  } from "react-native";   
-import Webview from 'react-native-webview'
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+  View,
+  StyleSheet,
+  Text,
+  Button,
+  TouchableOpacity,
+  Alert,
+  TextInput,
+  Modal,
+} from "react-native";
+import Webview from "react-native-webview";
 import ColorPalette from "../constants/ColorPalette";
 import Card from "../components/Card";
 import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
-
- 
 
 const ChallengesScreen = (props) => {
   // challenge details recieved from App.js
@@ -27,94 +23,103 @@ const ChallengesScreen = (props) => {
   });
   let theme = ColorPalette();
 
-//Control when the modal is visible / what is displayed when the modal is visible.
-const [modalVisible, setModalVisible] = useState(false);
-const [modalContent, setModalContent] = useState();
+  //Control when the modal is visible / what is displayed when the modal is visible.
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalContent, setModalContent] = useState();
 
-//When the admin presses on the edit button for a desciption,
-//Create the associated modal content, and set the modal to be visable.
-const editTitleHandler = () => {
-  createModalContent("title");
-  setModalVisible(!modalVisible);
-};
+  //When the admin presses on the edit button for a desciption,
+  //Create the associated modal content, and set the modal to be visable.
+  const editTitleHandler = () => {
+    createModalContent("title");
+    setModalVisible(!modalVisible);
+  };
 
-//When the admin presses on the edit button for a desciption,
-//Create the associated modal content, and set the modal to be visable.
-const editDescriptionHandler = () => {
-  createModalContent("description");
-  setModalVisible(!modalVisible);
-};
+  //When the admin presses on the edit button for a desciption,
+  //Create the associated modal content, and set the modal to be visable.
+  const editDescriptionHandler = () => {
+    createModalContent("description");
+    setModalVisible(!modalVisible);
+  };
 
-//Depending on which edit button the admin presses,
-//load the correct text input box.
-const createModalContent = (fieldToEdit) => {
-  if (fieldToEdit == "title") {
-    setModalContent(
-      <TextInput
-        style={styles.editInput}
-        placeholder="New Title..."
-        onChangeText={(text) => (challenge.title = text)}
-      />
-    );
-  }
-  if (fieldToEdit == "description") {
-    setModalContent(
-      <TextInput
-        style={styles.editInput}
-        placeholder="New Description..."
-        onChangeText={(text) => (challenge.description = text)}
-      />
-    );
-  }
-};
+  //Depending on which edit button the admin presses,
+  //load the correct text input box.
+  const createModalContent = (fieldToEdit) => {
+    if (fieldToEdit == "title") {
+      setModalContent(
+        <TextInput
+          style={styles.editInput}
+          placeholder="New Title..."
+          onChangeText={(text) => (challenge.title = text)}
+        />
+      );
+    }
+    if (fieldToEdit == "description") {
+      setModalContent(
+        <TextInput
+          style={styles.editInput}
+          placeholder="New Description..."
+          onChangeText={(text) => (challenge.description = text)}
+        />
+      );
+    }
+  };
 
-const onModalClose = () => {
-  //WRITE CHALLENGE TITLE AND CHALLENGE DESCRIPTION TO THE DATABASE
-  props.onEditChallenge(props.challenge, challenge);
-};
+  const onModalClose = () => {
+    //WRITE CHALLENGE TITLE AND CHALLENGE DESCRIPTION TO THE DATABASE
+    props.onEditChallenge(props.challenge, challenge);
+  };
 
-const onDeleteButtonPress = () => {
-  //Database call to delete the current challenge.
-  props.onDeleteChallenge();
-  setChallenge();
-  props.onPageChange("main screen");
-};
+  const onDeleteButtonPress = () => {
+    //Database call to delete the current challenge.
+    props.onDeleteChallenge();
+    setChallenge();
+    props.onPageChange("main screen");
+  };
 
-//If the adminRights prop is true, then load the edit title component.
-const ChallengeTitleAdminComponent = () => {
-  if (props.adminRights) {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          editTitleHandler();
-        }}
-        style={styles.editIconContainer}
-      >
-        <Icon style={styles.editIcon} name="edit" />
-      </TouchableOpacity>
-    );
-  } else {
-    return;
-  }
-};
+  //If the adminRights prop is true, then load the edit title component.
+  const ChallengeTitleAdminComponent = () => {
+    if (props.adminRights) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            editTitleHandler();
+          }}
+          style={styles.editIconContainer}
+        >
+          <Icon
+            style={[
+              styles.editIcon,
+              { color: theme.offcolor, textShadowColor: theme.highlight },
+            ]}
+            name="edit"
+          />
+        </TouchableOpacity>
+      );
+    } else {
+      return;
+    }
+  };
 
-//If the user is an admin, load the description edit component.
-const ChallengeDescriptionAdminComponent = () => {
-  if (props.adminRights) {
-    return (
-      <TouchableOpacity
-        onPress={() => {
-          editDescriptionHandler();
-        }}
-        style={styles.editIconContainer}
-      >
-        <Icon style={styles.editIcon} name="edit" />
-      </TouchableOpacity>
-    );
-  } else {
-    return;
-  }
-};
+  //If the user is an admin, load the description edit component.
+  const ChallengeDescriptionAdminComponent = () => {
+    if (props.adminRights) {
+      return (
+        <TouchableOpacity
+          onPress={() => {
+            editDescriptionHandler();
+          }}
+          style={styles.editIconContainer}
+        >
+          <Icon
+            style={[styles.editIcon, { color: theme.highlight }]}
+            name="edit"
+          />
+        </TouchableOpacity>
+      );
+    } else {
+      return;
+    }
+  };
 
 //If the user is an admin, load the delete challenge button.
 const AdminDeleteButton = () => {
@@ -169,30 +174,31 @@ const AdminDeleteButton = () => {
           });
 }
 
-// function to check if video exists to be embedded
-    function videoDisplay(isLink, description) {
-        if (isLink) {
-            return (
-                <Webview style={{width:"94%", alignSelf:"center", marginVertical: 10}} source={{uri:"https://www.youtube.com/embed/" + description }} />
-            );
-        }
-        else
-        {
-            return(
-                <Card>
-                {ChallengeDescriptionAdminComponent()}
-                <Text
-                    style={[
-                    styles.body,
-                    { textShadowColor: theme.highlight, color: theme.offcolor },
-                    ]}
-                >
-                    {challenge.description}
-                </Text>
-                </Card>
-            );
-        }
+  // function to check if video exists to be embedded
+  function videoDisplay(isLink, description) {
+    if (isLink) {
+      return (
+        <Webview
+          style={{ width: "94%", alignSelf: "center", marginVertical: 10 }}
+          source={{ uri: "https://www.youtube.com/embed/" + description }}
+        />
+      );
+    } else {
+      return (
+        <Card>
+          {ChallengeDescriptionAdminComponent()}
+          <Text
+            style={[
+              styles.body,
+              { textShadowColor: theme.highlight, color: theme.offcolor },
+            ]}
+          >
+            {challenge.description}
+          </Text>
+        </Card>
+      );
     }
+  }
 
   return (
     // Create the screen object
@@ -314,12 +320,15 @@ const styles = StyleSheet.create({
 
   editIcon: {
     fontSize: 30,
-    color: ColorPalette.offcolor,
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+    shadowOpacity: 0.2,
   },
 
   editIconContainer: {
     position: "absolute",
-    left: 8,
+    top: "70%",
+    left: "5%",
   },
 
   image: {
@@ -355,6 +364,9 @@ const styles = StyleSheet.create({
   body: {
     textAlign: "center",
     fontSize: 16,
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+    shadowOpacity: 0.2,
   },
 
   icon: {

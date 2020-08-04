@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Button, Modal } from "react-native";
+import { View, StyleSheet, Text, Button, Modal, LayoutAnimation } from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import covidCases from "../../assets/COVIDcases.json";
 import zipCodeData from "../../assets/Zip_Code_Boundaries.json";
@@ -8,7 +8,7 @@ import ColorPalette from "../../constants/ColorPalette";
 //Tutorial components
 import TutorialText from "../../components/TutorialText";
 import TutorialSquare from "../../components/TutorialSquare";
-import TutorialButton from "../../components/TutorialButton";
+import SafeSpaceButton from "../../components/SafeSpaceButton";
 import TutorialNavbar from "../../components/TutorialNavbar";
 
 const HeatmapTutorial = (props) => {
@@ -16,10 +16,44 @@ const HeatmapTutorial = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState([]);
 
+  const [stage, setStage] = useState(0);
+  const [buttonTitle, setButtonTitle] = useState("Okay!");
+
   let theme = ColorPalette();
 
   const handlePress = () => {
-    props.onPageChange("main screen");
+    LayoutAnimation.spring();
+    if (stage === 0) {
+      setButtonTitle("Anything else?");
+    }
+    if (stage === 1) {
+      setButtonTitle("Alright, thanks!");
+    }
+    if (stage === 2) {
+      setButtonTitle("Thanks!");
+      props.onPageChange("main screen");
+    }
+    setStage(stage + 1);
+  };
+
+  const createTutorialText = () => {
+    if (stage === 0) {
+      return (
+        "This is the Safe_ Heatmap. Shown on the map are the zipcodes of the Portland metro area. " +
+        "Areas are color coded based on the amount of cases in the zipcode. "
+      );
+    }
+
+    if (stage === 1) {
+      return (
+        "Green areas have under 10 cases, yellow are under 50, orange are between 50 and " +
+        "100 and red areas are 100+. Press on a zipcode to get specifics. "
+      );
+    }
+
+    if (stage === 2) {
+      return "That concludes the tutorial! Stay safe and have fun!";
+    }
   };
 
   const handleZipcodePress = (e) => {
@@ -121,9 +155,7 @@ const HeatmapTutorial = (props) => {
   useEffect(() => {
     var zipcodes = readPolygonData();
     var polygonComponentList = createPolygonComponents(zipcodes);
-    if (!polygons) {
-      setPolygons(polygons.concat(polygonComponentList));
-    }
+    setPolygons(polygonComponentList);
   }, []);
 
   return (
@@ -141,14 +173,13 @@ const HeatmapTutorial = (props) => {
           </View>
         </View>
       </Modal>
-      <TutorialSquare>
-        <TutorialText>
-          This is the Safe_ Heatmap. Shown on the map are the zipcodes of the
-          Portland metro area. Areas are color coded based on the amount of
-          cases in the zipcode. Green areas have under 10 cases, yellow are
-          under 50, orange are between 50 and 100 and red areas are 100+. Press
-          on a zipcode to get specifics.
-        </TutorialText>
+      <TutorialSquare style={styles.tutorialContainer}>
+        <TutorialText>{createTutorialText()}</TutorialText>
+        <SafeSpaceButton
+          style={styles.buttonContainer}
+          title={buttonTitle}
+          onPress={() => handlePress()}
+        />
       </TutorialSquare>
       <MapView
         id="anchor"
@@ -163,11 +194,6 @@ const HeatmapTutorial = (props) => {
       >
         {polygons}
       </MapView>
-      <TutorialButton
-        style={styles.buttonContainer}
-        title="Okay!"
-        onPress={() => handlePress()}
-      />
     </View>
   );
 };
@@ -177,9 +203,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 
-  buttonContainer: {
-    marginTop: 30,
-    marginBottom: 30,
+  tutorialContainer: {
+    marginVertical: 15,
   },
 
   modalTextContainer: {
