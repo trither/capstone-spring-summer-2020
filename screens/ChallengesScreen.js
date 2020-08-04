@@ -130,14 +130,15 @@ const AdminDeleteButton = () => {
     return;
   }
 };
-//function to get challenges completed
+/*
+//function to get challenges completed from db
 //grab uid from async storage
-function getChallengescompleted() {
-  const docRef = db.collection("profile").doc(user.uid)
+  function setChallengecompleted() {
+  const docRef = db.collection("profile").doc('xtOtqqZlx0QFT9flOv6jIYeocTG3')
   const getDoc = docRef.get()
   .then(snapshot => {
     snapshot.forEach(doc => {
-        completedChallenges = doc.data().challengesCompleted;
+        var completedChallenges = doc.data().challengesCompleted;
         console.log(completedChallenges)
         console.log(doc.id, '=>', doc.data().challengesCompleted);  
         });
@@ -147,8 +148,9 @@ function getChallengescompleted() {
         });
 
 }
+*/
 // function to get new challenge on refresh from db
-function refreshchallenge() {
+  function refreshchallenge() {
           const id = Math.floor(Math.random() * 25) + 6;
           const docRef = db.collection("challenges").where("challengeID", ">", id).limit(1)
           const getDoc = docRef.get()
@@ -156,6 +158,9 @@ function refreshchallenge() {
             snapshot.forEach(doc => {
               challenge.description = doc.data().description;
               challenge.title = doc.data().challenge;
+              challenge.isLink = doc.data().isLink;
+              challenge.difficulty =doc.data().difficulty;
+              challenge.score = doc.data().score;
               console.log(doc.id, '=>', doc.data());  
           });
           })
@@ -225,8 +230,7 @@ function refreshchallenge() {
       >
         {/* Create the squares the the buttons exist on top of (buttonBoxes) */}
         <Card style={styles.buttonBox}>
-          {/* cloud function to fetch new challnege and put the new data into the title and description elements above*/
-          refreshchallenge()}
+          {refreshchallenge()}
           <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
             <Icon
               style={[

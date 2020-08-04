@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 
+//firebase imports
+import * as firebase from 'firebase';
+import * as functions from 'functions';
+
 //Main app screens
 import MainScreen from "./screens/MainScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -24,6 +28,16 @@ import HeatmapTutorial from "./screens/Tutorial Screens/HeatmapTutorial";
 import ChallengeTutorial from "./screens/Tutorial Screens/ChallengeScreenTutorial";
 
 export default function App() {
+  const [currentChallenges, setCurrentChallenges] = useState([
+    { title: "ChallengeTitle1", description: "ChallengeDesc1" , isLink: false},
+    { title: "ChallengeTitle2", description: "ChallengeDesc2", isLink: false },
+    { title: "ChallengeTitle3", description: "ChallengeDesc3", isLink: false},
+  ]);
+  if(firebase.apps.length === 0){ 
+    firebase.initializeApp(firebaseConfig);}
+  const db = firebase.firestore();
+  db.settings({ timestampsInSnapshots: true });
+  
   //Page Functions (No need for DB)
   const [currentPage, setCurrentPage] = useState("main screen");
   //Tell app whether the screen wants to render the header and footer.
