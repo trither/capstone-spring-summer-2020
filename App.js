@@ -8,6 +8,8 @@ import ChallengesScreen from "./screens/ChallengesScreen";
 import HeatmapScreen from "./screens/Heatmap";
 import SettingsScreen from "./screens/SettingsScreen";
 import LoginScreen from "./screens/Login";
+import CongratsScreen from "./screens/CongratsScreen";
+import FailureScreen from "./screens/FailureScreen";
 
 //Helpful components.
 import Footer from "./components/Footer";
@@ -199,6 +201,10 @@ export default function App() {
     content = <Login onPageChange={changePageHandler} />;
   } else if (currentPage === "home address") {
     content = <HomeAddress onPageChange={changePageHandler} />;
+  } else if (currentPage === "congrats screen") {
+    content = <CongratsScreen onPageChange={changePageHandler} />;
+  } else if (currentPage === "failure screen") {
+    content = <FailureScreen onPageChange={changePageHandler} />;
   }
 
   return (
