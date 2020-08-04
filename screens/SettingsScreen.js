@@ -5,6 +5,7 @@ import {
   Text,
   AsyncStorage,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -105,6 +106,13 @@ const SettingsScreen = (props) => {
             }
           />
         </View>
+        <TouchableOpacity onPress={()=> Alert.alert("Delete Account")} width="20%">
+        <Text
+          style={[
+            styles.text,
+            { color: theme.offcolor, textShadowColor: theme.highlight },
+          ]}>Delete Account</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
