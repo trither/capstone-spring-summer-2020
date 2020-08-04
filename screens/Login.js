@@ -106,8 +106,8 @@ function isUserEqual(googleUser, firebaseUser) {
     });
 
     if (result.type === 'success') {
-	    onSignIn(result);
 	    props.onPageChange('main screen');
+	    onSignIn(result);
       return result.accessToken;
     } else {
       return { cancelled: true };

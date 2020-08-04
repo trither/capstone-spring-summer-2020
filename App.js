@@ -28,7 +28,7 @@ import HomeAddress from './screens/HomeAddress';
 
 //set up firebase
 import * as firebase from 'firebase';
-import { firebaseConfig } from './config';
+import { firebaseConfig } from './firebaseConfig';
 firebase.initializeApp(firebaseConfig);
 
 
