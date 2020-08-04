@@ -50,7 +50,8 @@ export default function App() {
   if(firebase.apps.length === 0){ 
     firebase.initializeApp(firebaseConfig);}
   const db = firebase.firestore();
-
+  
+  //create a new profile doc in db
   function onUserSignup(result)
   {
     return db.collection('profile').doc(result.user.uid).set({
@@ -65,6 +66,26 @@ export default function App() {
       challengesCompleted: [],
     });
   }
+
+  // function to get new challenge on refresh from db
+  function refreshchallenge() {
+    const id = Math.floor(Math.random() * 25) + 6;
+    const docRef = db.collection("challenges").where("challengeID", ">", id).limit(1)
+    const getDoc = docRef.get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        challenge.description = doc.data().description;
+        challenge.title = doc.data().challenge;
+        challenge.isLink = doc.data().isLink;
+        challenge.difficulty =doc.data().difficulty;
+        challenge.score = doc.data().score;
+        console.log(doc.id, '=>', doc.data());  
+    });
+    })
+    .catch(err => {
+      console.log('Error getting documents', err);
+    });
+}
 /*
   function onDeleteUser()
   {
@@ -181,6 +202,7 @@ export default function App() {
         challenge={currentChallenges[0]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[0])}
         onEditChallenge={ChallengeEditHandler}
+        onRefreshChallenge={refreshchallenge}
       />
     );
   } else if (currentPage === "challenge2") {
@@ -191,6 +213,7 @@ export default function App() {
         challenge={currentChallenges[1]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[1])}
         onEditChallenge={ChallengeEditHandler}
+        onRefreshChallenge={refreshchallenge}
       />
     );
   } else if (currentPage === "challenge3") {
@@ -201,6 +224,7 @@ export default function App() {
         challenge={currentChallenges[2]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[2])}
         onEditChallenge={ChallengeEditHandler}
+        onRefreshChallenge={refreshchallenge}
       />
     );
   } else if (currentPage === "heatmap") {
