@@ -10,6 +10,7 @@ import {
 import ColorPalette from "../constants/ColorPalette";
 import BubbleType from "../constants/BubbleType";
 import Icon from "../node_modules/@expo/vector-icons/FontAwesome";
+import SafeSpaceButton from "../components/SafeSpaceButton";
 
 const MainScreen = (props) => {
   let theme = ColorPalette();
@@ -18,11 +19,10 @@ const MainScreen = (props) => {
   const AdminAddChallengeButton = () => {
     if (props.adminRights) {
       return (
-        <Button
-          onPress={() => props.onPageChange("createNewChallenge")}
-          color={ColorPalette.offcolor}
-          title="Add Challenge."
-        />
+          <SafeSpaceButton
+            onPress={() => props.onPageChange("createNewChallenge")}
+            title="Add Challenge."
+          />
       );
     }
   };

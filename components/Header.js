@@ -14,11 +14,18 @@ const Header = (props) => {
   let theme = ColorPalette();
   return (
     <View style={[styles.header, { backgroundColor: theme.secondary }]}>
-            <TouchableOpacity
-        style={styles.left}
+      <TouchableOpacity
+        style={[styles.left]}
         onPress={() => props.onButtonPress("welcome")}
       >
-        <Icon style={styles.icon} name="info" raised="true" />
+        <Icon
+          style={[
+            styles.icon,
+            { color: theme.offcolor, textShadowColor: theme.highlight },
+          ]}
+          name="info"
+          raised="true"
+        />
       </TouchableOpacity>
       <Text
         style={[
@@ -52,7 +59,7 @@ const styles = StyleSheet.create({
   left: {
     position: "absolute",
     left: "10%",
-    top:"90%",
+    top: "90%",
   },
 
   header: {

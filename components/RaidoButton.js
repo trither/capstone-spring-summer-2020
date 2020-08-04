@@ -3,9 +3,10 @@ import { View, StyleSheet, Button } from "react-native";
 import ColorPalette from "../constants/ColorPalette";
 
 const RaidioButton = (props) => {
+  let theme = ColorPalette();
   return (
-    <View style={[styles.circle, props.style]}>
-      {props.selected ? <View style={styles.selectedCircle} /> : null}
+    <View style={[styles.circle, props.style, {borderColor: theme.offcolor}]}>
+      {props.selected ? <View style={[styles.selectedCircle, {backgroundColor: theme.offcolor}]} /> : null}
     </View>
   );
 };
@@ -16,7 +17,6 @@ const styles = StyleSheet.create({
     width: 24,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "#000",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
     height: 12,
     width: 12,
     borderRadius: 6,
-    backgroundColor: "#000",
   },
 });
 

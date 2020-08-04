@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { StyleSheet, Text, View, AsyncStorage, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  AsyncStorage,
+  LayoutAnimation,
+} from "react-native";
+
 
 //Main app screens
 import MainScreen from "./screens/MainScreen";
@@ -29,28 +36,68 @@ import HomeAddress from './screens/HomeAddress';
 //set up firebase
 import * as firebase from 'firebase';
 import { firebaseConfig } from './firebaseConfig';
-firebase.initializeApp(firebaseConfig);
+import 'firebase/auth';
+import 'firebase/firestore';
 
 
 export default function App() {
-
-  /*
- const [login, setlogin] = useState("");
-
-  AsyncStorage.getItem("login")
-  .then((value)=>{
-    uid = value;
-    console.log('here here');
-  if (uid !== null){
-    [currentPage, setCurrentPage] = useState("main screen");
+  
+  // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
+  const [currentChallenges, setCurrentChallenges] = useState([
+    { title: "ChallengeTitle1", description: "gXrtOipB87Y" , isLink: true},
+    { title: "ChallengeTitle2", description: "ChallengeDesc2", isLink: false },
+    { title: "ChallengeTitle3", description: "ChallengeDesc3", isLink: false},
+  ]);
+  if(firebase.apps.length === 0){ 
+    firebase.initializeApp(firebaseConfig);}
+  const db = firebase.firestore();
+  
+  //create a new profile doc in db
+  function onUserSignup(result)
+  {
+    return db.collection('profile').doc(result.user.uid).set({
+      email: result.user.email,
+      name: result.user.displayName,
+      urlpic: result.user.photoURL,
+      level: 0,
+      lives: 3,
+      score: 0,
+      weeklystreak: 0,
+      activeChallenges: [],
+      challengesCompleted: [],
+    });
   }
-  else {
-    [currentPage, setCurrentPage] = useState("login");
+
+  // function to get new challenge on refresh from db
+  function refreshchallenge() {
+    const id = Math.floor(Math.random() * 25) + 6;
+    const docRef = db.collection("challenges").where("challengeID", ">", id).limit(1)
+    const getDoc = docRef.get()
+    .then(snapshot => {
+      snapshot.forEach(doc => {
+        challenge.description = doc.data().description;
+        challenge.title = doc.data().challenge;
+        challenge.isLink = doc.data().isLink;
+        challenge.difficulty =doc.data().difficulty;
+        challenge.score = doc.data().score;
+        console.log(doc.id, '=>', doc.data());  
+    });
+    })
+    .catch(err => {
+      console.log('Error getting documents', err);
+    });
+}
+/*
+  function onDeleteUser()
+  {
+      const doc = db.collection('profile').doc(user.uid);
+      return doc.delete();
   }
-  });
+
   */
-
-  [currentPage, setCurrentPage] = useState("login");
+  
+  
+  const [currentPage, setCurrentPage] = useState("login");
   //Page Functions (No need for DB)
   //const [currentPage, setCurrentPage] = useState("main screen");
   //Tell app whether the screen wants to render the header and footer.
@@ -74,15 +121,13 @@ export default function App() {
     isAdmin: true,
   });
 
-  // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
-  const [currentChallenges, setCurrentChallenges] = useState([
-    { title: "ChallengeTitle1", description: "gXrtOipB87Y" , isLink: true},
-    { title: "ChallengeTitle2", description: "ChallengeDesc2", isLink: false },
-    { title: "ChallengeTitle3", description: "ChallengeDesc3", isLink: false},
-  ]);
-
   const changePageHandler = (newPage) => {
-    if (newPage === "main screen" || newPage === "profile") {
+    LayoutAnimation.spring();
+    if (
+      newPage === "main screen" ||
+      newPage === "settings" ||
+      newPage === "profile"
+    ) {
       setShowHeader(true);
       setShowFooter(true);
     } else if (newPage === "heatmap") {
@@ -90,6 +135,9 @@ export default function App() {
       setShowFooter(true);
     } else if (newPage === "welcome") {
       setShowHeader(false);
+      setShowFooter(false);
+    } else if (newPage === "createNewChallenge") {
+      setShowHeader(true);
       setShowFooter(false);
     }
     setCurrentPage(newPage);
@@ -207,6 +255,7 @@ export default function App() {
         challenge={currentChallenges[0]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[0])}
         onEditChallenge={ChallengeEditHandler}
+        onRefreshChallenge={refreshchallenge}
       />
     );
   } else if (currentPage === "challenge2") {
@@ -217,6 +266,7 @@ export default function App() {
         challenge={currentChallenges[1]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[1])}
         onEditChallenge={ChallengeEditHandler}
+        onRefreshChallenge={refreshchallenge}
       />
     );
   } else if (currentPage === "challenge3") {
@@ -227,16 +277,24 @@ export default function App() {
         challenge={currentChallenges[2]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[2])}
         onEditChallenge={ChallengeEditHandler}
+        onRefreshChallenge={refreshchallenge}
       />
     );
   } else if (currentPage === "heatmap") {
     content = <HeatmapScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "settings") {
-    content = <SettingsScreen onThemeChange={themeChangeHandler} onPageChange={changePageHandler} />;
+    content = (
+      <SettingsScreen
+        onThemeChange={themeChangeHandler}
+        onPageChange={changePageHandler}
+      />
+    );
   } else if (currentPage === "welcome") {
     content = <WelcomeScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "profileTutorial") {
-    content = <ProfileTutorial profile={thisUser} onPageChange={changePageHandler} />;
+    content = (
+      <ProfileTutorial profile={thisUser} onPageChange={changePageHandler} />
+    );
   } else if (currentPage === "challengeTutorial") {
     content = <ChallengeTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "heatmapTutorial") {
@@ -248,7 +306,7 @@ export default function App() {
   } else if (currentPage === "mainChallengeTutorial") {
     content = <MainScreenChallengeTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "login") {
-    content = <Login onPageChange={changePageHandler} />;
+    content = <Login onPageChange={changePageHandler} onSignup={onUserSignup}/>;
   } else if (currentPage === "home address") {
     content = <HomeAddress onPageChange={changePageHandler} />;
   }

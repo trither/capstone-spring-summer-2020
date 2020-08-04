@@ -31,6 +31,7 @@ const LoginScreen = (props) => {
       firebase.auth().signInWithCredential(credential).then(function(result){
         console.log('user signed in');
         AsyncStorage.setItem("login", result.user.uid);
+        props.onSignup(result);
       })
 	    .catch(function(error) {
         // Handle Errors here.

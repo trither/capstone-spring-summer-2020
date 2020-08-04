@@ -142,3 +142,8 @@ const styles = StyleSheet.create({
 });
 
 export default SettingsScreen;
+
+/*
+firebase.auth().currentUser.delete().then
+
+*/
