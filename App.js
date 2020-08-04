@@ -3,7 +3,18 @@ import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 
 //firebase imports
 import * as firebase from 'firebase';
+//import firebase from 'firebase/app'
+import 'firebase/auth';
+import 'firebase/firestore';
+//import 'firebase/database';
 import * as functions from 'functions';
+const firebaseConfig = {
+  apiKey: "AIzaSyBJiUujB8aiGHXm8jxBAChHUWsnJqJERgM",
+  authDomain: "capstone-spsu2020.firebaseapp.com",
+  databaseURL: "https://capstone-spsu2020.firebaseio.com",
+  projectId: "capstone-spsu2020",
+  storageBucket: "capstone-spsu2020.appspot.com",
+};
 
 //Main app screens
 import MainScreen from "./screens/MainScreen";
