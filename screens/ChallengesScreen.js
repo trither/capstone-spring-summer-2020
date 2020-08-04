@@ -130,6 +130,39 @@ const AdminDeleteButton = () => {
     return;
   }
 };
+//function to get challenges completed
+//grab uid from async storage
+function getChallengescompleted() {
+  const docRef = db.collection("profile").doc(user.uid)
+  const getDoc = docRef.get()
+  .then(snapshot => {
+    snapshot.forEach(doc => {
+        completedChallenges = doc.data().challengesCompleted;
+        console.log(completedChallenges)
+        console.log(doc.id, '=>', doc.data().challengesCompleted);  
+        });
+        })
+        .catch(err => {
+          console.log('Error getting documents', err);
+        });
+
+}
+// function to get new challenge on refresh from db
+function refreshchallenge() {
+          const id = Math.floor(Math.random() * 25) + 6;
+          const docRef = db.collection("challenges").where("challengeID", ">", id).limit(1)
+          const getDoc = docRef.get()
+          .then(snapshot => {
+            snapshot.forEach(doc => {
+              challenge.description = doc.data().description;
+              challenge.title = doc.data().challenge;
+              console.log(doc.id, '=>', doc.data());  
+          });
+          })
+          .catch(err => {
+            console.log('Error getting documents', err);
+          });
+}
 
 // function to check if video exists to be embedded
     function videoDisplay(isLink, description) {
@@ -192,7 +225,8 @@ const AdminDeleteButton = () => {
       >
         {/* Create the squares the the buttons exist on top of (buttonBoxes) */}
         <Card style={styles.buttonBox}>
-          {/* CloudFunctions needed here to fetch new challnege and put the new data into the title and description elements above*/}
+          {/* cloud function to fetch new challnege and put the new data into the title and description elements above*/
+          refreshchallenge()}
           <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
             <Icon
               style={[
@@ -205,7 +239,8 @@ const AdminDeleteButton = () => {
           </TouchableOpacity>
         </Card>
         <Card style={styles.buttonBox}>
-          {/* CloudFunctions needed here to recieve challenge completed data*/}
+          {/* CloudFunctions needed here to recieve challenge completed data*/
+          getChallengescompleted()}
           <TouchableOpacity
             onPress={() => Alert.alert("Challenge Marked Complete")}
             width="20%"
