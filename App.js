@@ -3,11 +3,8 @@ import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 
 //firebase imports
 import * as firebase from 'firebase';
-//import firebase from 'firebase/app'
 import 'firebase/auth';
 import 'firebase/firestore';
-//import 'firebase/database';
-import * as functions from 'functions';
 const firebaseConfig = {
   apiKey: "AIzaSyBJiUujB8aiGHXm8jxBAChHUWsnJqJERgM",
   authDomain: "capstone-spsu2020.firebaseapp.com",
@@ -48,7 +45,7 @@ export default function App() {
   if(firebase.apps.length === 0){ 
     firebase.initializeApp(firebaseConfig);}
   const db = firebase.firestore();
-  db.settings({ timestampsInSnapshots: true });
+  
   
   //Page Functions (No need for DB)
   const [currentPage, setCurrentPage] = useState("main screen");
