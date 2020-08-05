@@ -20,12 +20,15 @@ const ChallengesScreen = (props) => {
     title: props.challenge.title,
     description: props.challenge.description,
     isLink: props.challenge.isLink,
+    score: props.challenge.score,
+    difficulty: props.challenge.difficulty,
   });
   let theme = ColorPalette();
 
   //Control when the modal is visible / what is displayed when the modal is visible.
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState();
+  //const [flag, setFlag] = useState(false);
 
   //When the admin presses on the edit button for a desciption,
   //Create the associated modal content, and set the modal to be visable.
@@ -181,6 +184,13 @@ const AdminDeleteButton = () => {
     }
   }
 
+  const handleRefresh=()=>
+  {
+    //setFlag(!flag);  
+    props.onRefreshChallenge();
+    props.onPageChange("main screen");
+
+  }
   return (
     // Create the screen object
     <View style={styles.screen}>
@@ -217,8 +227,7 @@ const AdminDeleteButton = () => {
       >
         {/* Create the squares the the buttons exist on top of (buttonBoxes) */}
         <Card style={styles.buttonBox}>
-          {props.onRefreshChallenge()}
-          <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
+          <TouchableOpacity onPress={()=>handleRefresh()} width="20%">
             <Icon
               style={[
                 styles.icon,
