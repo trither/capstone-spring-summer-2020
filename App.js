@@ -44,13 +44,14 @@ export default function App() {
   
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
   const [currentChallenges, setCurrentChallenges] = useState([
-    { title: "ChallengeTitle1", description: "gXrtOipB87Y" , isLink: true},
-    { title: "ChallengeTitle2", description: "ChallengeDesc2", isLink: false },
+    { title: "ChallengeTitle1 That is extremely long and verbose just in case it comes up", description: "gXrtOipB87Y" , isLink: true},
+    { title: "ChallengeTitle2 that is less long, but still", description: "ChallengeDesc2", isLink: false },
     { title: "ChallengeTitle3", description: "ChallengeDesc3", isLink: false},
   ]);
   if(firebase.apps.length === 0){ 
     firebase.initializeApp(firebaseConfig);}
   const db = firebase.firestore();
+
   
   //create a new profile doc in db
   function onUserSignup(result)
