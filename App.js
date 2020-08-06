@@ -47,8 +47,21 @@ export default function App() {
   var doc_count = 54;
   //DB FUNCTIONS START HERE
   //read profile by uid from asyncstorage and get challenge ids from active challenges
-
   //const [currentChallenges, setCurrentChallenges] = useState(getChallengesId())
+
+       /*
+  async function getChallengesId(){
+    const snapshot = await db.collection("challenges").where("challengeID", "in", [2,3,4]).limit(3).get()
+    var str = JSON.stringify(snapshot.docs.map(doc => doc.data()))
+    var parsed = JSON.parse(str)
+    console.log(parsed)
+    //tempChallenges = parsed;
+    console.log("testing....")
+    return parsed
+
+  }
+  */
+ 
   const [currentChallenges, setCurrentChallenges] = useState(
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
   [
@@ -78,7 +91,7 @@ export default function App() {
     },
     
   ]);
-  
+
   const deepCopy = () => {
     var tempArray = [];
     currentChallenges.forEach((item) => {
@@ -131,9 +144,6 @@ export default function App() {
   
   //create a new profile doc in db
   function onUserSignup(result) {
-    const id1 = Math.floor(Math.random() * doc_count) + 0;
-    const id2 = Math.floor(Math.random() * doc_count) + 0;
-    const id3 = Math.floor(Math.random() * doc_count) + 0;
     return db.collection("profile").doc(result.user.uid).set({
       email: result.user.email,
       name: result.user.displayName,
@@ -142,7 +152,7 @@ export default function App() {
       lives: 3,
       score: 0,
       weeklystreak: 0,
-      activeChallenges: [id1,id2,id3],
+      activeChallenges: [1,2,3],
       challengesCompleted: [],
     });
   } 
