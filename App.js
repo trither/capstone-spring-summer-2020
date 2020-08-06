@@ -39,15 +39,26 @@ import "firebase/auth";
 import "firebase/firestore";
 
 export default function App() {
+  if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.firestore();
   var i = 0;
+  var doc_count = 54;
+  //DB FUNCTIONS START HERE
+  //read profile by uid from asyncstorage and get challenge ids from active challenges
+
+  //const [currentChallenges, setCurrentChallenges] = useState(getChallengesId())
+  const [currentChallenges, setCurrentChallenges] = useState(
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
-  const [currentChallenges, setCurrentChallenges] = useState([
+  [
     {
       title: "ChallengeTitle1",
       description: "gXrtOipB87Y",
       isLink: true,
       score: 0,
       difficulty: 0,
+      challengeID: 0,
     },
     {
       title: "ChallengeTitle2",
@@ -55,6 +66,7 @@ export default function App() {
       isLink: false,
       score: 0,
       difficulty: 0,
+      challengeID: 0,
     },
     {
       title: "ChallengeTitle3",
@@ -62,9 +74,11 @@ export default function App() {
       isLink: false,
       score: 0,
       difficulty: 0,
+      challengeID: 0,
     },
+    
   ]);
-
+  
   const deepCopy = () => {
     var tempArray = [];
     currentChallenges.forEach((item) => {
@@ -74,21 +88,52 @@ export default function App() {
         isLink: item.isLink,
         score: item.score,
         difficulty: item.difficulty,
+        challengeID: item.challengeID,
       };
       tempArray.push(tempItem);
     });
     return tempArray;
   };
 
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
+  /*
+  //function to move accepted challenge to completed challenges
+  //grab uid from async storage
+  function setChallengeCompleted(challenge) {
+  var docRef = db.collection("profile").doc('xtOtqqZlx0QFT9flOv6jIYeocTG3');
+  docRef.update({
+    challengesCompleted: firebase.firestore.FieldValue.arrayUnion(challenge.challengeID)
+  }); 
+  docRef.update({
+    activeChallenges: firebase.firestore.FieldValue.arrayRemove(challenge.challengeID)
+  });
+}
+*/
+  //add new challenge from admin
+  function addNewChallenge(challenge){
+    ++doc_count;
+    return db.collection("challenges").add({
+      challenge: challenge.title,
+      description: challenge.description,
+      challengeID: doc_count,
+      difficulty: challenge.difficulty,
+      score: challenge.score,
+      isLink: challenge.isLink,
+      type: challenge.type,
+  })
+  .then(function(docRef) {
+    console.log("Document written with ID: ", docRef.id);
+    })
+  .catch(function(error) {
+    console.error("Error adding document: ", error);
+  });
   }
-  const db = firebase.firestore();
+
+  
   //create a new profile doc in db
   function onUserSignup(result) {
-    const id1 = Math.floor(Math.random() * 30) + 0;
-    const id2 = Math.floor(Math.random() * 30) + 0;
-    const id3 = Math.floor(Math.random() * 30) + 0;
+    const id1 = Math.floor(Math.random() * doc_count) + 0;
+    const id2 = Math.floor(Math.random() * doc_count) + 0;
+    const id3 = Math.floor(Math.random() * doc_count) + 0;
     return db.collection("profile").doc(result.user.uid).set({
       email: result.user.email,
       name: result.user.displayName,
@@ -105,10 +150,9 @@ export default function App() {
   // function to get new challenge on refresh from db
   const refreshchallenge = (challenge) => {
     var temp = deepCopy();
-    console.log(temp);
     temp.forEach((item) => {
       if (item.title == challenge.title) {
-        const id = Math.floor(Math.random() * 25) + 6;
+        const id = Math.floor(Math.random() * doc_count) + 0;
         return db.collection("challenges").where("challengeID", ">", id).limit(1)
           .get()
           .then((snapshot) => {
@@ -118,6 +162,7 @@ export default function App() {
               item.isLink = doc.data().isLink;
               item.difficulty = doc.data().difficulty;
               item.score = doc.data().score;
+              item.challengeID = doc.data().challengeID;
               setCurrentChallenges(temp);
               console.log(doc.id, "=>", doc.data());
             });
@@ -128,42 +173,6 @@ export default function App() {
       }
     });
   };
-/*
-  //go into profile by uid and get challenge ids from active challenges
-  const docRef = db.collection("profile").doc("xtOtqqZlx0QFT9flOv6jIYeocTG3");
-  docRef.get().then(function(doc) {
-    if (doc.exists) {
-      var Challenges = doc.data().activeChallenges;
-      console.log(Challenges)
-      console.log(doc.id, '=>', doc.data());
-    } else {
-        console.log("No such document!");
-    }
-  }).catch(function(error) {
-    console.log("Error getting document:", error);
-  });
-
-  const docref = db.collection("challenges").where("challengeID", "in", Challenges)
-  const getDoc = docref.get()
-      .then(snapshot => {
-        snapshot.forEach(doc => {
-            renderData(doc);
-            ++i;
-            console.log(i);
-            console.log(doc.id, '=>', doc.data());
-        });
-      })
-      .catch(err => {
-        console.log('Error getting documents', err);
-        });
-
-    function renderData(doc) {
-      currentChallenges[i].title = doc.data().challenge;
-      currentChallenges[i].description = doc.data().description;
-      currentChallenges[i].isLink = doc.data().isLink;
-      console.log(currentChallenges[i]);
-    } 
-*/
 
   /*
   function onDeleteUser()
@@ -171,7 +180,6 @@ export default function App() {
       const doc = db.collection('profile').doc(user.uid);
       return doc.delete();
   }
-
   */
 
   const [currentPage, setCurrentPage] = useState("login");
@@ -183,6 +191,7 @@ export default function App() {
   //the states should be updated to true.
   const [showHeader, setShowHeader] = useState(true);
   const [showFooter, setShowFooter] = useState(true);
+
 
   //Using this to signal to app.js that we need to rerender. No important info is actually stored in this state.
   const [theme, setTheme] = useState(false);
@@ -223,8 +232,13 @@ export default function App() {
   //When the delete challenge button is hit in the challenge page this function is executed.
   //When an admin deletes a challenge, we load a new one to replace it.
   const deleteChallengeHandler = (challenge) => {
-    challenge.title = "replace";
-    challenge.description = "replace";
+    var docRef = db.collection('challenges').where('challengeID','==',challenge.challengeID).limit(1)
+    docRef.get().then(function(querySnapshot) {
+    querySnapshot.forEach(function(doc) {
+      doc.ref.delete();
+      setCurrentPage("createNewChallenge");
+    });
+    }); 
   };
 
   const ChallengeEditHandler = (challengeToEdit, challenge) => {
@@ -262,7 +276,7 @@ export default function App() {
         onPageChange={changePageHandler}
         challenges={currentChallenges}
         profile={thisUser}
-        onRefreshChallenge={() => refreshchallenge(currentChallenges[0])}
+        onRefreshChallenge={refreshchallenge}
 
       />
     );
@@ -279,6 +293,7 @@ export default function App() {
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[0])}
         onEditChallenge={ChallengeEditHandler}
         onRefreshChallenge={() => refreshchallenge(currentChallenges[0])}
+        onChallengeId="challenge1"
       />
     );
   } else if (currentPage === "challenge2") {
@@ -290,6 +305,7 @@ export default function App() {
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[1])}
         onEditChallenge={ChallengeEditHandler}
         onRefreshChallenge={() => refreshchallenge(currentChallenges[1])}
+        onChallengeId="challenge2"
       />
     );
   } else if (currentPage === "challenge3") {
@@ -301,6 +317,7 @@ export default function App() {
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[2])}
         onEditChallenge={ChallengeEditHandler}
         onRefreshChallenge={() => refreshchallenge(currentChallenges[2])}
+        onChallengeId={currentPage}
       />
     );
   } else if (currentPage === "heatmap") {
@@ -323,7 +340,7 @@ export default function App() {
   } else if (currentPage === "heatmapTutorial") {
     content = <HeatmapTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "createNewChallenge") {
-    content = <CreateNewChallengeScreen onPageChange={changePageHandler} />;
+    content = <CreateNewChallengeScreen onPageChange={changePageHandler} onAddNewChallenge={addNewChallenge}/>;
   } else if (currentPage === "healthTutorial") {
     content = <HealthTutorialScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "mainChallengeTutorial") {

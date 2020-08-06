@@ -22,13 +22,13 @@ const ChallengesScreen = (props) => {
     isLink: props.challenge.isLink,
     score: props.challenge.score,
     difficulty: props.challenge.difficulty,
+    challengeID: props.challenge.challengeID,
   });
   let theme = ColorPalette();
 
   //Control when the modal is visible / what is displayed when the modal is visible.
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState();
-  //const [flag, setFlag] = useState(false);
 
   //When the admin presses on the edit button for a desciption,
   //Create the associated modal content, and set the modal to be visable.
@@ -74,6 +74,7 @@ const ChallengesScreen = (props) => {
 
   const onDeleteButtonPress = () => {
     //Database call to delete the current challenge.
+    
     props.onDeleteChallenge();
     setChallenge();
     props.onPageChange("main screen");
@@ -138,25 +139,6 @@ const AdminDeleteButton = () => {
     return;
   }
 };
-/*
-//function to get challenges completed from db
-//grab uid from async storage
-  function setChallengecompleted() {
-  const docRef = db.collection("profile").doc('xtOtqqZlx0QFT9flOv6jIYeocTG3')
-  const getDoc = docRef.get()
-  .then(snapshot => {
-    snapshot.forEach(doc => {
-        var completedChallenges = doc.data().challengesCompleted;
-        console.log(completedChallenges)
-        console.log(doc.id, '=>', doc.data().challengesCompleted);  
-        });
-        })
-        .catch(err => {
-          console.log('Error getting documents', err);
-        });
-
-}
-*/
 
   // function to check if video exists to be embedded
   function videoDisplay(isLink, description) {
@@ -186,7 +168,6 @@ const AdminDeleteButton = () => {
 
   const handleRefresh=()=>
   {
-    //setFlag(!flag);  
     props.onRefreshChallenge();
     props.onPageChange("main screen");
 

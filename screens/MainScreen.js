@@ -6,6 +6,7 @@ import {
   Button,
   TouchableOpacity,
   Alert,
+  LayoutAnimation,
 } from "react-native";
 import ColorPalette from "../constants/ColorPalette";
 import BubbleType from "../constants/BubbleType";
@@ -44,9 +45,9 @@ const MainScreen = (props) => {
   var ch2 = props.challenges[1].title;
   var ch3 = props.challenges[2].title;
 
-  const handleRefresh=()=>
+  const handleRefresh=(challenges)=>
   {  
-    props.onRefreshChallenge();
+    props.onRefreshChallenge(challenges);
     props.onPageChange("main screen");
 
   }
@@ -76,7 +77,7 @@ const MainScreen = (props) => {
               {ch1}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>handleRefresh()} width="20%">
+          <TouchableOpacity onPress={()=>handleRefresh(props.challenges[0])} width="20%">
             <Icon
               style={[
                 styles.icon,
@@ -109,7 +110,7 @@ const MainScreen = (props) => {
               {ch2}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>handleRefresh()} width="20%">
+          <TouchableOpacity onPress={()=>handleRefresh(props.challenges[1])} width="20%">
             <Icon
               style={[
                 styles.icon,
@@ -142,7 +143,7 @@ const MainScreen = (props) => {
               {ch3}
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>handleRefresh()} width="20%">
+          <TouchableOpacity onPress={()=>handleRefresh(props.challenges[2])} width="20%">
             <Icon
               style={[
                 styles.icon,
