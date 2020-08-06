@@ -7,12 +7,16 @@ import {
   Keyboard,
   Button,
   AsyncStorage,
+  Image,
 } from "react-native";
 import ColorPalette from "../constants/ColorPalette";
 import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
+import myIcon from '../constants/myIcon;'
 
 const LoginScreen = (props) => {
+  let theme = ColorPalette();
+  let ssIcon = myIcon;
 
 //function handling sign-in with google
 	function onSignIn(googleUser) {
@@ -120,7 +124,8 @@ function isUserEqual(googleUser, firebaseUser) {
 
   return (
 		  
-	<View style={styles.screen}>
+	<View style={[styles.screen, { backgroundColor: theme.primary }]}>
+    {ssIcon}
 	  <Button title="sign in with google"
           onPress={googleLogin}
 	  />
