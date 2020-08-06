@@ -32,33 +32,112 @@ import HealthTutorialScreen from "./screens/Tutorial Screens/HealthTutorialScree
 import ProfileTutorial from "./screens/Tutorial Screens/ProfileScreenTutorial";
 import HeatmapTutorial from "./screens/Tutorial Screens/HeatmapTutorial";
 import ChallengeTutorial from "./screens/Tutorial Screens/ChallengeScreenTutorial";
-import Login from './screens/Login';
-import HomeAddress from './screens/HomeAddress';
+import Login from "./screens/Login";
+import HomeAddress from "./screens/HomeAddress";
 
 //set up firebase
-import * as firebase from 'firebase';
-import { firebaseConfig } from './firebaseConfig';
-import 'firebase/auth';
-import 'firebase/firestore';
-
+import * as firebase from "firebase";
+import { firebaseConfig } from "./firebaseConfig";
+import "firebase/auth";
+import "firebase/firestore";
 
 export default function App() {
-  
-  // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
-  const [currentChallenges, setCurrentChallenges] = useState([
-    { title: "ChallengeTitle1 That is extremely long and verbose just in case it comes up", description: "gXrtOipB87Y" , isLink: true},
-    { title: "ChallengeTitle2 that is less long, but still", description: "ChallengeDesc2", isLink: false },
-    { title: "ChallengeTitle3", description: "ChallengeDesc3", isLink: false},
-  ]);
-  if(firebase.apps.length === 0){ 
-    firebase.initializeApp(firebaseConfig);}
+  if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig);
+  }
   const db = firebase.firestore();
+  var i = 0;
+  var doc_count = 54;
+  //DB FUNCTIONS START HERE
+  //read profile by uid from asyncstorage and get challenge ids from active challenges
+
+  //const [currentChallenges, setCurrentChallenges] = useState(getChallengesId())
+  const [currentChallenges, setCurrentChallenges] = useState(
+  // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
+  [
+    {
+      title: "ChallengeTitle1",
+      description: "gXrtOipB87Y",
+      isLink: true,
+      score: 0,
+      difficulty: 0,
+      challengeID: 0,
+    },
+    {
+      title: "ChallengeTitle2",
+      description: "ChallengeDesc2",
+      isLink: false,
+      score: 0,
+      difficulty: 0,
+      challengeID: 0,
+    },
+    {
+      title: "ChallengeTitle3",
+      description: "ChallengeDesc3",
+      isLink: false,
+      score: 0,
+      difficulty: 0,
+      challengeID: 0,
+    },
+    
+  ]);
+  
+  const deepCopy = () => {
+    var tempArray = [];
+    currentChallenges.forEach((item) => {
+      var tempItem = {
+        title: item.title,
+        description: item.description,
+        isLink: item.isLink,
+        score: item.score,
+        difficulty: item.difficulty,
+        challengeID: item.challengeID,
+      };
+      tempArray.push(tempItem);
+    });
+    return tempArray;
+  };
+
+  /*
+  //function to move accepted challenge to completed challenges
+  //grab uid from async storage
+  function setChallengeCompleted(challenge) {
+  var docRef = db.collection("profile").doc('xtOtqqZlx0QFT9flOv6jIYeocTG3');
+  docRef.update({
+    challengesCompleted: firebase.firestore.FieldValue.arrayUnion(challenge.challengeID)
+  }); 
+  docRef.update({
+    activeChallenges: firebase.firestore.FieldValue.arrayRemove(challenge.challengeID)
+  });
+}
+*/
+  //add new challenge from admin
+  function addNewChallenge(challenge){
+    ++doc_count;
+    return db.collection("challenges").add({
+      challenge: challenge.title,
+      description: challenge.description,
+      challengeID: doc_count,
+      difficulty: challenge.difficulty,
+      score: challenge.score,
+      isLink: challenge.isLink,
+      type: challenge.type,
+  })
+  .then(function(docRef) {
+    console.log("Document written with ID: ", docRef.id);
+    })
+  .catch(function(error) {
+    console.error("Error adding document: ", error);
+  });
+  }
 
   
   //create a new profile doc in db
-  function onUserSignup(result)
-  {
-    return db.collection('profile').doc(result.user.uid).set({
+  function onUserSignup(result) {
+    const id1 = Math.floor(Math.random() * doc_count) + 0;
+    const id2 = Math.floor(Math.random() * doc_count) + 0;
+    const id3 = Math.floor(Math.random() * doc_count) + 0;
+    return db.collection("profile").doc(result.user.uid).set({
       email: result.user.email,
       name: result.user.displayName,
       urlpic: result.user.photoURL,
@@ -66,40 +145,46 @@ export default function App() {
       lives: 3,
       score: 0,
       weeklystreak: 0,
-      activeChallenges: [],
+      activeChallenges: [id1,id2,id3],
       challengesCompleted: [],
     });
-  }
+  } 
 
   // function to get new challenge on refresh from db
-  function refreshchallenge() {
-    const id = Math.floor(Math.random() * 25) + 6;
-    const docRef = db.collection("challenges").where("challengeID", ">", id).limit(1)
-    const getDoc = docRef.get()
-    .then(snapshot => {
-      snapshot.forEach(doc => {
-        challenge.description = doc.data().description;
-        challenge.title = doc.data().challenge;
-        challenge.isLink = doc.data().isLink;
-        challenge.difficulty =doc.data().difficulty;
-        challenge.score = doc.data().score;
-        console.log(doc.id, '=>', doc.data());  
+  const refreshchallenge = (challenge) => {
+    var temp = deepCopy();
+    temp.forEach((item) => {
+      if (item.title == challenge.title) {
+        const id = Math.floor(Math.random() * doc_count) + 0;
+        return db.collection("challenges").where("challengeID", ">", id).limit(1)
+          .get()
+          .then((snapshot) => {
+            snapshot.forEach((doc) => {
+              item.description = doc.data().description;
+              item.title = doc.data().challenge;
+              item.isLink = doc.data().isLink;
+              item.difficulty = doc.data().difficulty;
+              item.score = doc.data().score;
+              item.challengeID = doc.data().challengeID;
+              setCurrentChallenges(temp);
+              console.log(doc.id, "=>", doc.data());
+            });
+          })
+          .catch((err) => {
+            console.log("Error getting documents", err);
+          });   
+      }
     });
-    })
-    .catch(err => {
-      console.log('Error getting documents', err);
-    });
-}
-/*
+  };
+
+  /*
   function onDeleteUser()
   {
       const doc = db.collection('profile').doc(user.uid);
       return doc.delete();
   }
-
   */
-  
-  
+
   const [currentPage, setCurrentPage] = useState("login");
   //Page Functions (No need for DB)
   //const [currentPage, setCurrentPage] = useState("main screen");
@@ -109,6 +194,7 @@ export default function App() {
   //the states should be updated to true.
   const [showHeader, setShowHeader] = useState(true);
   const [showFooter, setShowFooter] = useState(true);
+
 
   //Using this to signal to app.js that we need to rerender. No important info is actually stored in this state.
   const [theme, setTheme] = useState(false);
@@ -148,13 +234,14 @@ export default function App() {
 
   //When the delete challenge button is hit in the challenge page this function is executed.
   //When an admin deletes a challenge, we load a new one to replace it.
-  const deleteChallengeHandler = (challengeToDelete) => {
-    currentChallenges.forEach(function (challenge) {
-      if (challengeToDelete.title == challenge.title) {
-        challenge.title = "replace";
-        challenge.description = "replace";
-      }
+  const deleteChallengeHandler = (challenge) => {
+    var docRef = db.collection('challenges').where('challengeID','==',challenge.challengeID).limit(1)
+    docRef.get().then(function(querySnapshot) {
+    querySnapshot.forEach(function(doc) {
+      doc.ref.delete();
+      setCurrentPage("createNewChallenge");
     });
+    }); 
   };
 
   const ChallengeEditHandler = (challengeToEdit, challenge) => {
@@ -244,6 +331,8 @@ export default function App() {
         onPageChange={changePageHandler}
         challenges={currentChallenges}
         profile={thisUser}
+        onRefreshChallenge={refreshchallenge}
+
       />
     );
   } else if (currentPage === "profile") {
@@ -258,7 +347,8 @@ export default function App() {
         challenge={currentChallenges[0]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[0])}
         onEditChallenge={ChallengeEditHandler}
-        onRefreshChallenge={refreshchallenge}
+        onRefreshChallenge={() => refreshchallenge(currentChallenges[0])}
+        onChallengeId="challenge1"
       />
     );
   } else if (currentPage === "challenge2") {
@@ -269,7 +359,8 @@ export default function App() {
         challenge={currentChallenges[1]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[1])}
         onEditChallenge={ChallengeEditHandler}
-        onRefreshChallenge={refreshchallenge}
+        onRefreshChallenge={() => refreshchallenge(currentChallenges[1])}
+        onChallengeId="challenge2"
       />
     );
   } else if (currentPage === "challenge3") {
@@ -280,7 +371,8 @@ export default function App() {
         challenge={currentChallenges[2]}
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[2])}
         onEditChallenge={ChallengeEditHandler}
-        onRefreshChallenge={refreshchallenge}
+        onRefreshChallenge={() => refreshchallenge(currentChallenges[2])}
+        onChallengeId={currentPage}
       />
     );
   } else if (currentPage === "heatmap") {
@@ -303,13 +395,15 @@ export default function App() {
   } else if (currentPage === "heatmapTutorial") {
     content = <HeatmapTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "createNewChallenge") {
-    content = <CreateNewChallengeScreen onPageChange={changePageHandler} />;
+    content = <CreateNewChallengeScreen onPageChange={changePageHandler} onAddNewChallenge={addNewChallenge}/>;
   } else if (currentPage === "healthTutorial") {
     content = <HealthTutorialScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "mainChallengeTutorial") {
     content = <MainScreenChallengeTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "login") {
-    content = <Login onPageChange={changePageHandler} onSignup={onUserSignup}/>;
+    content = (
+      <Login onPageChange={changePageHandler} onSignup={onUserSignup} />
+    );
   } else if (currentPage === "home address") {
     content = <HomeAddress onPageChange={changePageHandler} />;
   } else if (currentPage === "congrats screen") {

@@ -64,7 +64,7 @@ function isUserEqual(googleUser, firebaseUser) {
 }
 
 
-
+/*
 	async function facebookLogin() {
   try {
     await Facebook.initializeAsync('732205167600953');
@@ -96,7 +96,7 @@ function isUserEqual(googleUser, firebaseUser) {
     alert(`Facebook Login Error: ${message}`);
   }
 }
-
+*/
 	async function googleLogin() {
   try {
     const result = await Google.logInAsync({
@@ -125,7 +125,7 @@ function isUserEqual(googleUser, firebaseUser) {
           onPress={googleLogin}
 	  />
 	  <Button title="sign in with facebook"
-          onPress={facebookLogin}
+          /*onPress={facebookLogin}*/
 	  />
 	</View>
   );
