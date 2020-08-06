@@ -42,6 +42,16 @@ import "firebase/auth";
 import "firebase/firestore";
 
 export default function App() {
+
+  var localData;
+  
+  AsyncStorage.getItem("login").then((value) => {
+    if (value === null){
+      console.log("no user")
+    }  else {console.log(value)}
+  }).catch((error)=> {console.log(error)});
+
+
   if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
   }
@@ -56,7 +66,7 @@ export default function App() {
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
   [
     {
-      title: "ChallengeTitle1",
+      title: "ChallengeTitle1 Is a very long title that is exceptionally verbose",
       description: "gXrtOipB87Y",
       isLink: true,
       score: 0,
@@ -64,7 +74,7 @@ export default function App() {
       challengeID: 0,
     },
     {
-      title: "ChallengeTitle2",
+      title: "ChallengeTitle2 Is medium in length",
       description: "ChallengeDesc2",
       isLink: false,
       score: 0,
