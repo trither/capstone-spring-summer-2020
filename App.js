@@ -43,14 +43,39 @@ import "firebase/firestore";
 
 export default function App() {
 
-  var localData;
-  
-  AsyncStorage.getItem("login").then((value) => {
-    if (value === null){
-      console.log("no user")
-    }  else {console.log(value)}
-  }).catch((error)=> {console.log(error)});
+  const [myData, setMyData] = useState(
+    {
+      loggedIn: "no",
+      uid: null,
+    }
+  );
+  const changeData = (newData) => {
+    if (AsyncStorage.getItem("myData") !== null){
+      AsyncStorage.getItem("myData")
+      .then((value => {
+        const data = JSON.stringify(value);
+        setMyData(
+          {
+            loggedIn: data.loggedIn,
+            uid: data.uid,
+          }
+        )
+          console.log("got User data");
+          console.log(value);
+      }))
+    } else {
+      AsyncStorage.setItem("myData", JSON.stringify(newData))
+      .then(()=> {
+        console.log("saved");
+        console.log(newData);
+        setMyData(newData);
+      })
+      .catch((error) => {
+        console.log(error)
+      })
 
+    }
+  }
 
   if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
@@ -202,8 +227,8 @@ export default function App() {
   //For example, we don't want to load the header and footer for the login screen.
   //So they should be intially false, but when we are going to switch to the main screen,
   //the states should be updated to true.
-  const [showHeader, setShowHeader] = useState(true);
-  const [showFooter, setShowFooter] = useState(true);
+  const [showHeader, setShowHeader] = useState(false);
+  const [showFooter, setShowFooter] = useState(false);
 
 
   //Using this to signal to app.js that we need to rerender. No important info is actually stored in this state.
@@ -237,6 +262,9 @@ export default function App() {
       setShowFooter(false);
     } else if (newPage === "createNewChallenge") {
       setShowHeader(true);
+      setShowFooter(false);
+    } else if (newPage === "login") {
+      setShowHeader(false);
       setShowFooter(false);
     }
     setCurrentPage(newPage);
@@ -421,6 +449,7 @@ export default function App() {
   } else if (currentPage === "failure screen") {
     content = <FailureScreen onPageChange={changePageHandler} />;
   }
+
 
   return (
     <View style={styles.screen}>
