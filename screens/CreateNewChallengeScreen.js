@@ -23,7 +23,7 @@ const CreateNewChallengeScreen = (props) => {
     title: "",
     description: "",
     difficulty: "",
-    exp: 0,
+    score: 0,
     type: "",
     isLink: false,
   });
@@ -41,12 +41,15 @@ const CreateNewChallengeScreen = (props) => {
     } else if (id === 4) {
       setDifficultySelect(4);
       challenge.difficulty = 1;
+      challenge.score = 200;
     } else if (id === 5) {
       setDifficultySelect(5);
       challenge.difficulty = 2;
+      challenge.score = 500
     } else if (id === 6) {
       setDifficultySelect(6);
       challenge.difficulty = 3;
+      challenge.score = 1000;
     } else if (id === 7) {
       setSelected(7);
       challenge.isLink = true;
@@ -57,8 +60,9 @@ const CreateNewChallengeScreen = (props) => {
   };
 
   const handleConfirm = () => {
-    //write the challenge object to the database
+    props.onAddNewChallenge(challenge);
     props.onPageChange("main screen");
+    
   };
 
   const handleCancel = () => {

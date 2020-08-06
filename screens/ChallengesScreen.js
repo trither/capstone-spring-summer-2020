@@ -20,6 +20,9 @@ const ChallengesScreen = (props) => {
     title: props.challenge.title,
     description: props.challenge.description,
     isLink: props.challenge.isLink,
+    score: props.challenge.score,
+    difficulty: props.challenge.difficulty,
+    challengeID: props.challenge.challengeID,
   });
   let theme = ColorPalette();
 
@@ -71,6 +74,7 @@ const ChallengesScreen = (props) => {
 
   const onDeleteButtonPress = () => {
     //Database call to delete the current challenge.
+    
     props.onDeleteChallenge();
     setChallenge();
     props.onPageChange("main screen");
@@ -135,25 +139,6 @@ const AdminDeleteButton = () => {
     return;
   }
 };
-/*
-//function to get challenges completed from db
-//grab uid from async storage
-  function setChallengecompleted() {
-  const docRef = db.collection("profile").doc('xtOtqqZlx0QFT9flOv6jIYeocTG3')
-  const getDoc = docRef.get()
-  .then(snapshot => {
-    snapshot.forEach(doc => {
-        var completedChallenges = doc.data().challengesCompleted;
-        console.log(completedChallenges)
-        console.log(doc.id, '=>', doc.data().challengesCompleted);  
-        });
-        })
-        .catch(err => {
-          console.log('Error getting documents', err);
-        });
-
-}
-*/
 
   // function to check if video exists to be embedded
   function videoDisplay(isLink, description) {
@@ -181,6 +166,12 @@ const AdminDeleteButton = () => {
     }
   }
 
+  const handleRefresh=()=>
+  {
+    props.onRefreshChallenge();
+    props.onPageChange("main screen");
+
+  }
   return (
     // Create the screen object
     <View style={styles.screen}>
@@ -217,8 +208,7 @@ const AdminDeleteButton = () => {
       >
         {/* Create the squares the the buttons exist on top of (buttonBoxes) */}
         <Card style={styles.buttonBox}>
-          {props.onRefreshChallenge()}
-          <TouchableOpacity onPress={() => Alert.alert("Refresh")} width="20%">
+          <TouchableOpacity onPress={()=>handleRefresh()} width="20%">
             <Icon
               style={[
                 styles.icon,
