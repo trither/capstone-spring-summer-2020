@@ -7,6 +7,7 @@ import {
   LayoutAnimation,
 } from "react-native";
 
+
 //Main app screens
 import MainScreen from "./screens/MainScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -41,6 +42,41 @@ import "firebase/auth";
 import "firebase/firestore";
 
 export default function App() {
+
+  const [myData, setMyData] = useState(
+    {
+      loggedIn: "no",
+      uid: null,
+    }
+  );
+  const changeData = (newData) => {
+    if (AsyncStorage.getItem("myData") !== null){
+      AsyncStorage.getItem("myData")
+      .then((value => {
+        const data = JSON.stringify(value);
+        setMyData(
+          {
+            loggedIn: data.loggedIn,
+            uid: data.uid,
+          }
+        )
+          console.log("got User data");
+          console.log(value);
+      }))
+    } else {
+      AsyncStorage.setItem("myData", JSON.stringify(newData))
+      .then(()=> {
+        console.log("saved");
+        console.log(newData);
+        setMyData(newData);
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
+    }
+  }
+
   if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
   }
@@ -55,7 +91,7 @@ export default function App() {
   // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
   [
     {
-      title: "ChallengeTitle1",
+      title: "ChallengeTitle1 Is a very long title that is exceptionally verbose",
       description: "gXrtOipB87Y",
       isLink: true,
       score: 0,
@@ -63,7 +99,7 @@ export default function App() {
       challengeID: 0,
     },
     {
-      title: "ChallengeTitle2",
+      title: "ChallengeTitle2 Is medium in length",
       description: "ChallengeDesc2",
       isLink: false,
       score: 0,
@@ -191,8 +227,8 @@ export default function App() {
   //For example, we don't want to load the header and footer for the login screen.
   //So they should be intially false, but when we are going to switch to the main screen,
   //the states should be updated to true.
-  const [showHeader, setShowHeader] = useState(true);
-  const [showFooter, setShowFooter] = useState(true);
+  const [showHeader, setShowHeader] = useState(false);
+  const [showFooter, setShowFooter] = useState(false);
 
 
   //Using this to signal to app.js that we need to rerender. No important info is actually stored in this state.
@@ -226,6 +262,9 @@ export default function App() {
       setShowFooter(false);
     } else if (newPage === "createNewChallenge") {
       setShowHeader(true);
+      setShowFooter(false);
+    } else if (newPage === "login") {
+      setShowHeader(false);
       setShowFooter(false);
     }
     setCurrentPage(newPage);
@@ -268,6 +307,58 @@ export default function App() {
   const themeChangeHandler = () => {
     setTheme(!theme);
   };
+
+  //Alert state
+  let myAlert;
+  const leavingSpace = () =>{
+    Alert.alert (
+      "You're About to Leave Your Safe__",
+      "Are you going out for a legitimate reason",
+      [
+        {
+          text: "I am!",
+          onPress: () => console.log("Display Tips, Don't Decrement"),
+          style: 'cancel'
+        },
+        {
+          text: "I'm Not'",
+          onPress: () => console.log("Decrement Life")
+        }
+      ]
+    )
+  };
+
+  const lostLastLife = () =>{
+    Alert.alert (
+      "Sorry, You've Lost Your Last Life",
+      "Try to maintain social distance and when possible stay at home.",
+      [
+        {
+          text: "OK",
+          onPress: () => console.log("Last life lost, set streak to 0"),
+          style: 'cancel'
+        },
+        {
+          text: "Chance?",
+          onPress: () => console.log("Get challenge or redeem something")
+        }
+      ]
+    )
+  }
+
+
+  const[thisAlert, setAlert] = useState("none");
+
+  const changeAlert = (newAlert) => {
+    setAlert(newAlert);
+  };
+  //Set if group function for alerts, to be changed on events ONLY.
+  if (thisAlert === "none"){
+    myAlert = null;
+  } else {
+    myAlert = lostLastLife();
+  }
+
 
   let content;
 
@@ -358,6 +449,7 @@ export default function App() {
   } else if (currentPage === "failure screen") {
     content = <FailureScreen onPageChange={changePageHandler} />;
   }
+
 
   return (
     <View style={styles.screen}>

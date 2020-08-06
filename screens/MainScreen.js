@@ -71,7 +71,7 @@ const MainScreen = (props) => {
             <Text
               style={[
                 styles.text,
-                { color: theme.offcolor, textShadowColor: theme.highlight },
+                { color: theme.offcolor, textShadowColor: theme.highlight, width:250 },
               ]}
             >
               {ch1}
@@ -104,7 +104,7 @@ const MainScreen = (props) => {
             <Text
               style={[
                 styles.text,
-                { color: theme.offcolor, textShadowColor: theme.highlight },
+                { color: theme.offcolor, textShadowColor: theme.highlight, width:250 },
               ]}
             >
               {ch2}
@@ -137,7 +137,7 @@ const MainScreen = (props) => {
             <Text
               style={[
                 styles.text,
-                { color: theme.offcolor, textShadowColor: theme.highlight },
+                { color: theme.offcolor, textShadowColor: theme.highlight, width:250 },
               ]}
             >
               {ch3}
@@ -196,7 +196,6 @@ const styles = StyleSheet.create({
   },
 
   challenge: {
-    height: 40,
     width: "100%",
     bottom: 0,
     justifyContent: "space-around",

@@ -4,15 +4,21 @@ import {
   StyleSheet,
   TextInput,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   Keyboard,
   Button,
   AsyncStorage,
+  Image,
+  Text,
 } from "react-native";
 import ColorPalette from "../constants/ColorPalette";
 import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
+import myIcon from '../constants/myIcon.js';
 
 const LoginScreen = (props) => {
+  let theme = ColorPalette();
+  let ssIcon = myIcon;
 
 //function handling sign-in with google
 	function onSignIn(googleUser) {
@@ -120,13 +126,28 @@ function isUserEqual(googleUser, firebaseUser) {
 
   return (
 		  
-	<View style={styles.screen}>
-	  <Button title="sign in with google"
-          onPress={googleLogin}
-	  />
-	  <Button title="sign in with facebook"
-          /*onPress={facebookLogin}*/
-	  />
+	<View style={[styles.screen, { backgroundColor: theme.primary }]}>
+    {ssIcon}
+    <TouchableOpacity onPress= {googleLogin}>
+      <Text
+        style={[
+          styles.text,
+          { color: theme.offcolor, textShadowColor: theme.highlight, },
+        ]}
+      >
+        Sign in with Google
+      </Text>
+    </TouchableOpacity>
+    <TouchableOpacity onPress={() => console.log("Facebook Sign In") /*onPress={facebookLogin}*/}>
+      <Text
+        style={[
+          styles.text,
+          { color: theme.offcolor, textShadowColor: theme.highlight, },
+        ]}
+      >
+        Sign in with Facebook
+      </Text>
+    </TouchableOpacity>
 	</View>
   );
 };
@@ -148,6 +169,16 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderBottomColor: "black",
     borderBottomWidth: 1,
+  },
+
+  text: {
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+    shadowOpacity: 0.2,
+    textAlign: "center",
+    fontSize: 20,
+    fontWeight: "bold",
+    margin: 13,
   },
 });
 
