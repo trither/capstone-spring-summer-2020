@@ -22,23 +22,32 @@ const LoginScreen = (props) => {
   let ssIcon = myIcon;
 
 //If User Exists 
-  const [me, setMeState] = useState("hey");
-  const changeMeHandler = (newMe) =>{
-    setMeState(newMe)
+  const [myLoggedIn, setMyLoggedIn] = useState("false");
+  const changeLoggedIn = (newLoggedIn) =>{
+    setMyLoggedIn(newLoggedIn)
   }
-  function doesUserExist() {
-    AsyncStorage.getItem("myData")
-    .then((value) => {
-      const data = JSON.parse(value);
-      changeMeHandler(data.loggedIn)
-      if (me === "no"){
-        return 1;
-      } else {
-        return 0;
-      }
-    });
+  const [myUid, setMyUid] = useState(null)
+  const changeMyUid = (newUid) =>{
+    setMyUid(newUid)
   }
+  AsyncStorage.getItem("loggedIn")
+  .then((value)=>{
+          const data = value;
+          if (data !== null){
+                  changeLoggedIn(data)
+          }
+  })
+  AsyncStorage.getItem("uid")
+  .then((value)=>{
+          const data = value;
+          if (data !== null){
+                  changeMyUid(data)
+          }
+  })
 
+  if (myLoggedIn === "true"){
+    props.onPageChange("main screen")
+  }
 
 //function handling sign-in with google
 	function onSignIn(googleUser) {
@@ -48,7 +57,7 @@ const LoginScreen = (props) => {
     unsubscribe();
     // Check if we are already signed-in Firebase with the correct user.
     //if (!isUserEqual(googleUser, firebaseUser)) {
-      if (!doesUserExist) {
+      if (myLoggedIn === "false") {
       console.log("@@@@@@@@@@@@@@@@@")
       // Build Firebase credential with the Google ID token.
       var credential = firebase.auth.GoogleAuthProvider.credential(
@@ -58,11 +67,8 @@ const LoginScreen = (props) => {
       // Sign in with credential from the Google user.
       firebase.auth().signInWithCredential(credential).then(function(result){
         console.log('user signed in');
-        var newData = {
-          loggedIn: "yes",
-          uid: result.user.uid,
-        }
-        AsyncStorage.setItem("myData", JSON.stringify(newData));
+        AsyncStorage.setItem("loggedIn", "true");
+        AsyncStorage.setItem("uid", results.user.uid);
         props.onSignup(result);
       })
 	    .catch(function(error) {

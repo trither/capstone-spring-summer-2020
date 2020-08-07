@@ -43,41 +43,30 @@ import "firebase/firestore";
 
 export default function App() {
 
-  const [myData, setMyData] = useState(
-    {
-      loggedIn: "no",
-      uid: null,
-    }
-  );
-  const changeData = (newData) => {
-    if (AsyncStorage.getItem("myData") !== null){
-      AsyncStorage.getItem("myData")
-      .then((value => {
-        const data = JSON.parse(value);
-        setMyData(
-          {
-            loggedIn: data.loggedIn,
-            uid: data.uid,
-          }
-        )
-          console.log("got User data");
-          console.log(value);
-      }))
-    } else {
-      AsyncStorage.setItem("myData", JSON.stringify(newData))
-      .then(()=> {
-        console.log("saved");
-        console.log(newData);
-        setMyData(newData);
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-
-    }
+  //Stored data Values for UID and logged in type
+  const [myLoggedIn, setMyLoggedIn] = useState("false");
+  const changeLoggedIn = (newLoggedIn) =>{
+    setMyLoggedIn(newLoggedIn)
+  }
+  const [myUid, setMyUid] = useState(null)
+  const changeMyUid = (newUid) =>{
+    setMyUid(newUid)
   }
 
-  changeData(myData);
+  AsyncStorage.getItem("loggedIn")
+  .then((value)=>{
+          const data = value;
+          if (data !== null){
+                  changeLoggedIn(data)
+          }
+  })
+  AsyncStorage.getItem("uid")
+  .then((value)=>{
+          const data = value;
+          if (data !== null){
+                  changeMyUid(data)
+          }
+  })
 
   if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);
@@ -271,6 +260,7 @@ export default function App() {
     }
     setCurrentPage(newPage);
   };
+
 
   //When the delete challenge button is hit in the challenge page this function is executed.
   //When an admin deletes a challenge, we load a new one to replace it.
