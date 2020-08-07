@@ -40,6 +40,7 @@ import * as firebase from "firebase";
 import { firebaseConfig } from "./firebaseConfig";
 import "firebase/auth";
 import "firebase/firestore";
+import { setProvidesAudioData } from "expo/build/AR";
 
 export default function App() {
 
@@ -85,38 +86,77 @@ export default function App() {
   var doc_count = 54;
   //DB FUNCTIONS START HERE
   //read profile by uid from asyncstorage and get challenge ids from active challenges
+  //then go into challenges and get challenges matching the ids
+  async function getChallengesId() {
+    const snapshot = await db
+      .collection("challenges")
+      .where("challengeID", "in", [2, 3, 4])
+      .limit(3)
+      .get();
+    var str = JSON.stringify(snapshot.docs.map((doc) => doc.data()));
+    var parsed = JSON.parse(str);
+    setCurrentChallenges([
+      {
+        title: parsed[0].challenge,
+        description: parsed[0].description,
+        isLink: parsed[0].isLink,
+        score: parsed[0].score,
+        difficulty: parsed[0].difficulty,
+        challengeID: parsed[0].challengeID,
+      },
+      {
+        title: parsed[1].challenge,
+        description: parsed[1].description,
+        isLink: parsed[1].isLink,
+        score: parsed[1].score,
+        difficulty: parsed[1].difficulty,
+        challengeID: parsed[1].challengeID,
+      },
+      {
+        title: parsed[2].challenge,
+        description: parsed[2].description,
+        isLink: parsed[2].isLink,
+        score: parsed[2].score,
+        difficulty: parsed[2].difficulty,
+        challengeID: parsed[2].challengeID,
+      },
+    ]);
+  }
 
-  //const [currentChallenges, setCurrentChallenges] = useState(getChallengesId())
   const [currentChallenges, setCurrentChallenges] = useState(
-  // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
-  [
-    {
-      title: "ChallengeTitle1 Is a very long title that is exceptionally verbose",
-      description: "gXrtOipB87Y",
-      isLink: true,
-      score: 0,
-      difficulty: 0,
-      challengeID: 0,
-    },
-    {
-      title: "ChallengeTitle2 Is medium in length",
-      description: "ChallengeDesc2",
-      isLink: false,
-      score: 0,
-      difficulty: 0,
-      challengeID: 0,
-    },
-    {
-      title: "ChallengeTitle3",
-      description: "ChallengeDesc3",
-      isLink: false,
-      score: 0,
-      difficulty: 0,
-      challengeID: 0,
-    },
-    
-  ]);
-  
+    // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
+    [
+      {
+        title: "Loading...",
+        description: "Loading...",
+        isLink: false,
+        score: 0,
+        difficulty: 0,
+        challengeID: 0,
+      },
+      {
+        title: "Loading...",
+        description: "Loading...",
+        isLink: false,
+        score: 0,
+        difficulty: 0,
+        challengeID: 0,
+      },
+      {
+        title: "Loading...",
+        description: "Loading...",
+        isLink: false,
+        score: 0,
+        difficulty: 0,
+        challengeID: 0,
+      },
+    ]
+  );
+
+  useEffect(() => {
+    var temp = getChallengesId();
+  }, []);
+
   const deepCopy = () => {
     var tempArray = [];
     currentChallenges.forEach((item) => {
@@ -133,19 +173,34 @@ export default function App() {
     return tempArray;
   };
 
-  /*
   //function to move accepted challenge to completed challenges
   //grab uid from async storage
-  function setChallengeCompleted(challenge) {
-  var docRef = db.collection("profile").doc('xtOtqqZlx0QFT9flOv6jIYeocTG3');
-  docRef.update({
-    challengesCompleted: firebase.firestore.FieldValue.arrayUnion(challenge.challengeID)
-  }); 
-  docRef.update({
-    activeChallenges: firebase.firestore.FieldValue.arrayRemove(challenge.challengeID)
-  });
-}
-*/
+  const setChallengeCompleted= (challenge) =>
+  {
+    console.log("testing..."+challenge.challengeID)
+    var docRef = db.collection("profile").doc('mNsoZHB07GYfpba48Grx');
+    if(challenge.difficulty === 1){
+      currentScore = 200
+    }
+    if(challenge.difficulty === 2){
+      currentScore = 500
+    }if(challenge.difficulty === 3){
+      currentScore = 1000
+    }
+    docRef.update({
+      challengesCompleted: firebase.firestore.FieldValue.arrayUnion(challenge.challengeID),
+      score: firebase.firestore.FieldValue.increment(currentScore),
+
+    }); 
+    docRef.update({
+      activeChallenges: firebase.firestore.FieldValue.arrayRemove(challenge.challengeID),
+    });
+    var Score = thisUser.Score
+    setUser({...thisUser,Score: Score+currentScore})
+    refreshchallenge(challenge);
+
+  }
+
   //add new challenge from admin
   function addNewChallenge(challenge){
     ++doc_count;
@@ -166,7 +221,6 @@ export default function App() {
   });
   }
 
-  
   //create a new profile doc in db
   function onUserSignup(result) {
     const id1 = Math.floor(Math.random() * doc_count) + 0;
@@ -183,6 +237,8 @@ export default function App() {
       activeChallenges: [id1,id2,id3],
       challengesCompleted: [],
     });
+    
+
   } 
 
   // function to get new challenge on refresh from db
@@ -212,6 +268,14 @@ export default function App() {
     });
   };
 
+
+   //user loses a life
+   function LifeLoss(challenge){
+    var docRef = db.collection("profile").doc('mNsoZHB07GYfpba48Grx')
+    docRef.update({
+      lives: firebase.firestore.FieldValue.increment(-1),
+    }); 
+    }
   /*
   function onDeleteUser()
   {
@@ -270,6 +334,7 @@ export default function App() {
     setCurrentPage(newPage);
   };
 
+ 
   //When the delete challenge button is hit in the challenge page this function is executed.
   //When an admin deletes a challenge, we load a new one to replace it.
   const deleteChallengeHandler = (challenge) => {
@@ -283,6 +348,19 @@ export default function App() {
   };
 
   const ChallengeEditHandler = (challengeToEdit, challenge) => {
+    //challengeToEdit.challengeID)
+    var docRef = db.collection("challenges").doc('JT5n1M7nQ7DJHcFuvmt4')
+    if(challengeToEdit.title === challenge.title){
+      docRef.update({
+        description: challenge.description,
+      });
+
+    }
+    else{
+    docRef.update({
+      challenge: challenge.title,
+    });
+  }
     challengeToEdit.title = challenge.title;
     challengeToEdit.description = challenge.description;
   };
@@ -387,6 +465,7 @@ export default function App() {
         onEditChallenge={ChallengeEditHandler}
         onRefreshChallenge={() => refreshchallenge(currentChallenges[0])}
         onChallengeId="challenge1"
+        onChallengeCompleted={()=>setChallengeCompleted(currentChallenges[0])}
       />
     );
   } else if (currentPage === "challenge2") {
@@ -399,6 +478,7 @@ export default function App() {
         onEditChallenge={ChallengeEditHandler}
         onRefreshChallenge={() => refreshchallenge(currentChallenges[1])}
         onChallengeId="challenge2"
+        onChallengeCompleted={()=>setChallengeCompleted(currentChallenges[1])}
       />
     );
   } else if (currentPage === "challenge3") {
@@ -410,7 +490,8 @@ export default function App() {
         onDeleteChallenge={() => deleteChallengeHandler(currentChallenges[2])}
         onEditChallenge={ChallengeEditHandler}
         onRefreshChallenge={() => refreshchallenge(currentChallenges[2])}
-        onChallengeId={currentPage}
+        onChallengeId="challenge3"
+        onChallengeCompleted={()=>setChallengeCompleted(currentChallenges[2])}
       />
     );
   } else if (currentPage === "heatmap") {
