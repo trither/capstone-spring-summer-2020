@@ -12,6 +12,7 @@ import {
   Text,
 } from "react-native";
 import ColorPalette from "../constants/ColorPalette";
+import firebase from 'firebase'
 import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
 import myIcon from '../constants/myIcon.js';
@@ -20,6 +21,25 @@ const LoginScreen = (props) => {
   let theme = ColorPalette();
   let ssIcon = myIcon;
 
+  function doesUserExist() {
+    const [myData, setMyData] = useState(
+      {
+        loggedIn: "no",
+        uid: null,
+      }
+    );
+    const changeData = (newData) => {
+      if (AsyncStorage.getItem("myData") !== null){
+        //user account already exists
+        return 1;
+      }
+      else {
+        //user needs to create an account on firebase
+        return 0;
+      }
+    }
+  }
+
 //function handling sign-in with google
 	function onSignIn(googleUser) {
   console.log('Google Auth Response', googleUser);
@@ -27,7 +47,8 @@ const LoginScreen = (props) => {
   var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
     unsubscribe();
     // Check if we are already signed-in Firebase with the correct user.
-    if (!isUserEqual(googleUser, firebaseUser)) {
+    //if (!isUserEqual(googleUser, firebaseUser)) {
+      if (!doesUserExist) {
       // Build Firebase credential with the Google ID token.
       var credential = firebase.auth.GoogleAuthProvider.credential(
 	      googleUser.idToken,
@@ -55,54 +76,6 @@ const LoginScreen = (props) => {
   });
 }
 
-function isUserEqual(googleUser, firebaseUser) {
-  if (firebaseUser) {
-    var providerData = firebaseUser.providerData;
-    for (var i = 0; i < providerData.length; i++) {
-      if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-          providerData[i].uid === googleUser.getBasicProfile().getId()) {
-        // We don't need to reauth the Firebase connection.
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-
-/*
-	async function facebookLogin() {
-  try {
-    await Facebook.initializeAsync('732205167600953');
-    const {
-      type,
-      token,
-      expires,
-      permissions,
-      declinedPermissions,
-    } = await Facebook.logInWithReadPermissionsAsync({
-      permissions: ['public_profile'],
-    });
-    if (type === 'success') {
-      //sign user into firebase
-      const credential = firebase.auth.FacebookAuthProvider.credential(token);
-      firebase.auth().signInWithCredential(token).then(function(result){
-        console.log('facebook user signed in');
-        AsyncStorage.setItem("login", result.user.uid);
-      });
-
-      // Get the user's name using Facebook's Graph API
-      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-      Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
-      props.onPageChange('main screen');
-    } else {
-      // type === 'cancel'
-    }
-  } catch ({ message }) {
-    alert(`Facebook Login Error: ${message}`);
-  }
-}
-*/
 	async function googleLogin() {
   try {
     const result = await Google.logInAsync({
@@ -113,8 +86,8 @@ function isUserEqual(googleUser, firebaseUser) {
     });
 
     if (result.type === 'success') {
-	    props.onPageChange('main screen');
 	    onSignIn(result);
+	    //props.onPageChange('home address');
       return result.accessToken;
     } else {
       return { cancelled: true };
