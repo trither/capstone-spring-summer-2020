@@ -30,39 +30,52 @@ const ProfileScreen = (props) => {
   var streak = props.profile.WeeklyStreak;
   //variables for progress/level bar.  Let me know if you want this moved somewhere else
   var reqExp = 0;
-  for (let i = 0; i <= level; i++) {
-    if (i === 0) {
-      reqExp = reqExp + 100;
-    } else if (i < 6) {
-      reqExp = reqExp + 300;
-    } else if (i < 11) {
-      reqExp = reqExp + 500;
-    } else if (i < 21) {
-      reqExp = reqExp + 700;
-    } else {
-      reqExp = reqExp + 1000;
-    }
-  }
-  var preqExp = 0;
-  if (level !== 0) {
-    for (let j = 0; j <= level - 1; j++) {
-      for (let i = 0; i <= j; i++) {
-        if (i === 0) {
-          preqExp = preqExp + 100;
-        } else if (i < 6) {
-          preqExp = preqExp + 300;
-        } else if (i < 11) {
-          preqExp = preqExp + 500;
-        } else if (i < 21) {
-          preqExp = preqExp + 700;
-        } else {
-          preqExp = preqExp + 1000;
-        }
+  const updateReqExp = () => {
+    for (let i = 0; i <= level; i++) {
+      if (i === 0) {
+        reqExp = reqExp + 100;
+      } else if (i < 6) {
+        reqExp = reqExp + 300;
+      } else if (i < 11) {
+        reqExp = reqExp + 500;
+      } else if (i < 21) {
+        reqExp = reqExp + 700;
+      } else {
+        reqExp = reqExp + 1000;
       }
     }
-  } else {
-    preqExp = 0;
+  };
+  var preqExp = 0;
+  const updatePreqExp = () => {
+    if (level !== 0) {
+      for (let j = 0; j <= level - 1; j++) {
+        for (let i = 0; i <= j; i++) {
+          if (i === 0) {
+            preqExp = preqExp + 100;
+          } else if (i < 6) {
+            preqExp = preqExp + 300;
+          } else if (i < 11) {
+            preqExp = preqExp + 500;
+          } else if (i < 21) {
+            preqExp = preqExp + 700;
+          } else {
+            preqExp = preqExp + 1000;
+          }
+        }
+      }
+    } else {
+      preqExp = 0;
+    }
+  };
+  updateReqExp();
+  updatePreqExp();
+  while (score > reqExp) {
+    ++level;
+    updatePreqExp();
+    updateReqExp();
   }
+  console.log(score);
+  
   var currentLevelScore = score - preqExp;
   var getPercent = (currentLevelScore / reqExp) * 100;
   var percentDone = getPercent.toFixed(0) + "%";
