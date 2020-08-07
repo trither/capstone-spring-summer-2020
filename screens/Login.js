@@ -46,7 +46,9 @@ const LoginScreen = (props) => {
   })
 
   if (myLoggedIn === "true"){
-    props.onPageChange("main screen")
+    props.onGetProfile()
+    props.onGetChallenges()
+    setTimeout(()=>props.onPageChange("main screen"),1000)
   }
 
 //function handling sign-in with google

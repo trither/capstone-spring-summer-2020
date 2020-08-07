@@ -1,9 +1,13 @@
 import React from 'react';
-import { Image, Text } from 'react-native';
+import { Image, Text, View } from 'react-native';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
  
 const HomeAddress = (props) => {
   return (
+    <View>
+    <Text>lalalalalalalalalala</Text>
+    <Text>lalalalalalalalalala</Text>
+    <Text>lalalalalalalalalala</Text>
     <GooglePlacesAutocomplete
       placeholder='enter your home address'
       fetchDetails={true}
@@ -18,7 +22,7 @@ const HomeAddress = (props) => {
         components: 'country:us',
       }}
     />
-    
+    </View>
   );
 };
  
