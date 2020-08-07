@@ -244,6 +244,9 @@ export default function App() {
     docRef.get().then(function(doc) {
     if(doc.exists)
     {
+      console.log(myUid)
+      getProfile();
+      getChallengesId();
       return;
     }
     else{

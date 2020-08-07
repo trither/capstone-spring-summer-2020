@@ -52,11 +52,34 @@ const SettingsScreen = (props) => {
   const clearAllData = () =>{
     AsyncStorage.getAllKeys()
     .then((keys) => {
-      AsyncStorage.removeItem("loggedIn")
-      AsyncStorage.multiRemove(keys)
+      AsyncStorage.multiRemove(keys);
     })
       .then(() => {
-        console.log("logged out")})}
+        console.log("logged out, acct deleted")})};
+  
+  const clearLogdata = () =>{
+    AsyncStorage.removeItem("loggedIn")
+    .then(() => {console.log("logged out")})
+  }
+    
+
+  const deleteMe = () =>{
+    Alert.alert (
+      "You're About to delete your account!",
+      "This action is permenant, do you wish to proceed?",
+      [
+        {
+          text: "Yes",
+          onPress: () => props.onDeleteUser() + clearAllData() + setTimeout(()=>props.onPageChange("login"),1000),
+          style: 'cancel'
+        },
+        {
+          text: "I'm Not'",
+          onPress: () => console.log("went back")
+        }
+      ]
+    )
+  };
 
   return (
     <View style={styles.screen}>
@@ -115,14 +138,14 @@ const SettingsScreen = (props) => {
             }
           />
         </View>
-        <TouchableOpacity onPress={()=> clearAllData()+setTimeout(()=>props.onPageChange("login"),1000)} width="20%">
+        <TouchableOpacity onPress={()=> clearLogdata()+setTimeout(()=>props.onPageChange("login"),1000)} width="20%">
         <Text
           style={[
             styles.text,
             { color: theme.offcolor, textShadowColor: theme.highlight, margin:10 },
           ]}>Logout</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=> Alert.alert("Delete Account")} width="20%">
+        <TouchableOpacity onPress={()=> deleteMe()} width="20%">
         <Text
           style={[
             styles.text,
