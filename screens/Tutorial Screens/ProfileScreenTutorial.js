@@ -5,7 +5,6 @@ import ColorPalette from "../../constants/ColorPalette";
 import TutorialText from "../../components/TutorialText";
 import TutorialSquare from "../../components/TutorialSquare";
 import SafeSpaceButton from "../../components/SafeSpaceButton";
-import TutorialNavbar from "../../components/TutorialNavbar";
 
 const ProfileTutorial = (props) => {
   const [stage, setStage] = useState(0);
@@ -32,16 +31,16 @@ const ProfileTutorial = (props) => {
   };
 
   //load in values from the user
-  var name = props.profile.FullName;
-  var level = props.profile.Level;
-  var score = props.profile.Score;
+  var name = "Username";
+  var level = 3;
+  var score = 1600;
   let profilePic = (
     <Image
       style={[styles.profilePicture, { borderColor: theme.offcolor }]}
-      source={{ uri: props.profile.URLPic }}
+      source={{ uri: "https://i.stack.imgur.com/l60Hf.png" }}
     />
   );
-  var streak = props.profile.WeeklyStreak;
+  var streak = 2;
   //variables for progress/level bar.  Let me know if you want this moved somewhere else
   var reqExp = 0;
   for (let i = 0; i <= level; i++) {
@@ -318,10 +317,6 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-  },
-
-  example: {
-    marginVertical: 24,
   },
 
   middleBox: {

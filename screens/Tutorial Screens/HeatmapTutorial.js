@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, Text, Button, Modal, LayoutAnimation } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Button,
+  Modal,
+  LayoutAnimation,
+} from "react-native";
 import MapView, { Polygon } from "react-native-maps";
 import covidCases from "../../assets/COVIDcases.json";
 import zipCodeData from "../../assets/Zip_Code_Boundaries.json";
@@ -9,17 +16,15 @@ import ColorPalette from "../../constants/ColorPalette";
 import TutorialText from "../../components/TutorialText";
 import TutorialSquare from "../../components/TutorialSquare";
 import SafeSpaceButton from "../../components/SafeSpaceButton";
-import TutorialNavbar from "../../components/TutorialNavbar";
 
 const HeatmapTutorial = (props) => {
+  let theme = ColorPalette();
   const [polygons, setPolygons] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState([]);
 
   const [stage, setStage] = useState(0);
   const [buttonTitle, setButtonTitle] = useState("Okay!");
-
-  let theme = ColorPalette();
 
   const handlePress = () => {
     LayoutAnimation.spring();

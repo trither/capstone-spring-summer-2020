@@ -74,13 +74,6 @@ const HealthTutorial = (props) => {
         <TutorialSquare>
           <TutorialText>
             {createTutorialText()}
-            {/*In Safe_ you start 3 health, when you break social distancing by
-            coming to close to others, you will lose one health point (hp). If
-            your hp reaches zero, you lose the game. However, don't worry to
-            much about losing hp, because hp can be regained during the week by
-            actively completing challenges. PRO tip: Social distancing is not
-            enforced at your home location, so don't worry about losing hp while
-            at home!*/}
           </TutorialText>
           <SafeSpaceButton title={buttonTitle} onPress={() => handlePress()} />
         </TutorialSquare>
@@ -96,14 +89,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 
-  arrowContainer: {
-    margin: 40,
-  },
-
-  tutorialNavbar: {
-    flexDirection: "row",
-  },
-
   text: {
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
@@ -111,17 +96,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 20,
     fontWeight: "bold",
-  },
-
-  image: {
-    height: 125,
-    width: 360,
-    alignSelf: "center",
-  },
-
-  health: {
-    marginTop: "20%",
-    alignSelf: "center",
   },
 
   tutorialHealth: {
