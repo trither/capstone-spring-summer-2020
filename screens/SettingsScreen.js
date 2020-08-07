@@ -74,7 +74,7 @@ const SettingsScreen = (props) => {
           style: 'cancel'
         },
         {
-          text: "I'm Not'",
+          text: "No",
           onPress: () => console.log("went back")
         }
       ]
