@@ -69,12 +69,13 @@ const ChallengesScreen = (props) => {
 
   const onModalClose = () => {
     //WRITE CHALLENGE TITLE AND CHALLENGE DESCRIPTION TO THE DATABASE
+    console.log(props.challenge, challenge)
     props.onEditChallenge(props.challenge, challenge);
   };
 
   const onDeleteButtonPress = () => {
     //Database call to delete the current challenge.
-    
+
     props.onDeleteChallenge();
     setChallenge();
     props.onPageChange("main screen");
@@ -93,7 +94,7 @@ const ChallengesScreen = (props) => {
           <Icon
             style={[
               styles.editIcon,
-              { color: theme.offcolor, textShadowColor: theme.highlight },
+              { color: theme.highlight},
             ]}
             name="edit"
           />
@@ -222,7 +223,7 @@ const AdminDeleteButton = () => {
         <Card style={styles.buttonBox}>
           {/* CloudFunctions needed here to recieve challenge completed data getChallengescompleted()*/}
           <TouchableOpacity
-            onPress={() => Alert.alert("Challenge Marked Complete")}
+            onPress={() => props.onChallengeCompleted()+props.onPageChange("main screen")}
             width="20%"
           >
             <Icon
@@ -330,6 +331,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 24,
     fontWeight: "bold",
+    left: 20
   },
 
   body: {
@@ -338,6 +340,7 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
     shadowOpacity: 0.2,
+    left: 20,
   },
 
   icon: {
