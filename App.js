@@ -43,6 +43,12 @@ import "firebase/firestore";
 import { setProvidesAudioData } from "expo/build/AR";
 
 export default function App() {
+  if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.firestore();
+  var i = 0;
+  var doc_count = 54;
 
   //Stored data Values for UID and logged in type
   const [myLoggedIn, setMyLoggedIn] = useState("false");
@@ -68,27 +74,7 @@ export default function App() {
                   changeMyUid(data)
           }
   })
-/*
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const db = firebase.firestore();
-  */
-  var i = 0;
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const db = firebase.firestore();
-  /*
-  function getDocCount(){
-  var docRef = db.collection('challenges')
-  docRef.orderBy("challengeID", "desc").limit(1).get().then(function(doc) {
-        var doc_count = doc.data().challengeID
-        console.log("checking doc count"+doc_count)
-  })
-}
-getDocCount();
-*/
+  
   //DB FUNCTIONS START HERE
   //read profile by uid from asyncstorage and get challenge ids from active challenges
   //then go into challenges and get challenges matching the ids
@@ -309,7 +295,6 @@ getDocCount();
       }
     });
   };
-
 
    //user loses a life
    function LifeLoss(challenge){
