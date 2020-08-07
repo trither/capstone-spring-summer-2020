@@ -79,9 +79,26 @@ export default function App() {
   //read profile by uid from asyncstorage and get challenge ids from active challenges
   //then go into challenges and get challenges matching the ids
   async function getChallengesId() {
+    var Challenge1
+    var Challenge2
+    var Challenge3
+    var docRef = db.collection("profile").doc(myUid);
+      docRef.get().then(function(doc) {
+          if (doc.exists) {
+            Challenge1 = doc.data().activeChallenges[0];
+            Challenge2 = doc.data().activeChallenges[1];
+            Challenge3 = doc.data().activeChallenges[2];
+            getActiveChallenges(Challenge1, Challenge2, Challenge3)
+            console.log("Document data:", doc.data());
+          } else {
+              console.log("No such document!");
+          }
+      })
+    }
+  async function getActiveChallenges(Challenge1, Challenge2, Challenge3){
     const snapshot = await db
       .collection("challenges")
-      .where("challengeID", "in", [2, 3, 4])
+      .where("challengeID", "in", [Challenge1, Challenge2, Challenge3])
       .limit(3)
       .get();
     var str = JSON.stringify(snapshot.docs.map((doc) => doc.data()));
@@ -113,7 +130,6 @@ export default function App() {
       },
     ]);
   }
-
   const [currentChallenges, setCurrentChallenges] = useState(
     // CloudFunction needed to load this array with user's current challenge titles and descriptions (array of tuples)
     [
@@ -143,12 +159,11 @@ export default function App() {
       },
     ]
   );
-
+/*
   useEffect(() => {
     var temp = getChallengesId();
-    getProfile()
   }, []);
-
+*/
   const deepCopy = () => {
     var tempArray = [];
     currentChallenges.forEach((item) => {
@@ -169,7 +184,7 @@ export default function App() {
   //grab uid from async storage
   const setChallengeCompleted= (challenge) =>
   {
-    var docRef = db.collection("profile").doc('mNsoZHB07GYfpba48Grx');
+    var docRef = db.collection("profile").doc(myUid);
     if(challenge.difficulty === 1){
       currentScore = 200
     }
@@ -212,8 +227,8 @@ export default function App() {
   });
   }
 
-  function getProfile(result){
-      var docRef = db.collection("profile").doc(result.user.uid);
+  function getProfile(){
+      var docRef = db.collection("profile").doc(myUid);
       docRef.get().then(function(doc) {
           if (doc.exists) {
             setUser({Score: doc.data().score, Lives: doc.data().lives, URLPic: doc.data().urlpic,
@@ -227,9 +242,15 @@ export default function App() {
       });
   }
 
-
   //create a new profile doc in db
   function onUserSignup(result) {
+    var docRef = db.collection("profile").doc(result.user.uid);
+    docRef.get().then(function(doc) {
+    if(doc.exists)
+    {
+      return;
+    }
+    else{
     const id1 = Math.floor(Math.random() * doc_count) + 0;
     const id2 = Math.floor(Math.random() * doc_count) + 0;
     const id3 = Math.floor(Math.random() * doc_count) + 0;
@@ -244,9 +265,10 @@ export default function App() {
       activeChallenges: [id1,id2,id3],
       challengesCompleted: [],
     });   
-
-  } 
-
+  }
+    })
+  }
+  
   // function to get new challenge on refresh from db
   const refreshchallenge = (challenge) => {
     var temp = deepCopy();
@@ -277,7 +299,7 @@ export default function App() {
 
    //user loses a life
    function LifeLoss(challenge){
-    var docRef = db.collection("profile").doc('mNsoZHB07GYfpba48Grx')
+    var docRef = db.collection("profile").doc(myUid)
     docRef.update({
       lives: firebase.firestore.FieldValue.increment(-1),
     }); 
@@ -526,7 +548,7 @@ export default function App() {
     content = <MainScreenChallengeTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "login") {
     content = (
-      <Login onPageChange={changePageHandler} onSignup={onUserSignup} />
+      <Login onPageChange={changePageHandler} onSignup={onUserSignup} onGetProfile={getProfile} onGetChallenges={getChallengesId}/>
     );
   } else if (currentPage === "home address") {
     content = <HomeAddress onPageChange={changePageHandler} />;
