@@ -22,7 +22,7 @@ const MainScreen = (props) => {
       return (
           <SafeSpaceButton
             onPress={() => props.onPageChange("createNewChallenge")}
-            title="Add Challenge."
+            title="Add Challenge"
           />
       );
     }

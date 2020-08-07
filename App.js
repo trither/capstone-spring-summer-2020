@@ -155,6 +155,7 @@ export default function App() {
 
   useEffect(() => {
     var temp = getChallengesId();
+    getProfile()
   }, []);
 
   const deepCopy = () => {
@@ -177,7 +178,6 @@ export default function App() {
   //grab uid from async storage
   const setChallengeCompleted= (challenge) =>
   {
-    console.log("testing..."+challenge.challengeID)
     var docRef = db.collection("profile").doc('mNsoZHB07GYfpba48Grx');
     if(challenge.difficulty === 1){
       currentScore = 200
@@ -221,6 +221,22 @@ export default function App() {
   });
   }
 
+  function getProfile(result){
+      var docRef = db.collection("profile").doc(result.user.uid);
+      docRef.get().then(function(doc) {
+          if (doc.exists) {
+            setUser({Score: doc.data().score, Lives: doc.data().lives, URLPic: doc.data().urlpic,
+            WeeklyStreak: doc.data().weeklystreak, FullName: doc.data().name,})
+            console.log("Document data:", doc.data());
+          } else {
+              console.log("No such document!");
+          }
+      }).catch(function(error) {
+          console.log("Error getting document:", error);
+      });
+  }
+
+
   //create a new profile doc in db
   function onUserSignup(result) {
     const id1 = Math.floor(Math.random() * doc_count) + 0;
@@ -236,8 +252,7 @@ export default function App() {
       weeklystreak: 0,
       activeChallenges: [id1,id2,id3],
       challengesCompleted: [],
-    });
-    
+    });   
 
   } 
 

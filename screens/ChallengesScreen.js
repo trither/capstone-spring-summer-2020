@@ -132,7 +132,7 @@ const AdminDeleteButton = () => {
     return (
       <Button
         onPress={() => onDeleteButtonPress()}
-        title="Delete Challenge."
+        title="Delete Challenge"
         color="red"
       />
     );
