@@ -324,6 +324,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
+    left:20,
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
     shadowOpacity: 0.2,

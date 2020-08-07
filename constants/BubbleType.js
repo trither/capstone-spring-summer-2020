@@ -13,10 +13,10 @@ const myBubble = () => {
 
         AsyncStorage.getItem("bubble")
         .then((value)=>{
-        const data = value;
-        if (data !== null){
-                changeBubble(data)
-        }
+                const data = value;
+                if (data !== null){
+                        changeBubble(data)
+                }
         })
 
         if(Bubble === 'bubble1'){
