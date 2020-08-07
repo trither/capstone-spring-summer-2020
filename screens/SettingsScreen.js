@@ -49,6 +49,15 @@ const SettingsScreen = (props) => {
     }
   });
 
+  const clearAllData = () =>{
+    AsyncStorage.getAllKeys()
+    .then((keys) => {
+      AsyncStorage.removeItem("loggedIn")
+      AsyncStorage.multiRemove(keys)
+    })
+      .then(() => {
+        console.log("logged out")})}
+
   return (
     <View style={styles.screen}>
       <View style={[styles.viewContainer, { backgroundColor: theme.primary }]}>
@@ -106,6 +115,13 @@ const SettingsScreen = (props) => {
             }
           />
         </View>
+        <TouchableOpacity onPress={()=> clearAllData()+setTimeout(()=>props.onPageChange("login"),1000)} width="20%">
+        <Text
+          style={[
+            styles.text,
+            { color: theme.offcolor, textShadowColor: theme.highlight, margin:10 },
+          ]}>Logout</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={()=> Alert.alert("Delete Account")} width="20%">
         <Text
           style={[

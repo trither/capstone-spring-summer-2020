@@ -12,6 +12,7 @@ import {
   Text,
 } from "react-native";
 import ColorPalette from "../constants/ColorPalette";
+import firebase from 'firebase'
 import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
 import myIcon from '../constants/myIcon.js';
@@ -20,6 +21,34 @@ const LoginScreen = (props) => {
   let theme = ColorPalette();
   let ssIcon = myIcon;
 
+//If User Exists 
+  const [myLoggedIn, setMyLoggedIn] = useState("false");
+  const changeLoggedIn = (newLoggedIn) =>{
+    setMyLoggedIn(newLoggedIn)
+  }
+  const [myUid, setMyUid] = useState(null)
+  const changeMyUid = (newUid) =>{
+    setMyUid(newUid)
+  }
+  AsyncStorage.getItem("loggedIn")
+  .then((value)=>{
+          const data = value;
+          if (data !== null){
+                  changeLoggedIn(data)
+          }
+  })
+  AsyncStorage.getItem("uid")
+  .then((value)=>{
+          const data = value;
+          if (data !== null){
+                  changeMyUid(data)
+          }
+  })
+
+  if (myLoggedIn === "true"){
+    props.onPageChange("main screen")
+  }
+
 //function handling sign-in with google
 	function onSignIn(googleUser) {
   console.log('Google Auth Response', googleUser);
@@ -27,7 +56,9 @@ const LoginScreen = (props) => {
   var unsubscribe = firebase.auth().onAuthStateChanged(function(firebaseUser) {
     unsubscribe();
     // Check if we are already signed-in Firebase with the correct user.
-    if (!isUserEqual(googleUser, firebaseUser)) {
+    //if (!isUserEqual(googleUser, firebaseUser)) {
+      if (myLoggedIn === "false") {
+      console.log("@@@@@@@@@@@@@@@@@")
       // Build Firebase credential with the Google ID token.
       var credential = firebase.auth.GoogleAuthProvider.credential(
 	      googleUser.idToken,
@@ -36,7 +67,8 @@ const LoginScreen = (props) => {
       // Sign in with credential from the Google user.
       firebase.auth().signInWithCredential(credential).then(function(result){
         console.log('user signed in');
-        AsyncStorage.setItem("login", result.user.uid);
+        AsyncStorage.setItem("loggedIn", "true");
+        AsyncStorage.setItem("uid", result.user.uid);
         props.onSignup(result);
       })
 	    .catch(function(error) {
@@ -55,54 +87,6 @@ const LoginScreen = (props) => {
   });
 }
 
-function isUserEqual(googleUser, firebaseUser) {
-  if (firebaseUser) {
-    var providerData = firebaseUser.providerData;
-    for (var i = 0; i < providerData.length; i++) {
-      if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-          providerData[i].uid === googleUser.getBasicProfile().getId()) {
-        // We don't need to reauth the Firebase connection.
-        return true;
-      }
-    }
-  }
-  return false;
-}
-
-
-/*
-	async function facebookLogin() {
-  try {
-    await Facebook.initializeAsync('732205167600953');
-    const {
-      type,
-      token,
-      expires,
-      permissions,
-      declinedPermissions,
-    } = await Facebook.logInWithReadPermissionsAsync({
-      permissions: ['public_profile'],
-    });
-    if (type === 'success') {
-      //sign user into firebase
-      const credential = firebase.auth.FacebookAuthProvider.credential(token);
-      firebase.auth().signInWithCredential(token).then(function(result){
-        console.log('facebook user signed in');
-        AsyncStorage.setItem("login", result.user.uid);
-      });
-
-      // Get the user's name using Facebook's Graph API
-      const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
-      Alert.alert('Logged in!', `Hi ${(await response.json()).name}!`);
-      props.onPageChange('main screen');
-    } else {
-      // type === 'cancel'
-    }
-  } catch ({ message }) {
-    alert(`Facebook Login Error: ${message}`);
-  }
-}
-*/
 	async function googleLogin() {
   try {
     const result = await Google.logInAsync({
@@ -113,8 +97,8 @@ function isUserEqual(googleUser, firebaseUser) {
     });
 
     if (result.type === 'success') {
-	    props.onPageChange('main screen');
 	    onSignIn(result);
+	    props.onPageChange('home address');
       return result.accessToken;
     } else {
       return { cancelled: true };
