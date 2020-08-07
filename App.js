@@ -53,7 +53,7 @@ export default function App() {
     if (AsyncStorage.getItem("myData") !== null){
       AsyncStorage.getItem("myData")
       .then((value => {
-        const data = JSON.stringify(value);
+        const data = JSON.parse(value);
         setMyData(
           {
             loggedIn: data.loggedIn,
@@ -76,6 +76,8 @@ export default function App() {
 
     }
   }
+
+  changeData(myData);
 
   if (firebase.apps.length === 0) {
     firebase.initializeApp(firebaseConfig);

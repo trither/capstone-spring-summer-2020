@@ -21,24 +21,24 @@ const LoginScreen = (props) => {
   let theme = ColorPalette();
   let ssIcon = myIcon;
 
+//If User Exists 
+  const [me, setMeState] = useState("hey");
+  const changeMeHandler = (newMe) =>{
+    setMeState(newMe)
+  }
   function doesUserExist() {
-    const [myData, setMyData] = useState(
-      {
-        loggedIn: "no",
-        uid: null,
-      }
-    );
-    const changeData = (newData) => {
-      if (AsyncStorage.getItem("myData") !== null){
-        //user account already exists
+    AsyncStorage.getItem("myData")
+    .then((value) => {
+      const data = JSON.parse(value);
+      changeMeHandler(data.loggedIn)
+      if (me === "no"){
         return 1;
-      }
-      else {
-        //user needs to create an account on firebase
+      } else {
         return 0;
       }
-    }
+    });
   }
+
 
 //function handling sign-in with google
 	function onSignIn(googleUser) {
@@ -49,6 +49,7 @@ const LoginScreen = (props) => {
     // Check if we are already signed-in Firebase with the correct user.
     //if (!isUserEqual(googleUser, firebaseUser)) {
       if (!doesUserExist) {
+      console.log("@@@@@@@@@@@@@@@@@")
       // Build Firebase credential with the Google ID token.
       var credential = firebase.auth.GoogleAuthProvider.credential(
 	      googleUser.idToken,
@@ -57,7 +58,11 @@ const LoginScreen = (props) => {
       // Sign in with credential from the Google user.
       firebase.auth().signInWithCredential(credential).then(function(result){
         console.log('user signed in');
-        AsyncStorage.setItem("login", result.user.uid);
+        var newData = {
+          loggedIn: "yes",
+          uid: result.user.uid,
+        }
+        AsyncStorage.setItem("myData", JSON.stringify(newData));
         props.onSignup(result);
       })
 	    .catch(function(error) {
@@ -87,7 +92,7 @@ const LoginScreen = (props) => {
 
     if (result.type === 'success') {
 	    onSignIn(result);
-	    //props.onPageChange('home address');
+	    props.onPageChange('home address');
       return result.accessToken;
     } else {
       return { cancelled: true };
