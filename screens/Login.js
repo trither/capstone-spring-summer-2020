@@ -60,7 +60,6 @@ const LoginScreen = (props) => {
     // Check if we are already signed-in Firebase with the correct user.
     //if (!isUserEqual(googleUser, firebaseUser)) {
       if (myLoggedIn === "false") {
-      console.log("@@@@@@@@@@@@@@@@@")
       // Build Firebase credential with the Google ID token.
       var credential = firebase.auth.GoogleAuthProvider.credential(
 	      googleUser.idToken,
@@ -84,7 +83,10 @@ const LoginScreen = (props) => {
         // ...
       });
     } else {
+      props.onGetProfile()
+      props.onGetChallenges()
       console.log('User already signed-in Firebase.');
+      setTimeout(()=>props.onPageChange("main screen"),1000)
     }
   });
 }

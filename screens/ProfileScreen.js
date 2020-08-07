@@ -19,7 +19,7 @@ const ProfileScreen = (props) => {
 
   //load in values from the user
   var name = props.profile.FullName;
-  var level = props.profile.Level;
+  var level = 0;
   var score = props.profile.Score;
   let profilePic = (
     <Image
@@ -31,6 +31,7 @@ const ProfileScreen = (props) => {
   //variables for progress/level bar.  Let me know if you want this moved somewhere else
   var reqExp = 0;
   const updateReqExp = () => {
+    reqExp = 0;
     for (let i = 0; i <= level; i++) {
       if (i === 0) {
         reqExp = reqExp + 100;
@@ -47,9 +48,10 @@ const ProfileScreen = (props) => {
   };
   var preqExp = 0;
   const updatePreqExp = () => {
+    preqExp = 0;
     if (level !== 0) {
-      for (let j = 0; j <= level - 1; j++) {
-        for (let i = 0; i <= j; i++) {
+      for (let j = 0; j <= level; j++) {
+        for (let i = 0; i < j; i++) {
           if (i === 0) {
             preqExp = preqExp + 100;
           } else if (i < 6) {
@@ -67,15 +69,24 @@ const ProfileScreen = (props) => {
       preqExp = 0;
     }
   };
+  
   updateReqExp();
   updatePreqExp();
-  while (score > reqExp) {
+  while(score >= preqExp){
     ++level;
     updatePreqExp();
+    if(score<preqExp){
+      --level; 
+    }
+    console.log("level"+level)
     updateReqExp();
   }
-  console.log(score);
+  updatePreqExp();
+  console.log("reqexp"+reqExp)
+  console.log("prereq"+preqExp)
   
+  console.log(score);
+
   var currentLevelScore = score - preqExp;
   var getPercent = (currentLevelScore / reqExp) * 100;
   var percentDone = getPercent.toFixed(0) + "%";

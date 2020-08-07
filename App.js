@@ -43,6 +43,12 @@ import "firebase/firestore";
 import { setProvidesAudioData } from "expo/build/AR";
 
 export default function App() {
+  if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig);
+  }
+  const db = firebase.firestore();
+  var i = 0;
+  var doc_count = 54;
 
   //Stored data Values for UID and logged in type
   const [myLoggedIn, setMyLoggedIn] = useState("false");
@@ -68,13 +74,7 @@ export default function App() {
                   changeMyUid(data)
           }
   })
-
-  if (firebase.apps.length === 0) {
-    firebase.initializeApp(firebaseConfig);
-  }
-  const db = firebase.firestore();
-  var i = 0;
-  var doc_count = 54;
+  
   //DB FUNCTIONS START HERE
   //read profile by uid from asyncstorage and get challenge ids from active challenges
   //then go into challenges and get challenges matching the ids
@@ -159,11 +159,6 @@ export default function App() {
       },
     ]
   );
-/*
-  useEffect(() => {
-    var temp = getChallengesId();
-  }, []);
-*/
   const deepCopy = () => {
     var tempArray = [];
     currentChallenges.forEach((item) => {
@@ -201,6 +196,7 @@ export default function App() {
     docRef.update({
       activeChallenges: firebase.firestore.FieldValue.arrayRemove(challenge.challengeID),
     });
+    
     var Score = thisUser.Score
     setUser({...thisUser,Score: Score+currentScore})
     refreshchallenge(challenge);
@@ -248,6 +244,9 @@ export default function App() {
     docRef.get().then(function(doc) {
     if(doc.exists)
     {
+      console.log(myUid)
+      getProfile();
+      getChallengesId();
       return;
     }
     else{
@@ -287,6 +286,7 @@ export default function App() {
               item.challengeID = doc.data().challengeID;
               setCurrentChallenges(temp);
               console.log(doc.id, "=>", doc.data());
+              updateActiveChallenges(item);
             });
           })
           .catch((err) => {
@@ -296,7 +296,14 @@ export default function App() {
     });
   };
 
+  function updateActiveChallenges(item){
+    var docRef = db.collection("profile").doc(myUid);
+    docRef.update({
+      activeChallenges: firebase.firestore.FieldValue.arrayUnion(item.challengeID),
+    })
 
+  }
+  
    //user loses a life
    function LifeLoss(challenge){
     var docRef = db.collection("profile").doc(myUid)
@@ -304,13 +311,12 @@ export default function App() {
       lives: firebase.firestore.FieldValue.increment(-1),
     }); 
     }
-  /*
+  
   function onDeleteUser()
   {
-      const doc = db.collection('profile').doc(user.uid);
+      const doc = db.collection('profile').doc(myUid);
       return doc.delete();
   }
-  */
 
   const [currentPage, setCurrentPage] = useState("login");
   //Page Functions (No need for DB)
@@ -375,8 +381,7 @@ export default function App() {
   };
 
   const ChallengeEditHandler = (challengeToEdit, challenge) => {
-    //challengeToEdit.challengeID)
-    var docRef = db.collection("challenges").doc('JT5n1M7nQ7DJHcFuvmt4')
+    var docRef = db.collection("challenges").doc(challengeToEdit.challengeID)
     if(challengeToEdit.title === challenge.title){
       docRef.update({
         description: challenge.description,
@@ -528,6 +533,7 @@ export default function App() {
       <SettingsScreen
         onThemeChange={themeChangeHandler}
         onPageChange={changePageHandler}
+        onDeleteUser={onDeleteUser}
       />
     );
   } else if (currentPage === "welcome") {
