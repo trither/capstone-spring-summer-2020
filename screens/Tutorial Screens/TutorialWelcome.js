@@ -34,8 +34,7 @@ const TutorialWelcome = (props) => {
       <FadeInView>
         <TutorialSquare>
           <Text style={[styles.smallTitle, { color: theme.offcolor }]}>
-            {" "}
-            Welcome to Safe_!{" "}
+            Welcome to Safe_!
           </Text>
           <TutorialText>
             The goal of the game is to complete challenges and earn experience
@@ -70,19 +69,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: "black",
     margin: 10,
-  },
-
-  bodyText: {
-    color: "black",
-    fontSize: 18,
-    textAlign: "center",
-    margin: 10,
-  },
-
-  square: {
-    padding: 20,
-    width: "90%",
-    borderRadius: 15,
   },
 
   slogan: {

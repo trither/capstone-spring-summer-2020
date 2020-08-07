@@ -5,20 +5,16 @@ import {
   Text,
   TouchableOpacity,
   Alert,
-  TouchableHighlight,
   LayoutAnimation,
 } from "react-native";
 
 //Components
-import FadeInView from "../../components/FadeInView";
 import BlinkingView from "../../components/BlinkingView";
-import FadeOutView from "../../components/FadeOutView";
 
 //Tutorial components
 import TutorialText from "../../components/TutorialText";
 import TutorialSquare from "../../components/TutorialSquare";
 import SafeSpaceButton from "../../components/SafeSpaceButton";
-import TutorialNavbar from "../../components/TutorialNavbar";
 
 //constants
 import ColorPalette from "../../constants/ColorPalette";
@@ -63,7 +59,7 @@ const MainScreenTutorial = (props) => {
     }
     return (
       <SafeSpaceButton
-        style={{position: "absolute", opacity: 0}}
+        style={{ position: "absolute", opacity: 0 }}
         onPress={null}
         title="Go On..."
       />
@@ -79,8 +75,10 @@ const MainScreenTutorial = (props) => {
   //Depending on the stage change the tutorial text.
   const createTutorialText = () => {
     if (stage === 0) {
-      return ("Every day you will be presented with three possible challenges. Challenges include " +
-      "a variaty of activities to help you stay healthy and active during the COVID-19 pandemic.");
+      return (
+        "Every day you will be presented with three possible challenges. Challenges include " +
+        "a variaty of activities to help you stay healthy and active during the COVID-19 pandemic."
+      );
     }
     if (stage === 1) {
       return "Press on one of the challenges!";
@@ -259,12 +257,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
-  },
-
-  image: {
-    height: 125,
-    width: 360,
-    alignSelf: "center",
   },
 
   challenge: {
