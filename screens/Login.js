@@ -59,7 +59,7 @@ const LoginScreen = (props) => {
     unsubscribe();
     // Check if we are already signed-in Firebase with the correct user.
     //if (!isUserEqual(googleUser, firebaseUser)) {
-      if (myLoggedIn === "false") {
+      if (myUid === "false") {
       // Build Firebase credential with the Google ID token.
       var credential = firebase.auth.GoogleAuthProvider.credential(
 	      googleUser.idToken,
