@@ -83,10 +83,7 @@ const LoginScreen = (props) => {
         // ...
       });
     } else {
-      props.onGetProfile()
-      props.onGetChallenges()
       console.log('User already signed-in Firebase.');
-      setTimeout(()=>props.onPageChange("main screen"),1000)
     }
   });
 }
@@ -114,19 +111,20 @@ const LoginScreen = (props) => {
 
   return (
 		  
-	<View style={[styles.screen, { backgroundColor: theme.primary }]}>
+	<View style={[styles.screen, { backgroundColor: "#0E9AA7" }]}>
     {ssIcon}
     <TouchableOpacity onPress= {googleLogin}>
       <Text
         style={[
           styles.text,
-          { color: theme.offcolor, textShadowColor: theme.highlight, },
+          { color: "#F6CD61", textShadowColor: "#FE8A71", },
         ]}
       >
         Sign in with Google
       </Text>
     </TouchableOpacity>
-    <TouchableOpacity onPress={() => console.log("Facebook Sign In") /*onPress={facebookLogin}*/}>
+    {/*
+    <TouchableOpacity onPress={() => console.log("Facebook Sign In") /*onPress={facebookLogin}}>
       <Text
         style={[
           styles.text,
@@ -136,6 +134,7 @@ const LoginScreen = (props) => {
         Sign in with Facebook
       </Text>
     </TouchableOpacity>
+      */}
 	</View>
   );
 };
