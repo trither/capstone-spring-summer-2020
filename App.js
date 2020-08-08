@@ -50,6 +50,21 @@ export default function App() {
   var i = 0;
   var doc_count = 54;
 
+  const [lng, setLng] = useState(AsyncStorage.getItem("lng"));
+  console.log(lng);
+  console.log("^^lng");
+  const changeLng = (newLng) =>{
+    setLat(newLng)
+  }
+
+  const [lat, setLat] = useState(AsyncStorage.getItem("lat"));
+  console.log(lat);
+  console.log("^^lat");
+  const changeLat = (newLat) =>{
+    setLat(newLat)
+  }
+
+
   //Stored data Values for UID and logged in type
   const [myLoggedIn, setMyLoggedIn] = useState("false");
   const changeLoggedIn = (newLoggedIn) =>{
