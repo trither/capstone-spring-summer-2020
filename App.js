@@ -7,7 +7,6 @@ import {
   LayoutAnimation,
 } from "react-native";
 
-
 //Main app screens
 import MainScreen from "./screens/MainScreen";
 import ProfileScreen from "./screens/ProfileScreen";
@@ -51,66 +50,73 @@ export default function App() {
   var doc_count = 54;
 
   const [lng, setLng] = useState(AsyncStorage.getItem("lng"));
-  console.log(lng);
-  console.log("^^lng");
-  const changeLng = (newLng) =>{
-    setLat(newLng)
-  }
+  //console.log(lng);
+  //console.log("^^lng");
+  const changeLng = (newLng) => {
+    setLat(newLng);
+  };
 
   const [lat, setLat] = useState(AsyncStorage.getItem("lat"));
-  console.log(lat);
-  console.log("^^lat");
-  const changeLat = (newLat) =>{
-    setLat(newLat)
-  }
-
+  //console.log(lat);
+  //console.log("^^lat");
+  const changeLat = (newLat) => {
+    setLat(newLat);
+  };
 
   //Stored data Values for UID and logged in type
   const [myLoggedIn, setMyLoggedIn] = useState("false");
-  const changeLoggedIn = (newLoggedIn) =>{
-    setMyLoggedIn(newLoggedIn)
-  }
-  const [myUid, setMyUid] = useState(null)
-  const changeMyUid = (newUid) =>{
-    setMyUid(newUid)
-  }
+  const changeLoggedIn = (newLoggedIn) => {
+    setMyLoggedIn(newLoggedIn);
+  };
+  const [myUid, setMyUid] = useState(null);
+  const changeMyUid = (newUid) => {
+    setMyUid(newUid);
+  };
 
-  AsyncStorage.getItem("loggedIn")
-  .then((value)=>{
-          const data = value;
-          if (data !== null){
-                  changeLoggedIn(data)
-          }
-  })
-  AsyncStorage.getItem("uid")
-  .then((value)=>{
-          const data = value;
-          if (data !== null){
-                  changeMyUid(data)
-          }
-  })
-  
+  AsyncStorage.getItem("loggedIn").then((value) => {
+    const data = value;
+    if (data !== null) {
+      changeLoggedIn(data);
+    }
+  });
+  AsyncStorage.getItem("uid").then((value) => {
+    const data = value;
+    if (data !== null) {
+      changeMyUid(data);
+    }
+  });
+
+  useEffect(() => {
+    console.log("how many times is this called?");
+    if(myUid){
+      console.log(myUid);
+      getProfile();
+      getChallengesId();
+    }
+  }, [myUid]);
+
   //DB FUNCTIONS START HERE
   //read profile by uid from asyncstorage and get challenge ids from active challenges
   //then go into challenges and get challenges matching the ids
   async function getChallengesId() {
-    var Challenge1
-    var Challenge2
-    var Challenge3
+    var Challenge1;
+    var Challenge2;
+    var Challenge3;
     var docRef = db.collection("profile").doc(myUid);
-      docRef.get().then(function(doc) {
-          if (doc.exists) {
-            Challenge1 = doc.data().activeChallenges[0];
-            Challenge2 = doc.data().activeChallenges[1];
-            Challenge3 = doc.data().activeChallenges[2];
-            getActiveChallenges(Challenge1, Challenge2, Challenge3)
-            console.log("Document data:", doc.data());
-          } else {
-              console.log("No such document!");
-          }
-      })
-    }
-  async function getActiveChallenges(Challenge1, Challenge2, Challenge3){
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        Challenge1 = doc.data().activeChallenges[0];
+        Challenge2 = doc.data().activeChallenges[1];
+        Challenge3 = doc.data().activeChallenges[2];
+        getActiveChallenges(Challenge1, Challenge2, Challenge3);
+        console.log("Document data:", doc.data());
+      } else {
+        console.log("No such document!");
+      }
+    });
+  }
+
+  async function getActiveChallenges(Challenge1, Challenge2, Challenge3) {
     const snapshot = await db
       .collection("challenges")
       .where("challengeID", "in", [Challenge1, Challenge2, Challenge3])
@@ -174,6 +180,7 @@ export default function App() {
       },
     ]
   );
+
   const deepCopy = () => {
     var tempArray = [];
     currentChallenges.forEach((item) => {
@@ -192,104 +199,120 @@ export default function App() {
 
   //function to move accepted challenge to completed challenges
   //grab uid from async storage
-  const setChallengeCompleted= (challenge) =>
-  {
+  const setChallengeCompleted = (challenge) => {
     var docRef = db.collection("profile").doc(myUid);
-    if(challenge.difficulty === 1){
-      currentScore = 200
+    if (challenge.difficulty === 1) {
+      currentScore = 200;
     }
-    if(challenge.difficulty === 2){
-      currentScore = 500
-    }if(challenge.difficulty === 3){
-      currentScore = 1000
+    if (challenge.difficulty === 2) {
+      currentScore = 500;
+    }
+    if (challenge.difficulty === 3) {
+      currentScore = 1000;
     }
     docRef.update({
-      challengesCompleted: firebase.firestore.FieldValue.arrayUnion(challenge.challengeID),
+      challengesCompleted: firebase.firestore.FieldValue.arrayUnion(
+        challenge.challengeID
+      ),
       score: firebase.firestore.FieldValue.increment(currentScore),
-
-    }); 
-    docRef.update({
-      activeChallenges: firebase.firestore.FieldValue.arrayRemove(challenge.challengeID),
     });
-    
-    var Score = thisUser.Score
-    setUser({...thisUser,Score: Score+currentScore})
-    refreshchallenge(challenge);
+    docRef.update({
+      activeChallenges: firebase.firestore.FieldValue.arrayRemove(
+        challenge.challengeID
+      ),
+    });
 
-  }
+    var Score = thisUser.Score;
+    setUser({ ...thisUser, Score: Score + currentScore });
+    refreshchallenge(challenge);
+  };
 
   //add new challenge from admin
-  function addNewChallenge(challenge){
+  function addNewChallenge(challenge) {
     ++doc_count;
-    return db.collection("challenges").add({
-      challenge: challenge.title,
-      description: challenge.description,
-      challengeID: doc_count,
-      difficulty: challenge.difficulty,
-      score: challenge.score,
-      isLink: challenge.isLink,
-      type: challenge.type,
-  })
-  .then(function(docRef) {
-    console.log("Document written with ID: ", docRef.id);
-    })
-  .catch(function(error) {
-    console.error("Error adding document: ", error);
-  });
+    return db
+      .collection("challenges")
+      .add({
+        challenge: challenge.title,
+        description: challenge.description,
+        challengeID: doc_count,
+        difficulty: challenge.difficulty,
+        score: challenge.score,
+        isLink: challenge.isLink,
+        type: challenge.type,
+      })
+      .then(function (docRef) {
+        console.log("Document written with ID: ", docRef.id);
+      })
+      .catch(function (error) {
+        console.error("Error adding document: ", error);
+      });
   }
 
-  function getProfile(){
-      var docRef = db.collection("profile").doc(myUid);
-      docRef.get().then(function(doc) {
-          if (doc.exists) {
-            setUser({Score: doc.data().score, Lives: doc.data().lives, URLPic: doc.data().urlpic,
-            WeeklyStreak: doc.data().weeklystreak, FullName: doc.data().name,})
-            console.log("Document data:", doc.data());
-          } else {
-              console.log("No such document!");
-          }
-      }).catch(function(error) {
-          console.log("Error getting document:", error);
+  function getProfile() {
+    var docRef = db.collection("profile").doc(myUid);
+    docRef
+      .get()
+      .then(function (doc) {
+        if (doc.exists) {
+          setUser({
+            Score: doc.data().score,
+            Lives: doc.data().lives,
+            URLPic: doc.data().urlpic,
+            WeeklyStreak: doc.data().weeklystreak,
+            FullName: doc.data().name,
+          });
+          console.log("Document data:", doc.data());
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch(function (error) {
+        console.log("Error getting document:", error);
       });
   }
 
   //create a new profile doc in db
   function onUserSignup(result) {
     var docRef = db.collection("profile").doc(result.user.uid);
-    docRef.get().then(function(doc) {
-    if(doc.exists)
-    {
-      console.log(myUid)
-      getProfile();
-      getChallengesId();
-      return;
-    }
-    else{
-    const id1 = Math.floor(Math.random() * doc_count) + 0;
-    const id2 = Math.floor(Math.random() * doc_count) + 0;
-    const id3 = Math.floor(Math.random() * doc_count) + 0;
-    return db.collection("profile").doc(result.user.uid).set({
-      email: result.user.email,
-      name: result.user.displayName,
-      urlpic: result.user.photoURL,
-      level: 0,
-      lives: 3,
-      score: 0,
-      weeklystreak: 0,
-      activeChallenges: [id1,id2,id3],
-      challengesCompleted: [],
-    });   
+    docRef.get().then(function (doc) {
+      if (doc.exists) {
+        console.log(myUid);
+        getProfile();
+        getChallengesId();
+        return;
+      } else {
+        const id1 = Math.floor(Math.random() * doc_count) + 0;
+        const id2 = Math.floor(Math.random() * doc_count) + 0;
+        const id3 = Math.floor(Math.random() * doc_count) + 0;
+        return db
+          .collection("profile")
+          .doc(result.user.uid)
+          .set({
+            email: result.user.email,
+            name: result.user.displayName,
+            urlpic: result.user.photoURL,
+            level: 0,
+            lives: 3,
+            score: 0,
+            weeklystreak: 0,
+            activeChallenges: [id1, id2, id3],
+            challengesCompleted: [],
+          });
+      }
+    });
   }
-    })
-  }
-  
+
   // function to get new challenge on refresh from db
   const refreshchallenge = (challenge) => {
     var temp = deepCopy();
     temp.forEach((item) => {
       if (item.title == challenge.title) {
         const id = Math.floor(Math.random() * doc_count) + 0;
-        return db.collection("challenges").where("challengeID", ">", id).limit(1)
+        return db
+          .collection("challenges")
+          .where("challengeID", ">", id)
+          .limit(1)
           .get()
           .then((snapshot) => {
             snapshot.forEach((doc) => {
@@ -306,31 +329,31 @@ export default function App() {
           })
           .catch((err) => {
             console.log("Error getting documents", err);
-          });   
+          });
       }
     });
   };
 
-  function updateActiveChallenges(item){
+  function updateActiveChallenges(item) {
     var docRef = db.collection("profile").doc(myUid);
     docRef.update({
-      activeChallenges: firebase.firestore.FieldValue.arrayUnion(item.challengeID),
-    })
-
+      activeChallenges: firebase.firestore.FieldValue.arrayUnion(
+        item.challengeID
+      ),
+    });
   }
-  
-   //user loses a life
-   function LifeLoss(challenge){
-    var docRef = db.collection("profile").doc(myUid)
+
+  //user loses a life
+  function LifeLoss(challenge) {
+    var docRef = db.collection("profile").doc(myUid);
     docRef.update({
       lives: firebase.firestore.FieldValue.increment(-1),
-    }); 
-    }
-  
-  function onDeleteUser()
-  {
-      const doc = db.collection('profile').doc(myUid);
-      return doc.delete();
+    });
+  }
+
+  function onDeleteUser() {
+    const doc = db.collection("profile").doc(myUid);
+    return doc.delete();
   }
 
   const [currentPage, setCurrentPage] = useState("login");
@@ -342,7 +365,6 @@ export default function App() {
   //the states should be updated to true.
   const [showHeader, setShowHeader] = useState(false);
   const [showFooter, setShowFooter] = useState(false);
-
 
   //Using this to signal to app.js that we need to rerender. No important info is actually stored in this state.
   const [theme, setTheme] = useState(false);
@@ -386,28 +408,29 @@ export default function App() {
   //When the delete challenge button is hit in the challenge page this function is executed.
   //When an admin deletes a challenge, we load a new one to replace it.
   const deleteChallengeHandler = (challenge) => {
-    var docRef = db.collection('challenges').where('challengeID','==',challenge.challengeID).limit(1)
-    docRef.get().then(function(querySnapshot) {
-    querySnapshot.forEach(function(doc) {
-      doc.ref.delete();
-      setCurrentPage("createNewChallenge");
+    var docRef = db
+      .collection("challenges")
+      .where("challengeID", "==", challenge.challengeID)
+      .limit(1);
+    docRef.get().then(function (querySnapshot) {
+      querySnapshot.forEach(function (doc) {
+        doc.ref.delete();
+        setCurrentPage("createNewChallenge");
+      });
     });
-    }); 
   };
 
   const ChallengeEditHandler = (challengeToEdit, challenge) => {
-    var docRef = db.collection("challenges").doc(challengeToEdit.challengeID)
-    if(challengeToEdit.title === challenge.title){
+    var docRef = db.collection("challenges").doc(challengeToEdit.challengeID);
+    if (challengeToEdit.title === challenge.title) {
       docRef.update({
         description: challenge.description,
       });
-
+    } else {
+      docRef.update({
+        challenge: challenge.title,
+      });
     }
-    else{
-    docRef.update({
-      challenge: challenge.title,
-    });
-  }
     challengeToEdit.title = challenge.title;
     challengeToEdit.description = challenge.description;
   };
@@ -435,55 +458,53 @@ export default function App() {
 
   //Alert state
   let myAlert;
-  const leavingSpace = () =>{
-    Alert.alert (
+  const leavingSpace = () => {
+    Alert.alert(
       "You're About to Leave Your Safe__",
       "Are you going out for a legitimate reason",
       [
         {
           text: "I am!",
           onPress: () => console.log("Display Tips, Don't Decrement"),
-          style: 'cancel'
+          style: "cancel",
         },
         {
           text: "I'm Not'",
-          onPress: () => console.log("Decrement Life")
-        }
+          onPress: () => console.log("Decrement Life"),
+        },
       ]
-    )
+    );
   };
 
-  const lostLastLife = () =>{
-    Alert.alert (
+  const lostLastLife = () => {
+    Alert.alert(
       "Sorry, You've Lost Your Last Life",
       "Try to maintain social distance and when possible stay at home.",
       [
         {
           text: "OK",
           onPress: () => console.log("Last life lost, set streak to 0"),
-          style: 'cancel'
+          style: "cancel",
         },
         {
           text: "Chance?",
-          onPress: () => console.log("Get challenge or redeem something")
-        }
+          onPress: () => console.log("Get challenge or redeem something"),
+        },
       ]
-    )
-  }
+    );
+  };
 
-
-  const[thisAlert, setAlert] = useState("none");
+  const [thisAlert, setAlert] = useState("none");
 
   const changeAlert = (newAlert) => {
     setAlert(newAlert);
   };
   //Set if group function for alerts, to be changed on events ONLY.
-  if (thisAlert === "none"){
+  if (thisAlert === "none") {
     myAlert = null;
   } else {
     myAlert = lostLastLife();
   }
-
 
   let content;
 
@@ -495,7 +516,6 @@ export default function App() {
         challenges={currentChallenges}
         profile={thisUser}
         onRefreshChallenge={refreshchallenge}
-
       />
     );
   } else if (currentPage === "profile") {
@@ -512,7 +532,7 @@ export default function App() {
         onEditChallenge={ChallengeEditHandler}
         onRefreshChallenge={() => refreshchallenge(currentChallenges[0])}
         onChallengeId="challenge1"
-        onChallengeCompleted={()=>setChallengeCompleted(currentChallenges[0])}
+        onChallengeCompleted={() => setChallengeCompleted(currentChallenges[0])}
       />
     );
   } else if (currentPage === "challenge2") {
@@ -525,7 +545,7 @@ export default function App() {
         onEditChallenge={ChallengeEditHandler}
         onRefreshChallenge={() => refreshchallenge(currentChallenges[1])}
         onChallengeId="challenge2"
-        onChallengeCompleted={()=>setChallengeCompleted(currentChallenges[1])}
+        onChallengeCompleted={() => setChallengeCompleted(currentChallenges[1])}
       />
     );
   } else if (currentPage === "challenge3") {
@@ -538,7 +558,7 @@ export default function App() {
         onEditChallenge={ChallengeEditHandler}
         onRefreshChallenge={() => refreshchallenge(currentChallenges[2])}
         onChallengeId="challenge3"
-        onChallengeCompleted={()=>setChallengeCompleted(currentChallenges[2])}
+        onChallengeCompleted={() => setChallengeCompleted(currentChallenges[2])}
       />
     );
   } else if (currentPage === "heatmap") {
@@ -562,14 +582,24 @@ export default function App() {
   } else if (currentPage === "heatmapTutorial") {
     content = <HeatmapTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "createNewChallenge") {
-    content = <CreateNewChallengeScreen onPageChange={changePageHandler} onAddNewChallenge={addNewChallenge}/>;
+    content = (
+      <CreateNewChallengeScreen
+        onPageChange={changePageHandler}
+        onAddNewChallenge={addNewChallenge}
+      />
+    );
   } else if (currentPage === "healthTutorial") {
     content = <HealthTutorialScreen onPageChange={changePageHandler} />;
   } else if (currentPage === "mainChallengeTutorial") {
     content = <MainScreenChallengeTutorial onPageChange={changePageHandler} />;
   } else if (currentPage === "login") {
     content = (
-      <Login onPageChange={changePageHandler} onSignup={onUserSignup} onGetProfile={getProfile} onGetChallenges={getChallengesId}/>
+      <Login
+        onPageChange={changePageHandler}
+        onSignup={onUserSignup}
+        onGetProfile={getProfile}
+        onGetChallenges={getChallengesId}
+      />
     );
   } else if (currentPage === "home address") {
     content = <HomeAddress onPageChange={changePageHandler} />;
@@ -578,7 +608,6 @@ export default function App() {
   } else if (currentPage === "failure screen") {
     content = <FailureScreen onPageChange={changePageHandler} />;
   }
-
 
   return (
     <View style={styles.screen}>
