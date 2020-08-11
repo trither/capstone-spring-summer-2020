@@ -5,7 +5,6 @@ import {
   Text,
   Button,
   TouchableOpacity,
-  Alert,
   TextInput,
   Modal,
 } from "react-native";
@@ -69,7 +68,7 @@ const ChallengesScreen = (props) => {
 
   const onModalClose = () => {
     //WRITE CHALLENGE TITLE AND CHALLENGE DESCRIPTION TO THE DATABASE
-    console.log(props.challenge, challenge)
+    console.log(props.challenge, challenge);
     props.onEditChallenge(props.challenge, challenge);
   };
 
@@ -92,10 +91,7 @@ const ChallengesScreen = (props) => {
           style={styles.editIconContainer}
         >
           <Icon
-            style={[
-              styles.editIcon,
-              { color: theme.highlight},
-            ]}
+            style={[styles.editIcon, { color: theme.highlight }]}
             name="edit"
           />
         </TouchableOpacity>
@@ -126,20 +122,20 @@ const ChallengesScreen = (props) => {
     }
   };
 
-//If the user is an admin, load the delete challenge button.
-const AdminDeleteButton = () => {
-  if (props.adminRights) {
-    return (
-      <Button
-        onPress={() => onDeleteButtonPress()}
-        title="Delete Challenge"
-        color="red"
-      />
-    );
-  } else {
-    return;
-  }
-};
+  //If the user is an admin, load the delete challenge button.
+  const AdminDeleteButton = () => {
+    if (props.adminRights) {
+      return (
+        <Button
+          onPress={() => onDeleteButtonPress()}
+          title="Delete Challenge"
+          color="red"
+        />
+      );
+    } else {
+      return;
+    }
+  };
 
   // function to check if video exists to be embedded
   function videoDisplay(isLink, description) {
@@ -167,12 +163,10 @@ const AdminDeleteButton = () => {
     }
   }
 
-  const handleRefresh=()=>
-  {
+  const handleRefresh = () => {
     props.onRefreshChallenge();
     props.onPageChange("main screen");
-
-  }
+  };
   return (
     // Create the screen object
     <View style={styles.screen}>
@@ -209,7 +203,7 @@ const AdminDeleteButton = () => {
       >
         {/* Create the squares the the buttons exist on top of (buttonBoxes) */}
         <Card style={styles.buttonBox}>
-          <TouchableOpacity onPress={()=>handleRefresh()} width="20%">
+          <TouchableOpacity onPress={() => handleRefresh()} width="20%">
             <Icon
               style={[
                 styles.icon,
@@ -223,7 +217,9 @@ const AdminDeleteButton = () => {
         <Card style={styles.buttonBox}>
           {/* CloudFunctions needed here to recieve challenge completed data getChallengescompleted()*/}
           <TouchableOpacity
-            onPress={() => props.onChallengeCompleted()+props.onPageChange("main screen")}
+            onPress={() =>
+              props.onChallengeCompleted() + props.onPageChange("main screen")
+            }
             width="20%"
           >
             <Icon
@@ -324,14 +320,12 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    left:20,
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
     shadowOpacity: 0.2,
     textAlign: "center",
     fontSize: 24,
     fontWeight: "bold",
-    left: 20
   },
 
   body: {
@@ -340,7 +334,6 @@ const styles = StyleSheet.create({
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 6,
     shadowOpacity: 0.2,
-    left: 20,
   },
 
   icon: {
