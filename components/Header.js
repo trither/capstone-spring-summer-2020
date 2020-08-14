@@ -86,9 +86,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
   },
   touchable: {
-    position: "relative",
-    left: 120,
-    top: 0,
+    position: "absolute",
+    right: "10%",
+    top: "90%",
   },
 });
 export default Header;
