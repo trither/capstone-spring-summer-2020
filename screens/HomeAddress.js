@@ -69,7 +69,7 @@ const HomeAddress = (props) => {
         props.onPageChange("main screen")
       }}
       query={{
-        key: 'AIzaSyC0D_mqgtjsOIhC-haBWaxgBZTRhFRj9ek',
+        key: 'XXXXXXXXXX',
         language: 'en',
         components: 'country:us',
       }}
