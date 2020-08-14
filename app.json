@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "safespace",
+    "slug": "safespace",
+    "platforms": ["ios", "android", "web"],
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.safespace"
+    },
+    "android": {
+      "package": "com.safespace",
+      "config": {
+        "googleSignIn": {
+          "apiKey": "AIzaSyBS0JUQXcrtzDiCMFMwLXacRUbWhhRZRwg",
+          "certificateHash": "66:06:DE:BC:E0:92:63:EB:44:BC:C3:57:EB:EE:67:CE:E5:41:8F:9B"
+        },
+        "googleMaps.apiKey": {
+          "apiKey": "AIzaSyD8hILccrV6-O32n0ehi_ykSbOZunl0Et8"
+        }
+      }
+    },
+    "entryPoint": "node_modules/expo/AppEntry.js"
+  }
+}
